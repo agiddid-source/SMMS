@@ -1,0 +1,18 @@
+[
+  { "id": "CLASS-001", "name": "Toddler A", "section": "Toddler", "status": "active" },
+  { "id": "CLASS-002", "name": "Nursery 1", "section": "Nursery", "status": "active" },
+  { "id": "CLASS-003", "name": "Nursery 2", "section": "Nursery", "status": "active" },
+  { "id": "CLASS-004", "name": "KG 1", "section": "KG", "status": "active" },
+  { "id": "CLASS-005", "name": "KG 2", "section": "KG", "status": "active" },
+  { "id": "CLASS-006", "name": "Year 1", "section": "Primary", "status": "active" },
+  { "id": "CLASS-007", "name": "Year 2", "section": "Primary", "status": "active" },
+  { "id": "CLASS-008", "name": "Year 3", "section": "Primary", "status": "active" },
+  { "id": "CLASS-009", "name": "Year 4", "section": "Primary", "status": "active" },
+  { "id": "CLASS-010", "name": "Year 5", "section": "Primary", "status": "active" },
+  { "id": "CLASS-011", "name": "JSS 1", "section": "Secondary", "status": "active" },
+  { "id": "CLASS-012", "name": "JSS 2", "section": "Secondary", "status": "active" },
+  { "id": "CLASS-013", "name": "JSS 3", "section": "Secondary", "status": "active" },
+  { "id": "CLASS-014", "name": "SS 1", "section": "Secondary", "status": "active" },
+  { "id": "CLASS-015", "name": "SS 2", "section": "Secondary", "status": "active" },
+  { "id": "CLASS-016", "name": "SS 3", "section": "Secondary", "status": "active" }
+]

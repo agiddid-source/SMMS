@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Greenhill School fee types, amounts and class assignment.">
+  <title>Fee settings · Greenhill School OS</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { theme: { extend: { fontFamily: { ghtSans: ['Geist', 'ui-sans-serif', 'system-ui'], ghtDisplay: ['Instrument Serif', 'Georgia', 'serif'] } } } };</script>
+  <link rel="stylesheet" href="./styles/tokens.css">
+  <link rel="stylesheet" href="./css/fees.css">
+</head>
+<body>
+  <div id="ght-app" class="min-h-screen bg-white"></div>
+  <script type="module">
+    import { GhtAppShell } from './_components/AppShell.js';
+    import { GhtBindSidebar } from './_components/Sidebar.js';
+    import { GhtCard } from './_components/Card.js';
+    import { GhtButton } from './_components/Button.js';
+    import { GhtFeeRow } from './_components/FeeRow.js';
+    import { GhtClassPickerRow } from './_components/ClassRow.js';
+    import { GhtModal, GhtOpenModal, GhtConfirm } from './_components/Modal.js';
+    import { ghtNavigationConfig } from './data/navigation.js';
+    import { ghtFilterFees, ghtResolveClassNames, ghtDistinctTerms } from './js/fees/fees-helpers.js';
+    import { ghtFilterClasses, ghtGroupClassesBySection, ghtDistinctSections } from './js/classes/classes-helpers.js';
+
+    const ghtApp = document.querySelector('#ght-app');
+    const ghtCurrentPath = './fee-setup.html';
+    // Converts numeric amounts to whole-value NGN currency strings.
+    const ghtFormatNaira = (ghtAmount) => new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', maximumFractionDigits: 0 }).format(ghtAmount);
+
+    const ghtState = { fees: [], classes: [], feeTypes: [], search: '', typeFilter: '', termFilter: '' };
+
+    // Fetches fees, classes and fee-type data together, then renders the page.
+    async function ghtLoadFeeSetup() {
+      const [ghtFeesRes, ghtClassesRes, ghtTypesRes] = await Promise.all([
+        fetch('./data/fees.json'),
+        fetch('./data/classes.json'),
+        fetch('./data/fee-types.json'),
+      ]);
+      if (!ghtFeesRes.ok || !ghtClassesRes.ok || !ghtTypesRes.ok) throw new Error('Fee setup data could not be loaded.');
+      ghtState.fees = await ghtFeesRes.json();
+      ghtState.classes = await ghtClassesRes.json();
+      ghtState.feeTypes = await ghtTypesRes.json();
+      ghtRenderPage();
+    }
+
+    // ---- Class-assignment picker (used inside the add/edit fee form) ------
+
+    // Builds the picker's markup for currently-filtered classes, grouped by
+    // section, given the picker's own local search/section-filter state.
+    function ghtBuildPickerList(ghtPickerState, ghtSelectedIds) {
+      const ghtFiltered = ghtFilterClasses(ghtState.classes, { ghtSearch: ghtPickerState.search, ghtSectionFilter: ghtPickerState.sectionFilter });
+      if (ghtFiltered.length === 0) return `<p class="mt-2 text-sm text-[#737373]">No classes match.</p>`;
+      const ghtGroups = ghtGroupClassesBySection(ghtFiltered);
+      return ghtGroups
+        .map(([ghtSection, ghtClasses]) => {
+          const ghtRows = ghtClasses
+            .map((ghtClass) => GhtClassPickerRow({ ghtClass, ghtChecked: ghtSelectedIds.has(ghtClass.id) }).outerHTML)
+            .join('');
+          return `<div class="mt-3 first:mt-0"><p class="m-0 text-xs font-medium text-[#737373]">${ghtSection}</p>${ghtRows}</div>`;
+        })
+        .join('');
+    }
+
+    // ---- Add / edit fee form ------------------------------------------
+
+    function ghtBuildFeeForm(ghtExistingFee) {
+      const ghtSelectedIds = new Set(ghtExistingFee ? ghtExistingFee.assignedClasses : []);
+      const ghtPickerState = { search: '', sectionFilter: '' };
+
+      const ghtForm = document.createElement('div');
+      ghtForm.innerHTML = `
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <label class="mb-1 block text-xs text-[#737373]">Fee name</label>
+            <input type="text" class="ght-input w-full" id="ght-fee-name" placeholder="e.g. Tuition" />
+          </div>
+          <div>
+            <label class="mb-1 block text-xs text-[#737373]">Type</label>
+            <select class="ght-input w-full" id="ght-fee-type"></select>
+          </div>
+          <div>
+            <label class="mb-1 block text-xs text-[#737373]">Amount (₦)</label>
+            <input type="number" min="0" step="100" class="ght-input w-full" id="ght-fee-amount" placeholder="0" />
+          </div>
+          <div>
+            <label class="mb-1 block text-xs text-[#737373]">Academic session</label>
+            <input type="text" class="ght-input w-full" id="ght-fee-session" placeholder="2026/2027" />
+          </div>
+          <div>
+            <label class="mb-1 block text-xs text-[#737373]">Term</label>
+            <select class="ght-input w-full" id="ght-fee-term">
+              <option value="First Term">First Term</option>
+              <option value="Second Term">Second Term</option>
+              <option value="Third Term">Third Term</option>
+            </select>
+          </div>
+          <div>
+            <label class="mb-1 block text-xs text-[#737373]">Due date</label>
+            <input type="date" class="ght-input w-full" id="ght-fee-due-date" />
+          </div>
+        </div>
+
+        <div class="mt-3 hidden gap-2" id="ght-new-type-row">
+          <input type="text" class="ght-input" id="ght-new-type-name" placeholder="New fee type name" style="max-width: 220px;" />
+          <button type="button" class="ght-button ght-button--secondary text-sm font-medium" id="ght-new-type-confirm">Add type</button>
+        </div>
+
+        <div class="mt-4">
+          <label class="mb-1 block text-xs text-[#737373]">Description</label>
+          <input type="text" class="ght-input w-full" id="ght-fee-description" placeholder="Optional" />
+        </div>
+
+        <div class="mt-6 border-t border-[#f5f5f5] pt-4">
+          <p class="m-0 text-sm font-medium">Applicable classes</p>
+          <p class="m-0 mt-1 text-xs text-[#737373]">Select one or more classes this fee applies to.</p>
+          <div class="mt-3 flex flex-col gap-2 sm:flex-row">
+            <input type="text" class="ght-input flex-1" id="ght-picker-search" placeholder="Search classes…" />
+            <select class="ght-input sm:w-40" id="ght-picker-section"><option value="">All sections</option></select>
+          </div>
+          <div class="mt-3 max-h-56 overflow-y-auto rounded-md border border-[#f5f5f5] p-3" id="ght-picker-list"></div>
+          <p class="m-0 mt-2 text-xs text-[#737373]"><span id="ght-picker-count">0</span> selected</p>
+        </div>
+
+        <div class="mt-6 flex justify-end gap-2">
+          <button type="button" class="ght-button ght-button--secondary text-sm font-medium" id="ght-fee-form-cancel">Cancel</button>
+          <button type="button" class="ght-button ght-button--primary text-sm font-medium" id="ght-fee-form-save">Save fee</button>
+        </div>
+      `;
+
+      // Populate type select (plus "+ New type…")
+      const ghtTypeSelect = ghtForm.querySelector('#ght-fee-type');
+      function ghtRenderTypeOptions(ghtSelectValue) {
+        ghtTypeSelect.innerHTML =
+          ghtState.feeTypes.map((ghtType) => `<option value="${ghtType.name}">${ghtType.name}</option>`).join('') +
+          '<option value="__new__">+ New type…</option>';
+        ghtTypeSelect.value = ghtSelectValue || (ghtState.feeTypes[0] ? ghtState.feeTypes[0].name : '__new__');
+      }
+      ghtRenderTypeOptions(ghtExistingFee ? ghtExistingFee.type : null);
+
+      ghtTypeSelect.addEventListener('change', () => {
+        ghtForm.querySelector('#ght-new-type-row').classList.toggle('hidden', ghtTypeSelect.value !== '__new__');
+        ghtForm.querySelector('#ght-new-type-row').classList.toggle('flex', ghtTypeSelect.value === '__new__');
+      });
+      ghtForm.querySelector('#ght-new-type-confirm').addEventListener('click', () => {
+        const ghtName = ghtForm.querySelector('#ght-new-type-name').value.trim();
+        if (!ghtName) return;
+        let ghtType = ghtState.feeTypes.find((ghtItem) => ghtItem.name.toLowerCase() === ghtName.toLowerCase());
+        if (!ghtType) {
+          ghtType = { id: `TYPE-${String(ghtState.feeTypes.length + 1).padStart(3, '0')}`, name: ghtName, status: 'active' };
+          ghtState.feeTypes.push(ghtType);
+        }
+        ghtRenderTypeOptions(ghtType.name);
+        ghtForm.querySelector('#ght-new-type-row').classList.add('hidden');
+        ghtForm.querySelector('#ght-new-type-row').classList.remove('flex');
+        ghtForm.querySelector('#ght-new-type-name').value = '';
+      });
+
+      // Populate other fields for edit mode
+      if (ghtExistingFee) {
+        ghtForm.querySelector('#ght-fee-name').value = ghtExistingFee.name;
+        ghtForm.querySelector('#ght-fee-amount').value = ghtExistingFee.amount;
+        ghtForm.querySelector('#ght-fee-session').value = ghtExistingFee.academicSession;
+        ghtForm.querySelector('#ght-fee-term').value = ghtExistingFee.term;
+        ghtForm.querySelector('#ght-fee-due-date').value = ghtExistingFee.dueDate || '';
+        ghtForm.querySelector('#ght-fee-description').value = ghtExistingFee.description || '';
+      } else {
+        ghtForm.querySelector('#ght-fee-session').value = '2026/2027';
+      }
+
+      // Picker section filter options + list
+      const ghtPickerSectionSelect = ghtForm.querySelector('#ght-picker-section');
+      ghtDistinctSections(ghtState.classes).forEach((ghtSection) => {
+        const ghtOption = document.createElement('option');
+        ghtOption.value = ghtSection;
+        ghtOption.textContent = ghtSection;
+        ghtPickerSectionSelect.appendChild(ghtOption);
+      });
+
+      function ghtRefreshPickerList() {
+        ghtForm.querySelector('#ght-picker-list').innerHTML = ghtBuildPickerList(ghtPickerState, ghtSelectedIds);
+        ghtForm.querySelector('#ght-picker-count').textContent = ghtSelectedIds.size;
+      }
+      ghtRefreshPickerList();
+
+      ghtForm.querySelector('#ght-picker-search').addEventListener('input', (ghtEvent) => {
+        ghtPickerState.search = ghtEvent.target.value;
+        ghtRefreshPickerList();
+      });
+      ghtForm.querySelector('#ght-picker-section').addEventListener('change', (ghtEvent) => {
+        ghtPickerState.sectionFilter = ghtEvent.target.value;
+        ghtRefreshPickerList();
+      });
+      ghtForm.querySelector('#ght-picker-list').addEventListener('change', (ghtEvent) => {
+        const ghtCheckbox = ghtEvent.target.closest('.ght-class-picker-checkbox');
+        if (!ghtCheckbox) return;
+        if (ghtCheckbox.checked) ghtSelectedIds.add(ghtCheckbox.dataset.ghtId);
+        else ghtSelectedIds.delete(ghtCheckbox.dataset.ghtId);
+        ghtForm.querySelector('#ght-picker-count').textContent = ghtSelectedIds.size;
+      });
+
+      return { ghtForm, ghtSelectedIds, ghtTypeSelect };
+    }
+
+    // Opens the add/edit fee modal. Passing an existing fee switches it to edit mode.
+    function ghtOpenFeeForm(ghtExistingFee) {
+      const { ghtForm, ghtSelectedIds, ghtTypeSelect } = ghtBuildFeeForm(ghtExistingFee);
+      const ghtOverlay = GhtModal({ ghtTitle: ghtExistingFee ? 'Edit fee' : 'Add fee', ghtContent: ghtForm });
+      const ghtClose = GhtOpenModal(ghtOverlay);
+
+      ghtForm.querySelector('#ght-fee-form-cancel').addEventListener('click', () => ghtClose());
+      ghtForm.querySelector('#ght-fee-form-save').addEventListener('click', () => {
+        const ghtName = ghtForm.querySelector('#ght-fee-name').value.trim();
+        const ghtType = ghtTypeSelect.value;
+        const ghtAmount = Number(ghtForm.querySelector('#ght-fee-amount').value);
+        const ghtSession = ghtForm.querySelector('#ght-fee-session').value.trim();
+        const ghtTerm = ghtForm.querySelector('#ght-fee-term').value;
+        const ghtDueDate = ghtForm.querySelector('#ght-fee-due-date').value;
+        const ghtDescription = ghtForm.querySelector('#ght-fee-description').value.trim();
+
+        if (!ghtName || !ghtType || ghtType === '__new__' || !ghtAmount || !ghtSession) {
+          window.alert('Fee name, type, amount and academic session are required.');
+          return;
+        }
+
+        const ghtPayload = {
+          name: ghtName,
+          type: ghtType,
+          amount: ghtAmount,
+          academicSession: ghtSession,
+          term: ghtTerm,
+          dueDate: ghtDueDate,
+          description: ghtDescription,
+          assignedClasses: [...ghtSelectedIds],
+        };
+
+        if (ghtExistingFee) {
+          Object.assign(ghtExistingFee, ghtPayload);
+        } else {
+          const ghtNextNumber = ghtState.fees.length + 1;
+          ghtState.fees.push({ id: `FEE-${String(ghtNextNumber).padStart(3, '0')}`, status: 'active', createdAt: new Date().toISOString().slice(0, 10), ...ghtPayload });
+        }
+        ghtClose();
+        ghtRenderPage();
+      });
+    }
+
+    // Confirms and deactivates a fee, then re-renders the list.
+    async function ghtDeactivateFee(ghtFeeId) {
+      const ghtFee = ghtState.fees.find((ghtItem) => ghtItem.id === ghtFeeId);
+      if (!ghtFee) return;
+      const ghtConfirmed = await GhtConfirm({
+        ghtTitle: 'Deactivate fee',
+        ghtMessage: `Deactivate "${ghtFee.name}"? It will no longer be assignable to students.`,
+        ghtConfirmLabel: 'Deactivate',
+      });
+      if (!ghtConfirmed) return;
+      ghtFee.status = 'inactive';
+      ghtRenderPage();
+    }
+
+    // ---- Fee list --------------------------------------------------------
+
+    function ghtTypeLabel(ghtType) {
+      const ghtMatch = ghtState.feeTypes.find((ghtItem) => ghtItem.name === ghtType);
+      return ghtMatch ? ghtMatch.name : ghtType;
+    }
+
+    function ghtBuildFeeList() {
+      const ghtFiltered = ghtFilterFees(ghtState.fees, { ghtSearch: ghtState.search, ghtTypeFilter: ghtState.typeFilter, ghtTermFilter: ghtState.termFilter });
+      if (ghtFiltered.length === 0) {
+        return `<p class="mt-2 text-sm text-[#737373]">No fees match your search or filters.</p>`;
+      }
+      const ghtHeader = `<div class="hidden gap-4 border-b border-[#f5f5f5] pb-3 text-xs text-[#737373] md:grid" style="grid-template-columns: 1.4fr .8fr .9fr 1.4fr auto;"><span>Fee</span><span>Amount</span><span>Due</span><span>Applicable classes</span><span></span></div>`;
+      const ghtRows = ghtFiltered
+        .map((ghtFee) =>
+          GhtFeeRow({
+            ghtFee,
+            ghtTypeLabel: ghtTypeLabel(ghtFee.type),
+            ghtClassNames: ghtResolveClassNames(ghtFee.assignedClasses, ghtState.classes),
+            ghtFormatNaira,
+          }).outerHTML
+        )
+        .join('');
+      return `${ghtHeader}<ul class="m-0 mt-1 list-none divide-y divide-[#f5f5f5] p-0">${ghtRows}</ul>`;
+    }
+
+    // Renders the whole page: shell + toolbar + fee list.
+    function ghtRenderPage() {
+      const ghtTypes = ghtState.feeTypes;
+      const ghtTerms = ghtDistinctTerms(ghtState.fees);
+      const ghtToolbar = `
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <input type="text" id="ght-fee-search" class="ght-input flex-1" placeholder="Search fees…" value="${ghtState.search}" />
+          <select id="ght-fee-type-filter" class="ght-input sm:w-40">
+            <option value="">All types</option>
+            ${ghtTypes.map((ghtType) => `<option value="${ghtType.name}" ${ghtState.typeFilter === ghtType.name ? 'selected' : ''}>${ghtType.name}</option>`).join('')}
+          </select>
+          <select id="ght-fee-term-filter" class="ght-input sm:w-40">
+            <option value="">All terms</option>
+            ${ghtTerms.map((ghtTerm) => `<option value="${ghtTerm}" ${ghtState.termFilter === ghtTerm ? 'selected' : ''}>${ghtTerm}</option>`).join('')}
+          </select>
+        </div>
+      `;
+      const ghtContent = `
+        <div class="ght-dashboard-content">
+          <div class="ght-page-enter">
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p class="m-0 text-sm text-[#737373]">Fee Management</p>
+                <h2 class="ght-display mb-0 mt-2 text-3xl leading-none tracking-normal sm:text-4xl">Fee settings.</h2>
+              </div>
+              <div id="ght-add-fee-slot"></div>
+            </div>
+            <section class="mt-6">
+              ${GhtCard({ ghtContent: `<div id="ght-fee-toolbar">${ghtToolbar}</div><div id="ght-fee-list">${ghtBuildFeeList()}</div>` })}
+            </section>
+          </div>
+        </div>
+      `;
+      ghtApp.innerHTML = GhtAppShell({ ghtNavigationConfig, ghtCurrentPath, ghtContent });
+      GhtBindSidebar();
+
+      document.querySelector('#ght-add-fee-slot').appendChild(
+        GhtButton({ ghtLabel: '+ Add fee', ghtTone: 'primary', ghtAttributes: 'id="ght-add-fee-btn"' })
+      );
+      document.querySelector('#ght-add-fee-btn').addEventListener('click', () => ghtOpenFeeForm(null));
+
+      document.querySelector('#ght-fee-search').addEventListener('input', (ghtEvent) => {
+        ghtState.search = ghtEvent.target.value;
+        document.querySelector('#ght-fee-list').innerHTML = ghtBuildFeeList();
+      });
+      document.querySelector('#ght-fee-type-filter').addEventListener('change', (ghtEvent) => {
+        ghtState.typeFilter = ghtEvent.target.value;
+        document.querySelector('#ght-fee-list').innerHTML = ghtBuildFeeList();
+      });
+      document.querySelector('#ght-fee-term-filter').addEventListener('change', (ghtEvent) => {
+        ghtState.termFilter = ghtEvent.target.value;
+        document.querySelector('#ght-fee-list').innerHTML = ghtBuildFeeList();
+      });
+
+      // Delegated once per full render — #ght-fee-list is recreated each
+      // time ghtRenderPage() runs, so this doesn't need rebinding on
+      // search/filter (those only replace its innerHTML, not the node).
+      document.querySelector('#ght-fee-list').addEventListener('click', (ghtEvent) => {
+        const ghtRow = ghtEvent.target.closest('[data-ght-id]');
+        if (!ghtRow) return;
+        const ghtAction = ghtEvent.target.closest('[data-ght-action]')?.dataset.ghtAction;
+        if (ghtAction === 'edit') {
+          const ghtFee = ghtState.fees.find((ghtItem) => ghtItem.id === ghtRow.dataset.ghtId);
+          if (ghtFee) ghtOpenFeeForm(ghtFee);
+        } else if (ghtAction === 'deactivate') {
+          ghtDeactivateFee(ghtRow.dataset.ghtId);
+        }
+      });
+    }
+
+    ghtLoadFeeSetup().catch((ghtError) => {
+      console.error(ghtError);
+      ghtApp.innerHTML = `<main class="mx-auto flex min-h-screen max-w-xl items-center p-6"><section class="ght-card w-full"><p class="m-0 text-sm text-[#737373]">Fee settings unavailable</p><h1 class="ght-display mb-0 mt-2 text-3xl">We could not load fee setup data.</h1><p class="mb-0 mt-4 text-sm text-[#737373]">Please serve this folder from a local static server, then try again.</p></section></main>`;
+    });
+  </script>
+</body>
+</html>

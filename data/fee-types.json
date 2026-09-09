@@ -1,0 +1,11 @@
+[
+  { "id": "TYPE-001", "name": "Tuition", "status": "active" },
+  { "id": "TYPE-002", "name": "Uniform", "status": "active" },
+  { "id": "TYPE-003", "name": "Examination", "status": "active" },
+  { "id": "TYPE-004", "name": "Books", "status": "active" },
+  { "id": "TYPE-005", "name": "Registration", "status": "active" },
+  { "id": "TYPE-006", "name": "WAEC", "status": "active" },
+  { "id": "TYPE-007", "name": "BECE", "status": "active" },
+  { "id": "TYPE-008", "name": "Transportation", "status": "active" },
+  { "id": "TYPE-009", "name": "Other", "status": "active" }
+]

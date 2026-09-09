@@ -1,0 +1,21 @@
+/* Classes page — module-specific styles.
+   Kept out of styles/tokens.css deliberately since that file is shared
+   across every module; anything here is safe to change without touching
+   other members' work. .ght-input is duplicated verbatim in css/fees.css
+   for the same reason. */
+
+.ght-input {
+  width: 100%;
+  min-height: 42px;
+  padding: 8px 12px;
+  border: 1px solid var(--ght-color-border);
+  border-radius: var(--ght-radius-md);
+  background: var(--ght-color-surface);
+  font-size: 14px;
+  color: var(--ght-color-on-surface);
+}
+
+.ght-input:focus {
+  outline: 2px solid var(--ght-color-accent);
+  outline-offset: -1px;
+}

@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Greenhill School class and academic structure.">
+  <title>Classes · Greenhill School OS</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { theme: { extend: { fontFamily: { ghtSans: ['Geist', 'ui-sans-serif', 'system-ui'], ghtDisplay: ['Instrument Serif', 'Georgia', 'serif'] } } } };</script>
+  <link rel="stylesheet" href="./styles/tokens.css">
+  <link rel="stylesheet" href="./css/classes.css">
+</head>
+<body>
+  <div id="ght-app" class="min-h-screen bg-white"></div>
+  <script type="module">
+    import { GhtAppShell } from './_components/AppShell.js';
+    import { GhtBindSidebar } from './_components/Sidebar.js';
+    import { GhtCard } from './_components/Card.js';
+    import { GhtButton } from './_components/Button.js';
+    import { GhtChip } from './_components/Chip.js';
+    import { GhtClassManageRow } from './_components/ClassRow.js';
+    import { GhtModal, GhtOpenModal, GhtConfirm } from './_components/Modal.js';
+    import { ghtNavigationConfig } from './data/navigation.js';
+    import { ghtFilterClasses, ghtGroupClassesBySection, ghtDistinctSections } from './js/classes/classes-helpers.js';
+
+    const ghtApp = document.querySelector('#ght-app');
+    const ghtCurrentPath = './classes.html';
+
+    // Page state — kept simple and page-local, same as index.html's approach.
+    const ghtState = { classes: [], search: '', sectionFilter: '' };
+
+    // Fetches class data and starts the first render.
+    async function ghtLoadClasses() {
+      const ghtResponse = await fetch('./data/classes.json');
+      if (!ghtResponse.ok) throw new Error('Class data could not be loaded.');
+      ghtState.classes = await ghtResponse.json();
+      ghtRenderPage();
+    }
+
+    // Builds the add/edit class form body used inside the modal.
+    function ghtBuildClassForm(ghtExistingClass) {
+      const ghtSections = ghtDistinctSections(ghtState.classes);
+      const ghtForm = document.createElement('div');
+      ghtForm.innerHTML = `
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <label class="mb-1 block text-xs text-[#737373]">Class name</label>
+            <input type="text" class="ght-input w-full" id="ght-class-name" placeholder="e.g. Year 6" />
+          </div>
+          <div>
+            <label class="mb-1 block text-xs text-[#737373]">Section</label>
+            <input type="text" class="ght-input w-full" id="ght-class-section" list="ght-section-options" placeholder="e.g. Primary" />
+            <datalist id="ght-section-options">${ghtSections.map((ghtSection) => `<option value="${ghtSection}"></option>`).join('')}</datalist>
+          </div>
+        </div>
+        <div class="mt-6 flex justify-end gap-2">
+          <button type="button" class="ght-button ght-button--secondary text-sm font-medium" id="ght-class-form-cancel">Cancel</button>
+          <button type="button" class="ght-button ght-button--primary text-sm font-medium" id="ght-class-form-save">Save class</button>
+        </div>
+      `;
+      if (ghtExistingClass) {
+        ghtForm.querySelector('#ght-class-name').value = ghtExistingClass.name;
+        ghtForm.querySelector('#ght-class-section').value = ghtExistingClass.section;
+      }
+      return ghtForm;
+    }
+
+    // Opens the add/edit modal. Passing an existing class switches it to edit mode.
+    function ghtOpenClassForm(ghtExistingClass) {
+      const ghtForm = ghtBuildClassForm(ghtExistingClass);
+      const ghtOverlay = GhtModal({ ghtTitle: ghtExistingClass ? 'Edit class' : 'Add class', ghtContent: ghtForm });
+      const ghtClose = GhtOpenModal(ghtOverlay);
+
+      ghtForm.querySelector('#ght-class-form-cancel').addEventListener('click', () => ghtClose());
+      ghtForm.querySelector('#ght-class-form-save').addEventListener('click', () => {
+        const ghtName = ghtForm.querySelector('#ght-class-name').value.trim();
+        const ghtSection = ghtForm.querySelector('#ght-class-section').value.trim();
+        if (!ghtName || !ghtSection) {
+          window.alert('Class name and section are both required.');
+          return;
+        }
+        if (ghtExistingClass) {
+          ghtExistingClass.name = ghtName;
+          ghtExistingClass.section = ghtSection;
+        } else {
+          const ghtNextNumber = ghtState.classes.length + 1;
+          ghtState.classes.push({ id: `CLASS-${String(ghtNextNumber).padStart(3, '0')}`, name: ghtName, section: ghtSection, status: 'active' });
+        }
+        ghtClose();
+        ghtRenderPage();
+      });
+    }
+
+    // Confirms and archives a class, then re-renders the list.
+    async function ghtArchiveClass(ghtClassId) {
+      const ghtClass = ghtState.classes.find((ghtItem) => ghtItem.id === ghtClassId);
+      if (!ghtClass) return;
+      const ghtConfirmed = await GhtConfirm({
+        ghtTitle: 'Archive class',
+        ghtMessage: `Archive "${ghtClass.name}"? It will no longer be selectable when assigning fees.`,
+        ghtConfirmLabel: 'Archive',
+      });
+      if (!ghtConfirmed) return;
+      ghtClass.status = 'archived';
+      ghtRenderPage();
+    }
+
+    // Builds the section-grouped list markup for the currently filtered classes.
+    function ghtBuildClassList() {
+      const ghtFiltered = ghtFilterClasses(ghtState.classes, { ghtSearch: ghtState.search, ghtSectionFilter: ghtState.sectionFilter });
+      if (ghtFiltered.length === 0) {
+        return `<p class="mt-2 text-sm text-[#737373]">No classes match your search or filter.</p>`;
+      }
+      const ghtGroups = ghtGroupClassesBySection(ghtFiltered);
+      return ghtGroups
+        .map(([ghtSection, ghtClasses]) => {
+          const ghtRows = ghtClasses.map((ghtClass) => GhtClassManageRow({ ghtClass }).outerHTML).join('');
+          return `
+            <div class="mt-6 first:mt-0">
+              <p class="m-0 text-xs font-medium text-[#737373]">${ghtSection}</p>
+              <ul class="m-0 mt-1 list-none divide-y divide-[#f5f5f5] p-0">${ghtRows}</ul>
+            </div>
+          `;
+        })
+        .join('');
+    }
+
+    // Renders the whole page: shell + toolbar + section-grouped class list.
+    function ghtRenderPage() {
+      const ghtSections = ghtDistinctSections(ghtState.classes);
+      const ghtToolbar = `
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <input type="text" id="ght-class-search" class="ght-input flex-1" placeholder="Search classes…" value="${ghtState.search}" />
+          <select id="ght-section-filter" class="ght-input sm:w-48">
+            <option value="">All sections</option>
+            ${ghtSections.map((ghtSection) => `<option value="${ghtSection}" ${ghtState.sectionFilter === ghtSection ? 'selected' : ''}>${ghtSection}</option>`).join('')}
+          </select>
+        </div>
+      `;
+      const ghtContent = `
+        <div class="ght-dashboard-content">
+          <div class="ght-page-enter">
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p class="m-0 text-sm text-[#737373]">Class & Academic Structure</p>
+                <h2 class="ght-display mb-0 mt-2 text-3xl leading-none tracking-normal sm:text-4xl">Classes.</h2>
+              </div>
+              <div id="ght-add-class-slot"></div>
+            </div>
+            <section class="mt-6">
+              ${GhtCard({ ghtContent: `<div id="ght-class-toolbar">${ghtToolbar}</div><div id="ght-class-list">${ghtBuildClassList()}</div>` })}
+            </section>
+          </div>
+        </div>
+      `;
+      ghtApp.innerHTML = GhtAppShell({ ghtNavigationConfig, ghtCurrentPath, ghtContent });
+      GhtBindSidebar();
+
+      document.querySelector('#ght-add-class-slot').appendChild(
+        GhtButton({ ghtLabel: '+ Add class', ghtTone: 'primary', ghtAttributes: 'id="ght-add-class-btn"' })
+      );
+      document.querySelector('#ght-add-class-btn').addEventListener('click', () => ghtOpenClassForm(null));
+
+      document.querySelector('#ght-class-search').addEventListener('input', (ghtEvent) => {
+        ghtState.search = ghtEvent.target.value;
+        document.querySelector('#ght-class-list').innerHTML = ghtBuildClassList();
+      });
+      document.querySelector('#ght-section-filter').addEventListener('change', (ghtEvent) => {
+        ghtState.sectionFilter = ghtEvent.target.value;
+        document.querySelector('#ght-class-list').innerHTML = ghtBuildClassList();
+      });
+
+      ghtBindRowActions();
+    }
+
+    // Delegates edit/archive clicks from the class list to their handlers.
+    function ghtBindRowActions() {
+      document.querySelector('#ght-class-list').addEventListener('click', (ghtEvent) => {
+        const ghtRow = ghtEvent.target.closest('[data-ght-id]');
+        if (!ghtRow) return;
+        const ghtAction = ghtEvent.target.closest('[data-ght-action]')?.dataset.ghtAction;
+        if (ghtAction === 'edit') {
+          const ghtClass = ghtState.classes.find((ghtItem) => ghtItem.id === ghtRow.dataset.ghtId);
+          if (ghtClass) ghtOpenClassForm(ghtClass);
+        } else if (ghtAction === 'archive') {
+          ghtArchiveClass(ghtRow.dataset.ghtId);
+        }
+      });
+    }
+
+    ghtLoadClasses().catch((ghtError) => {
+      console.error(ghtError);
+      ghtApp.innerHTML = `<main class="mx-auto flex min-h-screen max-w-xl items-center p-6"><section class="ght-card w-full"><p class="m-0 text-sm text-[#737373]">Classes unavailable</p><h1 class="ght-display mb-0 mt-2 text-3xl">We could not load class data.</h1><p class="mb-0 mt-4 text-sm text-[#737373]">Please serve this folder from a local static server, then try again.</p></section></main>`;
+    });
+  </script>
+</body>
+</html>

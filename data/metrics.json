@@ -1,0 +1,41 @@
+{
+  "school": "Greenhill School",
+  "term": "First Term · 2026/27",
+  "updated": "Updated today, 08:42",
+  "metrics": [
+    { "label": "Fees collected", "value": 12480600, "detail": "of ₦16,450,000 billed", "tone": "success", "change": "75.9% collection rate" },
+    { "label": "Outstanding fees", "value": 3969400, "detail": "47 families owe fees", "tone": "accent", "change": "₦820,000 overdue" },
+    { "label": "This month’s expenses", "value": 2847500, "detail": "September 2026", "tone": "neutral", "change": "₦412,500 payroll due" },
+    { "label": "Active fee discounts", "value": 38, "detail": "₦1,206,000 discounted", "tone": "accent", "change": "6 discount rules active", "format": "number" }
+  ],
+  "collection": { "billed": 16450000, "collected": 12480600, "due": 3969400 },
+  "collectionTrend": [42, 55, 48, 72, 66, 81, 94],
+  "collectionDays": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Today"],
+  "collectionViews": {
+    "weekly": {
+      "label": "Weekly",
+      "caption": "Daily fees collected this week",
+      "period": "7–13 September 2026",
+      "values": [87000, 90000, 118000, 104000, 132000, 97000, 156000],
+      "labels": ["Mon · 07 Sep", "Tue · 08 Sep", "Wed · 09 Sep", "Thu · 10 Sep", "Fri · 11 Sep", "Sat · 12 Sep", "Sun · 13 Sep"]
+    },
+    "monthly": {
+      "label": "Monthly",
+      "caption": "Fees collected each month",
+      "period": "January–December 2026",
+      "values": [2400000, 5100000, 3200000, 6800000, 4700000, 7300000, 5900000, 8100000, 6400000, 9200000, 7600000, 12480600],
+      "labels": ["Jan 2026", "Feb 2026", "Mar 2026", "Apr 2026", "May 2026", "Jun 2026", "Jul 2026", "Aug 2026", "Sep 2026", "Oct 2026", "Nov 2026", "Dec 2026"]
+    },
+    "session": {
+      "label": "Academic session",
+      "caption": "Fees collected by session",
+      "period": "2021/22–2026/27",
+      "values": [11000000, 12500000, 13000000, 17000000, 19000000, 16450000],
+      "labels": ["2021/22", "2022/23", "2023/24", "2024/25", "2025/26", "2026/27"]
+    }
+  },
+  "moduleSummaries": [
+    { "title": "Results", "detail": "Coming soon", "description": "Term performance will appear here when assessment records are connected." },
+    { "title": "Staff", "detail": "Coming soon", "description": "Staff attendance and payroll summaries will appear here." }
+  ]
+}

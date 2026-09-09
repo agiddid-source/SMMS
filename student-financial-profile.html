@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Greenhill School student account, fees and payments.">
+  <title>Student account · Greenhill School OS</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { theme: { extend: { fontFamily: { ghtSans: ['Geist', 'ui-sans-serif', 'system-ui'], ghtDisplay: ['Instrument Serif', 'Georgia', 'serif'] } } } };</script>
+  <link rel="stylesheet" href="./styles/tokens.css">
+</head>
+<body>
+  <div id="ght-app" class="min-h-screen bg-white"></div>
+  <script type="module">
+    import { GhtAppShell } from './_components/AppShell.js';
+    import { GhtBindSidebar } from './_components/Sidebar.js';
+    import { GhtStudentProfileHeader } from './_components/StudentProfileHeader.js';
+    import { GhtAdminSummary } from './_components/AdminSummary.js';
+    import { GhtFeeBreakdown } from './_components/FeeBreakdown.js';
+    import { GhtAccountHistory } from './_components/AccountHistory.js';
+    import { GhtCard } from './_components/Card.js';
+    import { GhtChip } from './_components/Chip.js';
+    import { ghtNavigationConfig } from './data/navigation.js';
+
+    const ghtApp = document.querySelector('#ght-app');
+    // Converts numeric amounts to whole-value NGN currency strings.
+    const ghtFormatNaira = (ghtAmount) => new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', maximumFractionDigits: 0 }).format(ghtAmount);
+    const ghtStudentId = new URLSearchParams(window.location.search).get('student') || 'sodiq-adeyemi';
+    const ghtCurrentPath = './student-financial-profile.html?student=sodiq-adeyemi';
+
+    // Fetches student data, selects the requested record, and starts rendering.
+    async function ghtLoadStudentProfile() {
+      const ghtResponse = await fetch('./data/students.json');
+      if (!ghtResponse.ok) throw new Error('Student data could not be loaded.');
+      const ghtData = await ghtResponse.json();
+      const ghtStudent = ghtData.students.find((ghtItem) => ghtItem.id === ghtStudentId) || ghtData.students[0];
+      ghtRenderStudentProfile(ghtStudent);
+    }
+
+    // Creates profile sections, mounts the shell, and binds sidebar controls.
+    function ghtRenderStudentProfile(ghtStudent) {
+      const ghtBalanceStatus = ghtStudent.summary.outstanding === 0 ? 'Paid in full' : `${ghtFormatNaira(ghtStudent.summary.outstanding)} due`;
+      const ghtContent = `<div class="ght-dashboard-content ght-profile-content"><div class="ght-page-enter"><a class="ght-transaction-link inline-flex min-h-11 items-center text-sm font-medium" href="./index.html">← Back to overview</a><div class="mt-3">${GhtStudentProfileHeader({ ghtStudent, ghtFormatNaira })}</div><div class="mt-6">${GhtAdminSummary({ ghtStudent, ghtFormatNaira })}</div><section class="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-[1.25fr_.75fr]"><div>${GhtFeeBreakdown({ ghtStudent, ghtFormatNaira })}</div><aside class="grid gap-4"><section class="ght-card"><p class="m-0 text-sm text-[#737373]">This term</p><h2 class="m-0 mt-2 text-xl font-medium tracking-[-.5px]">First Term · 2026/27</h2><div class="mt-6 flex items-center justify-between border-t border-[#f5f5f5] pt-5"><span class="text-sm text-[#737373]">Account status</span>${GhtChip({ ghtLabel: ghtBalanceStatus, ghtTone: ghtStudent.summary.outstanding === 0 ? 'success' : 'accent' })}</div><p class="mb-0 mt-4 text-sm leading-5 text-[#737373]">${ghtStudent.summary.outstanding === 0 ? 'Every payable fee for this term has been settled.' : 'Payment is recorded separately by the Bursar & Payments team.'}</p></section>${GhtCard({ ghtContent: `<p class="m-0 text-sm text-[#737373]">Fee calculation trail</p><div class="mt-5 space-y-4"><div class="flex justify-between gap-3 text-sm"><span class="text-[#737373]">Assigned fees</span><span class="font-medium">${ghtFormatNaira(ghtStudent.summary.assigned)}</span></div><div class="flex justify-between gap-3 text-sm"><span class="text-[#737373]">Approved concession</span><span class="font-medium text-[#915239]">−${ghtFormatNaira(ghtStudent.concession.amount)}</span></div><div class="flex justify-between gap-3 border-t border-[#f5f5f5] pt-4 text-sm"><span class="font-medium">Amount payable</span><span class="font-medium">${ghtFormatNaira(ghtStudent.summary.payable)}</span></div></div>` })}</aside></section><section class="mt-6">${GhtAccountHistory({ ghtTransactions: ghtStudent.transactions, ghtFormatNaira })}</section></div></div>`;
+      const ghtPlainContent = ghtContent.replaceAll('This term', 'Term').replaceAll('Account status', 'Payment status').replaceAll('Fee calculation trail', 'Fee summary').replaceAll('Approved concession', 'Discount').replaceAll('Payment is recorded separately by the Bursar & Payments team.', 'Payments are recorded by the bursar.').replaceAll('Every payable fee for this term has been settled.', 'All fees for this term are paid.');
+      ghtApp.innerHTML = GhtAppShell({ ghtNavigationConfig, ghtCurrentPath, ghtContent: ghtPlainContent });
+      GhtBindSidebar();
+      document.querySelectorAll('[data-ght-profile-action]').forEach((ghtAction) => ghtAction.addEventListener('click', () => {
+        const ghtActionLabel = ghtAction.dataset.ghtProfileAction === 'payment' ? 'Record payment' : 'Statement';
+        const ghtToast = document.createElement('div');
+        ghtToast.className = 'ght-profile-toast';
+        ghtToast.setAttribute('role', 'status');
+        ghtToast.textContent = `${ghtActionLabel} workflow is ready for the next module.`;
+        document.body.appendChild(ghtToast);
+        requestAnimationFrame(() => ghtToast.classList.add('ght-is-visible'));
+        window.setTimeout(() => {
+          ghtToast.classList.remove('ght-is-visible');
+          window.setTimeout(() => ghtToast.remove(), 200);
+        }, 2400);
+      }));
+    }
+
+    ghtLoadStudentProfile().catch((ghtError) => {
+      console.error(ghtError);
+      ghtApp.innerHTML = `<main class="mx-auto flex min-h-screen max-w-xl items-center p-6"><section class="ght-card w-full"><p class="m-0 text-sm text-[#737373]">Student account unavailable</p><h1 class="ght-display mb-0 mt-2 text-3xl">We could not load this financial profile.</h1><p class="mb-0 mt-4 text-sm text-[#737373]">Please serve this folder from a local static server, then try again.</p></section></main>`;
+    });
+  </script>
+</body>
+</html>

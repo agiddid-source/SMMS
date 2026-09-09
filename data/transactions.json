@@ -1,0 +1,6 @@
+[
+  { "initials": "AO", "name": "Amara Okafor", "context": "Year 3 · Tuition", "amount": 87000, "status": "Paid", "time": "Today, 08:32" },
+  { "initials": "SA", "name": "Sodiq Adeyemi", "context": "Toddler · Community child discount", "amount": 87000, "status": "Discount", "time": "Today, 08:04" },
+  { "initials": "CE", "name": "Chiamaka Eze", "context": "Year 5 · Tuition", "amount": 78300, "status": "Paid", "time": "Yesterday, 16:18" },
+  { "initials": "OH", "name": "Olamide Hassan", "context": "Year 1 · Tuition", "amount": 43500, "status": "Pending", "time": "Yesterday, 14:57" }
+]

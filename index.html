@@ -1,0 +1,74 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Greenhill School financial overview for proprietors and bursars.">
+  <title>Overview · Greenhill School OS</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { theme: { extend: { fontFamily: { ghtSans: ['Geist', 'ui-sans-serif', 'system-ui'], ghtDisplay: ['Instrument Serif', 'Georgia', 'serif'] } } } };</script>
+  <link rel="stylesheet" href="./styles/tokens.css">
+</head>
+<body>
+  <div id="ght-app" class="min-h-screen bg-white"></div>
+  <script type="module">
+    import { GhtAppShell } from './_components/AppShell.js';
+    import { GhtBindSidebar } from './_components/Sidebar.js';
+    import { GhtDashboardBanner } from './_components/DashboardBanner.js';
+    import { GhtMetricCard } from './_components/MetricCard.js';
+    import { GhtCard } from './_components/Card.js';
+    import { GhtButton } from './_components/Button.js';
+    import { GhtChip } from './_components/Chip.js';
+    import { GhtCollectionChart, GhtBindCollectionChart } from './_components/Chart.js';
+    import { GhtTransactionRow } from './_components/TransactionRow.js';
+    import { GhtDashboardReview } from './_components/DashboardAttention.js';
+    import { ghtNavigationConfig } from './data/navigation.js';
+
+    const ghtDashboardBannerSource = './assets/15.png';
+    const ghtCurrentPath = './index.html';
+    const ghtApp = document.querySelector('#ght-app');
+    // Converts numeric amounts to whole-value NGN currency strings.
+    const ghtFormatNaira = (ghtAmount) => new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', maximumFractionDigits: 0 }).format(ghtAmount);
+    // Converts amounts to abbreviated million-naira display strings.
+    const ghtFormatCompactNaira = (ghtAmount) => `${ghtFormatNaira(ghtAmount / 1000000)}m`;
+
+    // Fetches both dashboard datasets and passes them to the page renderer.
+    async function ghtLoadDashboard() {
+      const [ghtMetricsResponse, ghtTransactionsResponse] = await Promise.all([fetch('./data/metrics.json'), fetch('./data/transactions.json')]);
+      if (!ghtMetricsResponse.ok || !ghtTransactionsResponse.ok) throw new Error('Dashboard data could not be loaded.');
+      const [ghtDashboard, ghtTransactions] = await Promise.all([ghtMetricsResponse.json(), ghtTransactionsResponse.json()]);
+      console.info('ght raw metrics response', ghtDashboard);
+      ghtRenderDashboard(ghtDashboard, ghtTransactions);
+    }
+
+    // Creates dashboard sections, mounts the shell, and binds page actions.
+    function ghtRenderDashboard(ghtDashboard, ghtTransactions) {
+      const ghtCollectionViews = ghtDashboard.collectionViews;
+      window.ghtCollectionChartViews = ghtCollectionViews;
+      // Wraps each metric component for the responsive metric grid.
+      const ghtMetrics = ghtDashboard.metrics.map((ghtMetric) => `<div class="ght-stagger-enter">${GhtMetricCard({ ghtLabel: ghtMetric.label, ghtValue: ghtMetric.value, ghtDetail: ghtMetric.detail, ghtChange: ghtMetric.change, ghtTone: ghtMetric.tone, ghtFormatNaira: ghtMetric.format === 'number' ? null : ghtFormatNaira, ghtActionHref: ghtMetric.label === 'Outstanding fees' ? './coming-soon.html?module=Ledger' : ghtMetric.label === 'This month’s expenses' ? './coming-soon.html?module=Expenses' : '', ghtActionLabel: ghtMetric.label === 'Outstanding fees' ? 'Review ledger' : 'View expenses' })}</div>`).join('');
+      // Creates transaction rows and links the matching student transaction.
+      const ghtTransactionRows = ghtTransactions.map((ghtTransaction) => GhtTransactionRow({ ghtTransaction, ghtFormatNaira, ghtHref: ghtTransaction.name === 'Sodiq Adeyemi' ? './student-financial-profile.html?student=sodiq-adeyemi' : '' })).join('');
+      const ghtCollectionPercent = Math.round((ghtDashboard.collection.collected / ghtDashboard.collection.billed) * 100);
+      const ghtDashboardReview = GhtDashboardReview({ ghtTransactions, ghtFormatNaira });
+      // Creates one summary card for each configured dashboard module.
+      const ghtModuleCards = ghtDashboard.moduleSummaries.map((ghtModule) => GhtCard({ ghtClassName: 'flex min-h-[142px] flex-col justify-between', ghtContent: `<div class="flex items-start justify-between gap-3"><div><h3 class="m-0 text-base font-medium">${ghtModule.title}</h3><p class="mb-0 mt-2 text-sm leading-5 text-[#737373]">${ghtModule.description}</p></div><span class="ght-empty-orb flex shrink-0 items-center justify-center text-[#915239]" aria-hidden="true"><svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14"/></svg></span></div><p class="mb-0 mt-4 text-xs font-medium text-[#737373]">${ghtModule.detail}</p>` })).join('');
+      const ghtContent = `<div class="ght-dashboard-content"><div class="ght-page-enter">${GhtDashboardBanner({ ghtSchool: ghtDashboard.school, ghtTerm: ghtDashboard.term, ghtUpdated: ghtDashboard.updated, ghtImageSource: ghtDashboardBannerSource })}<div class="mt-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"><div><p class="m-0 text-sm text-[#737373]">Financial overview</p><h2 class="ght-display mb-0 mt-2 text-3xl leading-none tracking-normal sm:text-4xl">What needs your attention.</h2></div><div class="flex flex-wrap items-center gap-3">${GhtChip({ ghtLabel: ghtDashboard.term, ghtTone: 'neutral' })}${GhtButton({ ghtLabel: 'View ledger', ghtTone: 'primary', ghtIcon: '<svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>', ghtAttributes: 'id="ght-view-ledger"' })}</div></div><section class="mt-5 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4" aria-label="Key financial figures">${ghtMetrics}</section><section class="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-[1.22fr_.78fr]"><div>${GhtCard({ ghtContent: `<div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between"><div><p class="m-0 text-sm text-[#737373]">Weekly collection rhythm</p><h3 class="m-0 mt-2 text-xl font-medium tracking-[-.5px]">${ghtFormatCompactNaira(ghtDashboard.collection.collected)} received this term</h3></div>${GhtChip({ ghtLabel: 'On track', ghtTone: 'success' })}</div>${GhtCollectionChart({ ghtTrend: ghtDashboard.collectionTrend, ghtDays: ghtDashboard.collectionDays })}<div class="mt-6 grid grid-cols-1 gap-4 border-t border-[#f5f5f5] pt-5 sm:grid-cols-3"><div><p class="m-0 text-xs text-[#737373]">Billed</p><p class="mb-0 mt-1 text-sm font-medium">${ghtFormatCompactNaira(ghtDashboard.collection.billed)}</p></div><div><p class="m-0 text-xs text-[#737373]">Collected</p><p class="mb-0 mt-1 text-sm font-medium text-[#16803b]">${ghtFormatCompactNaira(ghtDashboard.collection.collected)}</p></div><div><p class="m-0 text-xs text-[#737373]">Remaining</p><p class="mb-0 mt-1 text-sm font-medium">${ghtFormatCompactNaira(ghtDashboard.collection.due)}</p></div></div>` })}</div><div>${GhtCard({ ghtContent: `<div class="flex items-center justify-between gap-4"><div><p class="m-0 text-sm text-[#737373]">Term collection status</p><h3 class="m-0 mt-2 text-xl font-medium tracking-[-.5px]">${ghtCollectionPercent}% received</h3></div><span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-[5px] border-[#f7e7d8] text-xs font-semibold text-[#915239]">${ghtCollectionPercent}%</span></div><div class="mt-6"><div class="flex justify-between gap-3 text-sm"><span class="text-[#737373]">Collected</span><span class="font-medium">${ghtFormatNaira(ghtDashboard.collection.collected)}</span></div><div class="ght-progress-track mt-3"><div class="ght-progress-fill" style="width:${ghtCollectionPercent}%"></div></div><p class="mb-0 mt-3 text-xs text-[#737373]">${ghtFormatNaira(ghtDashboard.collection.due)} remains across 47 families.</p></div><div class="mt-6 border-t border-[#f5f5f5] pt-5"><p class="m-0 text-sm font-medium">A practical next step</p><p class="mb-0 mt-2 text-sm leading-5 text-[#737373]">Follow up on 12 accounts now overdue to protect this term’s collection target.</p></div>` })}</div></section><section class="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-[1.22fr_.78fr]"><div>${GhtCard({ ghtContent: `<div class="flex items-start justify-between gap-4"><div><p class="m-0 text-sm text-[#737373]">Recent financial activity</p><h3 class="m-0 mt-2 text-xl font-medium tracking-[-.5px]">A visible trail, not a memory test.</h3></div><a class="ght-transaction-link min-h-11 pt-2 text-sm font-medium" href="./student-financial-profile.html?student=sodiq-adeyemi">View profile</a></div><ul class="m-0 mt-3 list-none divide-y divide-[#f5f5f5] p-0">${ghtTransactionRows}</ul>` })}</div><div><div class="mb-4"><p class="m-0 text-sm text-[#737373]">Connected modules</p><h3 class="m-0 mt-2 text-xl font-medium tracking-[-.5px]">Ready when they are.</h3></div><div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-1">${ghtModuleCards}</div></div></section></div></div>`;
+      const ghtPlainContent = ghtContent.replaceAll('Financial overview', 'Finance').replaceAll('What needs your attention.', 'Review these items').replaceAll('Weekly collection rhythm', 'Weekly fees collected').replaceAll('received this term', 'collected this term').replaceAll('Term collection status', 'Fees collected').replaceAll('A practical next step', 'Next step').replaceAll('Follow up on 12 accounts now overdue to protect this term’s collection target.', 'Follow up on 12 overdue accounts.').replaceAll('Recent financial activity', 'Recent payments').replaceAll('A visible trail, not a memory test.', 'Recent payment activity').replaceAll('Connected modules', 'Other modules').replaceAll('Ready when they are.', 'Not available yet');
+      ghtApp.innerHTML = GhtAppShell({ ghtNavigationConfig, ghtCurrentPath, ghtContent: ghtPlainContent });
+      const ghtDashboardPage = document.querySelector('.ght-page-enter');
+      const ghtMetricsSection = ghtDashboardPage?.querySelector('section[aria-label="Key financial figures"]');
+      if (ghtDashboardPage) ghtDashboardPage.appendChild(ghtDashboardReview);
+      GhtBindSidebar();
+      GhtBindCollectionChart({ ghtViews: ghtCollectionViews });
+      document.querySelector('#ght-view-ledger').addEventListener('click', () => { window.location.assign('./coming-soon.html?module=Ledger'); });
+    }
+
+    ghtLoadDashboard().catch((ghtError) => {
+      console.error(ghtError);
+      ghtApp.innerHTML = `<main class="mx-auto flex min-h-screen max-w-xl items-center p-6"><section class="ght-card w-full"><p class="m-0 text-sm text-[#737373]">Dashboard unavailable</p><h1 class="ght-display mb-0 mt-2 text-3xl">We could not load Greenhill’s financial overview.</h1><p class="mb-0 mt-4 text-sm text-[#737373]">Please serve this folder from a local static server, then try again.</p></section></main>`;
+    });
+  </script>
+</body>
+</html>

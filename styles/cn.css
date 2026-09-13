@@ -34,6 +34,11 @@
 .cn-table td { padding: 12px 16px; border-bottom: 1px solid var(--ght-color-border); vertical-align: middle; }
 .cn-table tr:last-child td { border-bottom: none; }
 
+/* Fixed-column grid list — used instead of one <table> per section, so
+   Status lands in the exact same spot on every row regardless of which
+   section (and therefore which class-name width) produced it. A per-
+   section <table> auto-sizes its own columns independently, which is
+   what caused the misalignment this replaces. */
 .cn-list-wrap { background: var(--ght-color-surface); border: 1px solid var(--ght-color-border); border-radius: var(--ght-radius-lg); overflow: hidden; }
 .cn-list-header, .cn-list-row {
   display: grid;
@@ -55,6 +60,11 @@
   background: var(--ght-color-surface); border-bottom: 1px solid var(--ght-color-border);
 }
 
+/* Fee list — same fixed-column-grid approach, wider columns for amount/
+   term/due-date/classes. Also avoids nesting the per-row modal markup
+   inside a real <table>, which isn't valid HTML (a <div>/checkbox pair
+   as a direct child of <tbody> gets silently "fixed" by the browser via
+   foster-parenting rather than rejected outright). */
 .cn-fee-list-wrap { background: var(--ght-color-surface); border: 1px solid var(--ght-color-border); border-radius: var(--ght-radius-lg); overflow: hidden; }
 .cn-fee-list-header, .cn-fee-list-row {
   display: grid;
@@ -82,7 +92,7 @@
 .cn-btn-text { background: none; border: none; padding: 6px 4px; font-size: 14px; font-weight: 500; color: var(--ght-color-accent); cursor: pointer; }
 .cn-btn-danger-text { background: none; border: none; padding: 6px 4px; font-size: 14px; font-weight: 500; color: var(--ght-color-error); cursor: pointer; }
 
-/* ---- Checkbox-hack modal --- */
+/* ---- Checkbox-hack modal (no JS) ---- */
 .cn-modal-toggle { position: absolute; opacity: 0; pointer-events: none; width: 0; height: 0; }
 .cn-modal-overlay {
   position: fixed; inset: 0; z-index: 70; display: flex; align-items: flex-start; justify-content: center;

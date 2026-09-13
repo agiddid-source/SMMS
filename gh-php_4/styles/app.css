@@ -1,0 +1,46 @@
+.ght-visually-hidden {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  white-space: nowrap;
+}
+
+.ght-mobile-drawer, .ght-sidebar-scrim { transition: transform 240ms var(--ght-ease-out), opacity 220ms var(--ght-ease-out); }
+
+body:has(#ght-drawer-toggle:checked) .ght-mobile-drawer { transform: translateX(0); }
+body:has(#ght-drawer-toggle:checked) .ght-sidebar-scrim { opacity: 1; pointer-events: auto; }
+body:has(#ght-drawer-toggle:checked) { overflow: hidden; }
+
+.ght-nav-group { border: 0; }
+.ght-nav-group-toggle { list-style: none; }
+.ght-nav-group-toggle::-webkit-details-marker,
+.ght-nav-group-toggle::marker { display: none; content: ''; }
+.ght-nav-group[open] .ght-nav-group-panel { grid-template-rows: 1fr; opacity: 1; }
+.ght-nav-group[open] > .ght-nav-group-toggle { color: var(--ght-color-on-surface); }
+
+.ght-chart-views { align-items: center; display: inline-flex; gap: 4px; background: var(--ght-color-tertiary); border: 1px solid var(--ght-color-border); border-radius: var(--ght-radius-md); padding: 3px; }
+.ght-chart-view-link { border-radius: 6px; color: var(--ght-color-muted); font-size: 12px; font-weight: 500; padding: 6px 10px; text-decoration: none; }
+.ght-chart-view-link--active { background: var(--ght-color-surface); box-shadow: 0 1px 2px #0000001a; color: var(--ght-color-on-surface); }
+
+@media (min-width: 1024px) {
+  body:has(#ght-sidebar-collapse-toggle:checked) .ght-sidebar-desktop { width: 88px; }
+  body:has(#ght-sidebar-collapse-toggle:checked) .ght-app-main { padding-left: 88px; }
+  body:has(#ght-sidebar-collapse-toggle:checked) .ght-sidebar-brand { justify-content: center; position: relative; }
+  body:has(#ght-sidebar-collapse-toggle:checked) .ght-sidebar-brand > a { justify-content: center; }
+  body:has(#ght-sidebar-collapse-toggle:checked) .ght-sidebar-brand > a > .ght-sidebar-label,
+  body:has(#ght-sidebar-collapse-toggle:checked) .ght-sidebar-profile > div > div,
+  body:has(#ght-sidebar-collapse-toggle:checked) .ght-nav-link > span,
+  body:has(#ght-sidebar-collapse-toggle:checked) .ght-nav-group-toggle > span,
+  body:has(#ght-sidebar-collapse-toggle:checked) .ght-nav-group-toggle > svg:last-child { display: none; }
+  body:has(#ght-sidebar-collapse-toggle:checked) .ght-sidebar-collapse { background: var(--ght-color-surface); display: inline-flex; height: 24px; position: absolute; right: -8px; top: -8px; width: 24px; }
+  body:has(#ght-sidebar-collapse-toggle:checked) .ght-sidebar-collapse svg { transform: rotate(180deg); }
+  body:has(#ght-sidebar-collapse-toggle:checked) .ght-nav-link,
+  body:has(#ght-sidebar-collapse-toggle:checked) .ght-nav-group-toggle { justify-content: center; padding-inline: 8px; }
+  body:has(#ght-sidebar-collapse-toggle:checked) .ght-nav-group-panel { display: none; }
+  body:has(#ght-sidebar-collapse-toggle:checked) .ght-sidebar-profile > div { justify-content: center; }
+}

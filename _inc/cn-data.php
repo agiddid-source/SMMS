@@ -21,7 +21,7 @@ function cn_next_id($prefix, $existing) {
     return sprintf('%s-%03d', $prefix, count($existing) + 1);
 }
 
-// ---- Classes ------------------------------------------------------------
+// Classes 
 
 function cn_get_classes() {
     return read_json('data/classes.json') ?? [];
@@ -60,7 +60,7 @@ function cn_archive_class($id) {
     return false;
 }
 
-// ---- Fee types ------------------------------------------------------------
+// Fee types
 
 function cn_get_fee_types() {
     return read_json('data/fee-types.json') ?? [];
@@ -77,7 +77,7 @@ function cn_add_fee_type($name) {
     return $record;
 }
 
-// ---- Fees ------------------------------------------------------------
+// Fees
 
 function cn_get_fees() {
     return read_json('data/fees.json') ?? [];

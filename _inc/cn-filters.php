@@ -1,10 +1,4 @@
 <?php
-/**
- * _inc/cn-filters.php
- *
- * Pure functions used by pages/classes.php and pages/fee-setup.php. Kept
- * free of superglobals and output so they're directly unit-testable.
- */
 
 const CN_SECTION_ORDER = ['Toddler', 'Nursery', 'KG', 'Primary', 'Secondary'];
 

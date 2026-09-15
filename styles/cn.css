@@ -1,17 +1,3 @@
-/**
- * styles/cn.css
- *
- * Kept as our own file rather than added to tokens.css/app.css (shared).
- * Linked directly from pages/classes.php and pages/fee-setup.php.
- *
- * The modal system here deliberately follows the same zero-JS pattern
- * app.css already uses for the sidebar drawer/collapse: a hidden checkbox
- * plus a CSS sibling selector, no custom script anywhere. Because there's
- * no shared JS store to hold "which fee is being edited," each row gets
- * its own checkbox + modal, pre-filled server-side with that row's actual
- * values — the PHP equivalent of what a client-side data-cn-fill would
- * have done, just resolved at render time instead of at click time.
- */
 
 .cn-input {
   min-height: 42px;
@@ -34,11 +20,6 @@
 .cn-table td { padding: 12px 16px; border-bottom: 1px solid var(--ght-color-border); vertical-align: middle; }
 .cn-table tr:last-child td { border-bottom: none; }
 
-/* Fixed-column grid list — used instead of one <table> per section, so
-   Status lands in the exact same spot on every row regardless of which
-   section (and therefore which class-name width) produced it. A per-
-   section <table> auto-sizes its own columns independently, which is
-   what caused the misalignment this replaces. */
 .cn-list-wrap { background: var(--ght-color-surface); border: 1px solid var(--ght-color-border); border-radius: var(--ght-radius-lg); overflow: hidden; }
 .cn-list-header, .cn-list-row {
   display: grid;
@@ -59,12 +40,6 @@
   padding: 10px 16px 6px; font-size: 13px; font-weight: 600; color: var(--ght-color-muted);
   background: var(--ght-color-surface); border-bottom: 1px solid var(--ght-color-border);
 }
-
-/* Fee list — same fixed-column-grid approach, wider columns for amount/
-   term/due-date/classes. Also avoids nesting the per-row modal markup
-   inside a real <table>, which isn't valid HTML (a <div>/checkbox pair
-   as a direct child of <tbody> gets silently "fixed" by the browser via
-   foster-parenting rather than rejected outright). */
 .cn-fee-list-wrap { background: var(--ght-color-surface); border: 1px solid var(--ght-color-border); border-radius: var(--ght-radius-lg); overflow: hidden; }
 .cn-fee-list-header, .cn-fee-list-row {
   display: grid;

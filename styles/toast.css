@@ -1,0 +1,42 @@
+
+.toast {
+  position: fixed; bottom: 24px; right: 24px; z-index: 90;
+  display: grid; min-width: 240px; padding: 14px 18px;
+  background: var(--ght-color-primary); color: #fff; border-radius: var(--ght-radius-lg);
+  box-shadow: 0 12px 30px #00000033; font-size: 14px; font-weight: 500;
+  opacity: 0; transform: translateY(8px);
+  animation: toast-enter 220ms var(--ght-ease-out) forwards,
+             toast-exit 220ms var(--ght-ease-out) forwards;
+  animation-delay: 0s, calc(var(--toast-spin-duration) + 2500ms);
+}
+.toast-phase {
+  grid-column: 1; grid-row: 1;
+  display: flex; align-items: center; gap: 10px;
+  opacity: 0;
+}
+.toast-phase--loading {
+  animation: toast-fade-in 150ms ease forwards, toast-fade-out 200ms ease forwards;
+  animation-delay: 80ms, var(--toast-spin-duration);
+}
+.toast-phase--done {
+  animation: toast-fade-in 200ms ease forwards;
+  animation-delay: calc(var(--toast-spin-duration) + 100ms);
+}
+@keyframes toast-enter { to { opacity: 1; transform: translateY(0); } }
+@keyframes toast-exit { to { opacity: 0; transform: translateY(8px); } }
+@keyframes toast-fade-in { to { opacity: 1; } }
+@keyframes toast-fade-out { to { opacity: 0; } }
+
+.toast-spinner {
+  width: 15px; height: 15px; flex-shrink: 0;
+  border: 2px solid rgba(255, 255, 255, .3); border-top-color: #fff; border-radius: 50%;
+  animation: toast-spin 700ms linear infinite;
+}
+@keyframes toast-spin { to { transform: rotate(360deg); } }
+
+.toast-check {
+  width: 16px; height: 16px; flex-shrink: 0; border-radius: 50%;
+  background: var(--ght-color-success); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; line-height: 1;
+}

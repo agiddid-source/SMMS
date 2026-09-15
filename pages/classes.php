@@ -1,13 +1,5 @@
 <link rel="stylesheet" href="styles/cn.css">
 <?php
-/**
- * pages/classes.php
- *
- * Required by index.php inside <main>, after the shell has already been
- * echoed — so no header()/redirect can happen from here. Mutations go
- * through _inc/handlers/classes.php via index.php's generic POST dispatch
- * (see the comment there); this file only ever renders a GET.
- */
 
 $search = cure($_GET['search'] ?? '');
 $section_filter = cure($_GET['section'] ?? '');
@@ -17,6 +9,7 @@ $filtered = cn_filter_classes($all_classes, $search, $section_filter);
 $grouped = cn_group_by_section($filtered);
 $sections = cn_distinct_sections($all_classes);
 ?>
+<?php render_toast(); ?>
 <div class="ght-dashboard-content">
   <div class="ght-page-enter">
 

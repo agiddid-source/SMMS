@@ -1,18 +1,5 @@
 <link rel="stylesheet" href="styles/cn.css">
 <?php
-/**
- * pages/fee-setup.php
- *
- * Same constraints as pages/classes.php — mutations go through
- * _inc/handlers/fee-setup.php via index.php's generic POST dispatch, this
- * file only ever renders a GET.
- *
- * The class-assignment picker inside Add/Edit Fee renders every active
- * class as a plain checkbox, grouped by section, with no live search/
- * filter — there's no JS anywhere in this build to hide/show rows, and at
- * ~16 classes a scrollable list is perfectly usable without one. That's a
- * real simplification versus the JS build's live-filtering picker.
- */
 
 $search = cure($_GET['search'] ?? '');
 $type_filter = cure($_GET['type'] ?? '');
@@ -26,6 +13,7 @@ $filtered_fees = cn_filter_fees($all_fees, $search, $type_filter, $term_filter);
 $terms = cn_distinct_terms($all_fees);
 $grouped_classes = cn_group_by_section($all_classes);
 ?>
+<?php render_toast(); ?>
 <div class="ght-dashboard-content">
   <div class="ght-page-enter">
 
@@ -86,7 +74,7 @@ $grouped_classes = cn_group_by_section($all_classes);
               </span>
             </div>
 
-            <!-- Edit fee modal — pre-filled server-side, including which class checkboxes are already checked -->
+            <!-- Edit fee modal -->
             <input type="checkbox" id="cn-edit-fee-<?= htmlspecialchars($fee['id']) ?>" class="cn-modal-toggle">
             <div class="cn-modal-overlay">
               <label for="cn-edit-fee-<?= htmlspecialchars($fee['id']) ?>" class="cn-modal-backdrop" aria-hidden="true"></label>
@@ -131,7 +119,7 @@ $grouped_classes = cn_group_by_section($all_classes);
   </div>
 </div>
 
-<!-- Add fee modal — same field partial, all blank -->
+<!-- Add fee modal -->
 <?php $fee = null; $assigned_ids = []; ?>
 <input type="checkbox" id="cn-add-fee" class="cn-modal-toggle">
 <div class="cn-modal-overlay">

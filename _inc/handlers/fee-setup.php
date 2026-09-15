@@ -1,10 +1,4 @@
 <?php
-/**
- * _inc/handlers/fee-setup.php
- *
- * Required by index.php's generic POST dispatch before any HTML output
- * has started (see the comment there), so header('Location: ...') is safe.
- */
 
 $cn_action = cure($_POST['action'] ?? '');
 
@@ -43,6 +37,8 @@ if ($cn_action === 'add' || $cn_action === 'edit') {
             cn_update_fee($cn_id, $cn_payload);
         } else {
             cn_add_fee($cn_payload);
+            header('Location: index.php?p=fee-setup' . toast_query('Adding fee', 'Fee added successfully', $cn_name));
+            exit;
         }
     }
 } elseif ($cn_action === 'deactivate') {

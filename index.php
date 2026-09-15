@@ -4,6 +4,7 @@ require_once __DIR__ . '/_inc/format.php';
 require_once __DIR__ . '/_inc/route.inc.php';
 require_once __DIR__ . '/_inc/cn-data.php';
 require_once __DIR__ . '/_inc/cn-filters.php';
+require_once __DIR__ . '/_inc/toast.php';
 
 // Generic per-page POST handler dispatch. Runs before any HTML output, so
 // a handler is free to header('Location: ...') and exit — something a

@@ -9,7 +9,7 @@ $ght_navigation_config = [
     ]],
     ['type' => 'group', 'label' => 'Student Accounts', 'icon' => 'users', 'items' => [
         ['label' => 'Student profiles', 'href' => 'index.php?p=student-profile&student=sodiq-adeyemi'],
-        ['label' => 'Fee discounts', 'href' => 'index.php?p=student-profile&student=sodiq-adeyemi#ght-concessions'],
+        ['label' => 'Discount rules', 'href' => 'index.php?p=discounts'],
     ]],
     ['type' => 'group', 'label' => 'Bursar & Payments', 'icon' => 'payment', 'items' => [
         ['label' => 'Invoices', 'href' => 'index.php?p=invoices&module=Invoicing+%26+Billing'],

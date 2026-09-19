@@ -117,3 +117,44 @@ function cn_deactivate_fee($id) {
     }
     return false;
 }
+
+// Discounts
+
+function cn_get_discounts() {
+    return read_json('data/discounts.json') ?? [];
+}
+
+function cn_add_discount($payload) {
+    $discounts = cn_get_discounts();
+    $record = array_merge(
+        ['id' => cn_next_id('DISC', $discounts), 'status' => 'active', 'createdAt' => date('Y-m-d')],
+        $payload
+    );
+    $discounts[] = $record;
+    cn_write_json('data/discounts.json', $discounts);
+    return $record;
+}
+
+function cn_update_discount($id, $payload) {
+    $discounts = cn_get_discounts();
+    foreach ($discounts as &$discount) {
+        if ($discount['id'] === $id) {
+            $discount = array_merge($discount, $payload);
+            cn_write_json('data/discounts.json', $discounts);
+            return $discount;
+        }
+    }
+    return null;
+}
+
+function cn_toggle_discount_status($id) {
+    $discounts = cn_get_discounts();
+    foreach ($discounts as &$discount) {
+        if ($discount['id'] === $id) {
+            $discount['status'] = $discount['status'] === 'active' ? 'inactive' : 'active';
+            cn_write_json('data/discounts.json', $discounts);
+            return $discount['status'];
+        }
+    }
+    return null;
+}

@@ -25,6 +25,10 @@ $pages = [
         'file' => 'pages/fee-setup.php',
         'title' => 'Fee settings · Greenhill School OS',
     ],
+    'discounts' => [
+        'file' => 'pages/discounts.php',
+        'title' => 'Discounts · Greenhill School OS',
+    ],
 ];
 
 $p = cure($_GET['p'] ?? '');

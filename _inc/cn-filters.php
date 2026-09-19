@@ -65,3 +65,14 @@ function cn_format_class_names($names) {
     if (count($names) <= 2) return implode(', ', $names);
     return implode(', ', array_slice($names, 0, 2)) . ' +' . (count($names) - 2) . ' more';
 }
+
+function cn_filter_discounts($discounts, $search = '', $type = '', $applies_to = '', $include_inactive = true) {
+    $needle = strtolower(trim($search));
+    return array_values(array_filter($discounts, function ($discount) use ($needle, $type, $applies_to, $include_inactive) {
+        if (!$include_inactive && $discount['status'] === 'inactive') return false;
+        if ($type !== '' && $discount['type'] !== $type) return false;
+        if ($applies_to !== '' && $discount['appliesTo'] !== $applies_to) return false;
+        if ($needle !== '' && !str_contains(strtolower($discount['name'] . ' ' . $discount['eligibility']), $needle)) return false;
+        return true;
+    }));
+}

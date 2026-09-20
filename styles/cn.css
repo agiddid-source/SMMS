@@ -1,3 +1,18 @@
+/**
+ * styles/cn.css
+ *
+ * Classes & Fees' own stylesheet — kept separate from the shared
+ * tokens.css/app.css so nothing shared is touched. Everything here is
+ * built on the shared tokens (--ght-color-*, --ght-radius-*), so the
+ * module inherits the Greenhill look without redefining it.
+ *
+ * The modal system is JS-driven now (hidden + .is-open, see
+ * assets/js/cn-modal.js) rather than the older checkbox-hack: one dialog
+ * per purpose, filled at click time, instead of one pre-filled dialog per
+ * row.
+ */
+
+/* ---- Inputs & toolbar ---- */
 
 .cn-input {
   min-height: 42px;
@@ -9,18 +24,31 @@
   color: var(--ght-color-on-surface);
   width: 100%;
 }
-.cn-input:focus { outline: 2px solid var(--ght-color-accent); outline-offset: -1px; }
+.cn-input:focus-visible { outline: 2px solid var(--ght-color-accent); outline-offset: -1px; }
+.cn-input--compact { max-width: 180px; }
 
 .cn-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 18px; }
-.cn-toolbar .cn-input { width: auto; flex: 1; min-width: 160px; }
+.cn-toolbar .cn-input { width: auto; flex: 1 1 180px; min-width: 160px; }
+.cn-toolbar .cn-input--compact { flex: 0 0 auto; }
 
-.cn-table-wrap { background: var(--ght-color-surface); border: 1px solid var(--ght-color-border); border-radius: var(--ght-radius-lg); overflow: hidden; }
-.cn-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-.cn-table th { text-align: left; padding: 10px 16px; font-weight: 500; color: var(--ght-color-muted); border-bottom: 1px solid var(--ght-color-border); background: var(--ght-color-tertiary); }
-.cn-table td { padding: 12px 16px; border-bottom: 1px solid var(--ght-color-border); vertical-align: middle; }
-.cn-table tr:last-child td { border-bottom: none; }
+.cn-switch { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; color: var(--ght-color-muted); cursor: pointer; }
+.cn-switch input { accent-color: var(--ght-color-accent); }
 
-.cn-list-wrap { background: var(--ght-color-surface); border: 1px solid var(--ght-color-border); border-radius: var(--ght-radius-lg); overflow: hidden; }
+.cn-prototype-note { margin: 12px 2px 0; font-size: 12px; color: var(--ght-color-muted); }
+
+/* ---- Lists ----
+   Fixed-column grids rather than tables: every row is its own grid
+   container, so any column that is empty in the header and full in the
+   rows must be a fixed width — `auto` resolves per row and pulls the
+   header out of alignment. */
+
+.cn-list-wrap, .cn-fee-list-wrap {
+  background: var(--ght-color-surface);
+  border: 1px solid var(--ght-color-border);
+  border-radius: var(--ght-radius-lg);
+  overflow: hidden;
+}
+
 .cn-list-header, .cn-list-row {
   display: grid;
   grid-template-columns: 1fr 120px 140px;
@@ -28,19 +56,6 @@
   column-gap: 12px;
   padding: 12px 16px;
 }
-.cn-list-header {
-  font-size: 12px; font-weight: 500; color: var(--ght-color-muted);
-  background: var(--ght-color-tertiary); border-bottom: 1px solid var(--ght-color-border);
-  text-transform: uppercase; letter-spacing: .02em;
-}
-.cn-list-row { border-bottom: 1px solid var(--ght-color-border); font-size: 14px; }
-.cn-list-row:last-child { border-bottom: none; }
-.cn-list-row-actions { text-align: right; white-space: nowrap; }
-.cn-list-section-row {
-  padding: 10px 16px 6px; font-size: 13px; font-weight: 600; color: var(--ght-color-muted);
-  background: var(--ght-color-surface); border-bottom: 1px solid var(--ght-color-border);
-}
-.cn-fee-list-wrap { background: var(--ght-color-surface); border: 1px solid var(--ght-color-border); border-radius: var(--ght-radius-lg); overflow: hidden; }
 .cn-fee-list-header, .cn-fee-list-row {
   display: grid;
   grid-template-columns: 1.6fr 1fr 1.3fr .9fr 1.6fr 170px;
@@ -48,45 +63,150 @@
   column-gap: 12px;
   padding: 12px 16px;
 }
-.cn-fee-list-header {
-  font-size: 12px; font-weight: 500; color: var(--ght-color-muted);
-  background: var(--ght-color-tertiary); border-bottom: 1px solid var(--ght-color-border);
-  text-transform: uppercase; letter-spacing: .02em;
-}
-.cn-fee-list-row { border-bottom: 1px solid var(--ght-color-border); font-size: 14px; }
-.cn-fee-list-row:last-child { border-bottom: none; }
 
-.cn-section-group { margin-bottom: 22px; }
-.cn-section-heading { font-size: 13px; font-weight: 600; color: var(--ght-color-muted); margin: 0 0 8px 2px; }
-.cn-empty { padding: 40px 20px; text-align: center; color: var(--ght-color-muted); font-size: 14px; }
+.cn-list-header, .cn-fee-list-header {
+  font-size: 12px; font-weight: 500; color: var(--ght-color-muted);
+  background: var(--ght-color-tertiary);
+  border-bottom: 1px solid var(--ght-color-border);
+}
+
+.cn-list-row, .cn-fee-list-row {
+  border-bottom: 1px solid var(--ght-color-border);
+  font-size: 14px;
+  animation: cn-row-in 320ms var(--ght-ease-out) both;
+}
+.cn-list-row:last-child, .cn-fee-list-row:last-child { border-bottom: none; }
+.cn-list-row.is-archived .cn-list-row-name,
+.cn-fee-list-row.is-inactive .cn-fee-name { color: var(--ght-color-muted); }
+
+@keyframes cn-row-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .cn-list-row, .cn-fee-list-row { animation: none; }
+}
+
+.cn-list-row-actions { display: flex; justify-content: flex-end; gap: 4px; white-space: nowrap; }
+
+.cn-list-section-row {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+  padding: 10px 16px 6px;
+  font-size: 13px; font-weight: 600; color: var(--ght-color-muted);
+  background: var(--ght-color-surface);
+  border-bottom: 1px solid var(--ght-color-border);
+}
+.cn-list-section-count { font-weight: 400; font-size: 12px; }
+
+.cn-fee-name { display: block; }
+.cn-fee-meta { display: block; font-size: 12px; color: var(--ght-color-muted); }
+.cn-fee-amount { font-variant-numeric: tabular-nums; }
+
+/* ---- Empty state ---- */
+
+.cn-empty { padding: 44px 24px; text-align: center; display: grid; justify-items: center; gap: 6px; }
+.cn-empty-title { margin: 0; font-size: 15px; font-weight: 500; }
+.cn-empty-body { margin: 0 0 8px; font-size: 14px; color: var(--ght-color-muted); max-width: 42ch; }
+
+/* ---- Text buttons ---- */
+
+.cn-btn-text, .cn-btn-danger-text {
+  background: none; border: none; padding: 6px 8px; border-radius: var(--ght-radius-sm);
+  font-size: 14px; font-weight: 500; cursor: pointer;
+}
+.cn-btn-text { color: var(--ght-color-accent); }
+.cn-btn-danger-text { color: var(--ght-color-error); }
+.cn-btn-text--small { font-size: 12px; padding: 2px 4px; }
+@media (hover: hover) {
+  .cn-btn-text:hover, .cn-btn-danger-text:hover { background: var(--ght-color-tertiary); }
+}
+.cn-button--danger { background: var(--ght-color-error); color: #fff; }
+
+/* ---- Modal ---- */
+
+.cn-modal {
+  position: fixed; inset: 0; z-index: 70;
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: 24px 16px; overflow-y: auto;
+  background: transparent; opacity: 0;
+  transition: opacity 180ms var(--ght-ease-out), background 180ms var(--ght-ease-out);
+}
+.cn-modal[hidden] { display: none; }
+.cn-modal.is-open { opacity: 1; background: #0a0a0a66; }
+
+.cn-modal-backdrop { position: absolute; inset: 0; border: 0; padding: 0; background: transparent; cursor: default; }
+
+.cn-modal-panel {
+  position: relative; z-index: 1;
+  background: var(--ght-color-surface); border-radius: var(--ght-radius-xl);
+  max-width: 560px; width: 100%; padding: 24px;
+  box-shadow: 0 20px 60px #0000003a;
+  transform: translateY(-8px);
+  transition: transform 180ms var(--ght-ease-out);
+}
+.cn-modal-panel--narrow { max-width: 420px; }
+.cn-modal.is-open .cn-modal-panel { transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .cn-modal, .cn-modal-panel { transition: none; }
+}
+
+.cn-modal-title { margin: 0 0 14px; font-size: 18px; font-weight: 600; }
+.cn-modal-body { margin: 0 0 16px; font-size: 14px; color: var(--ght-color-muted); }
+.cn-modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+.cn-modal-close {
+  position: absolute; top: 14px; right: 16px; z-index: 2;
+  background: none; border: 0; font-size: 20px; line-height: 1; cursor: pointer;
+  color: var(--ght-color-muted);
+}
+body.cn-modal-open { overflow: hidden; }
+
+/* ---- Fields ---- */
 
 .cn-field { margin-bottom: 12px; }
 .cn-field label { display: block; font-size: 12px; color: var(--ght-color-muted); margin-bottom: 4px; }
 .cn-field-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
 
-.cn-btn-text { background: none; border: none; padding: 6px 4px; font-size: 14px; font-weight: 500; color: var(--ght-color-accent); cursor: pointer; }
-.cn-btn-danger-text { background: none; border: none; padding: 6px 4px; font-size: 14px; font-weight: 500; color: var(--ght-color-error); cursor: pointer; }
+.cn-inline-form { display: flex; gap: 8px; align-items: center; }
 
-/* ---- Checkbox-hack modal (no JS) ---- */
-.cn-modal-toggle { position: absolute; opacity: 0; pointer-events: none; width: 0; height: 0; }
-.cn-modal-overlay {
-  position: fixed; inset: 0; z-index: 70; display: flex; align-items: flex-start; justify-content: center;
-  padding: 24px 16px; overflow-y: auto; background: transparent; opacity: 0; pointer-events: none;
-  transition: opacity 180ms var(--ght-ease-out), background 180ms var(--ght-ease-out);
-}
-.cn-modal-toggle:checked + .cn-modal-overlay {
-  opacity: 1; pointer-events: auto; background: #0a0a0a66;
-}
-.cn-modal-backdrop { position: absolute; inset: 0; cursor: default; }
-.cn-modal-panel {
-  position: relative; background: var(--ght-color-surface); border-radius: var(--ght-radius-xl);
-  max-width: 560px; width: 100%; padding: 24px; box-shadow: 0 20px 60px #0000003a;
-  transform: translateY(-8px); transition: transform 180ms var(--ght-ease-out);
-}
-.cn-modal-toggle:checked + .cn-modal-overlay .cn-modal-panel { transform: translateY(0); }
-.cn-modal-title { margin: 0 0 18px; font-size: 18px; font-weight: 600; }
-.cn-modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
-.cn-modal-close { position: absolute; top: 18px; right: 18px; cursor: pointer; color: var(--ght-color-muted); }
+/* ---- Class picker (inside the fee form) ---- */
 
-.cn-picker-list { max-height: 240px; overflow-y: auto; border: 1px solid var(--ght-color-border); border-radius: var(--ght-radius-md); padding: 10px; }
-.cn-picker-row { display: flex; align-items: center; gap: 8px; min-height: 30px; font-size: 13px; }
+.cn-picker { margin-top: 16px; border-top: 1px solid var(--ght-color-border); padding-top: 14px; }
+.cn-picker-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.cn-picker-head .cn-input { max-width: 190px; min-height: 36px; }
+.cn-picker-list {
+  margin-top: 10px; max-height: 240px; overflow-y: auto;
+  border: 1px solid var(--ght-color-border); border-radius: var(--ght-radius-md); padding: 10px;
+}
+.cn-picker-section {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  margin-top: 10px; padding-bottom: 2px;
+}
+.cn-picker-section:first-child { margin-top: 0; }
+.cn-picker-section-name { font-size: 12px; font-weight: 500; color: var(--ght-color-muted); }
+.cn-picker-row { display: flex; align-items: center; gap: 8px; min-height: 30px; font-size: 13px; cursor: pointer; }
+.cn-picker-row input { accent-color: var(--ght-color-accent); }
+.cn-picker-empty { margin: 0; font-size: 13px; color: var(--ght-color-muted); }
+
+/* ---- Fee types list ---- */
+
+.cn-type-list { list-style: none; padding: 0; margin: 0 0 16px; }
+.cn-type-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 8px 0; border-bottom: 1px solid var(--ght-color-border); font-size: 14px;
+}
+.cn-type-row:last-child { border-bottom: none; }
+.cn-type-count { font-size: 12px; color: var(--ght-color-muted); }
+
+/* ---- Narrow screens: the grid lists collapse to stacked cards ---- */
+
+@media (max-width: 860px) {
+  .cn-list-header, .cn-fee-list-header { display: none; }
+  .cn-list-row, .cn-fee-list-row {
+    grid-template-columns: 1fr auto;
+    row-gap: 6px;
+    padding: 14px 16px;
+  }
+  .cn-fee-list-row > span:nth-child(3),
+  .cn-fee-list-row > span:nth-child(4),
+  .cn-fee-list-row > span:nth-child(5) {
+    grid-column: 1 / -1; font-size: 13px; color: var(--ght-color-muted);
+  }
+  .cn-list-row-actions { grid-column: 1 / -1; justify-content: flex-start; }
+}

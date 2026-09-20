@@ -1,35 +1,38 @@
 <?php
-
-function toast_query($loading_message, $success_message, $subject = '') {
-    $params = ['toast_loading' => $loading_message, 'toast_success' => $success_message];
-    if ($subject !== '') {
-        $params['toast_subject'] = $subject;
-    }
-    return '&' . http_build_query($params);
-}
+/**
+ * _inc/toast.php
+ *
+ * Shared toast component — any module can use it (Classes & Fees built it,
+ * but nothing Classes/Fees-specific is left in it). Required once,
+ * globally, from index.php.
+ *
+ * Because this build is a frontend prototype, the toast is triggered in
+ * the browser, not by a redirect: PHP only prints the empty container and
+ * loads the assets.
+ *
+ * In your page markup, once, anywhere (the toast is position: fixed, so
+ * where doesn't matter):
+ *
+ *   <?php render_toast(); ?>
+ *
+ * Then from any module's JS, at the moment the change happens:
+ *
+ *   showToast('Adding fee', 'Fee added', name);
+ *
+ * It returns a Promise that resolves when the success phase appears, so a
+ * caller can wait for it if it wants to:
+ *
+ *   showToast('Recording payment', 'Payment recorded', ref)
+ *     .then(() => refreshLedger());
+ *
+ * Third argument is optional; when given it is quoted into the loading
+ * line — 'Adding fee "Tuition"…'.
+ */
 
 function render_toast() {
-    if (!isset($_GET['toast_loading']) || !isset($_GET['toast_success'])) {
-        return;
-    }
-
-    $loading = cure($_GET['toast_loading']);
-    $success = cure($_GET['toast_success']);
-    $subject = cure($_GET['toast_subject'] ?? '');
-    $spin_ms = random_int(2000, 5000);
-
-    $loading_label = $subject !== '' ? "{$loading} \"{$subject}\"" : $loading;
     ?>
     <link rel="stylesheet" href="styles/toast.css">
-    <div class="toast" role="status" aria-live="polite" style="--toast-spin-duration: <?= (int) $spin_ms ?>ms;">
-      <span class="toast-phase toast-phase--loading">
-        <span class="toast-spinner" aria-hidden="true"></span>
-        <span><?= htmlspecialchars($loading_label) ?>&hellip;</span>
-      </span>
-      <span class="toast-phase toast-phase--done">
-        <span class="toast-check" aria-hidden="true">&#10003;</span>
-        <span><?= htmlspecialchars($success) ?></span>
-      </span>
-    </div>
+    <div id="toast-root" class="toast-root" role="status" aria-live="polite"></div>
+    <script src="assets/js/toast.js"></script>
     <?php
 }

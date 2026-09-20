@@ -1,17 +1,14 @@
 <link rel="stylesheet" href="styles/cn.css">
 <?php
-
-$search = cure($_GET['search'] ?? '');
-$type_filter = cure($_GET['type'] ?? '');
-$term_filter = cure($_GET['term'] ?? '');
-
-$all_fees = cn_get_fees();
-$all_classes = cn_filter_classes(cn_get_classes(), '', '', false); // active only
-$fee_types = cn_get_fee_types();
-
-$filtered_fees = cn_filter_fees($all_fees, $search, $type_filter, $term_filter);
-$terms = cn_distinct_terms($all_fees);
-$grouped_classes = cn_group_by_section($all_classes);
+/**
+ * pages/fee-setup.php
+ *
+ * Static shell only — same contract as pages/classes.php. Fee rows,
+ * filters, the add/edit modal (including its class picker) and the fee
+ * types modal are all rendered by assets/js/cn-fees.js from the seeded
+ * fixtures. No form on this page posts anywhere.
+ */
+$cn_default_session = '2026/2027';
 ?>
 <?php render_toast(); ?>
 <div class="ght-dashboard-content">
@@ -19,144 +16,125 @@ $grouped_classes = cn_group_by_section($all_classes);
 
     <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div>
-        <p class="m-0 text-sm text-[#737373]">Fee Management</p>
+        <p class="m-0 text-sm text-[#737373]">Fee management</p>
         <h2 class="ght-display mb-0 mt-2 text-3xl leading-none tracking-normal sm:text-4xl">Fee settings.</h2>
+        <p class="m-0 mt-2 text-sm text-[#737373]" id="cn-fee-summary"></p>
       </div>
       <div class="flex gap-2">
-        <label for="cn-manage-types" class="ght-button ght-button--secondary text-sm font-medium"><span class="ght-button-label">Fee types</span></label>
-        <label for="cn-add-fee" class="ght-button ght-button--primary text-sm font-medium">
+        <button type="button" id="cn-manage-types" class="ght-button ght-button--secondary text-sm font-medium"><span class="ght-button-label">Fee types</span></button>
+        <button type="button" id="cn-add-fee" class="ght-button ght-button--primary text-sm font-medium">
           <span class="ght-button-icon"><svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span>
           <span class="ght-button-label">Add fee</span>
-        </label>
+        </button>
       </div>
     </div>
 
     <section class="mt-6">
-      <form method="get" class="cn-toolbar">
-        <input type="hidden" name="p" value="fee-setup">
-        <input type="text" name="search" class="cn-input" placeholder="Search fees…" value="<?= htmlspecialchars($search) ?>">
-        <select name="type" class="cn-input" style="max-width:180px;">
-          <option value="">All types</option>
-          <?php foreach ($fee_types as $type): ?>
-            <option value="<?= htmlspecialchars($type['name']) ?>" <?= $type['name'] === $type_filter ? 'selected' : '' ?>><?= htmlspecialchars($type['name']) ?></option>
-          <?php endforeach; ?>
-        </select>
-        <select name="term" class="cn-input" style="max-width:180px;">
-          <option value="">All terms</option>
-          <?php foreach ($terms as $term_option): ?>
-            <option value="<?= htmlspecialchars($term_option) ?>" <?= $term_option === $term_filter ? 'selected' : '' ?>><?= htmlspecialchars($term_option) ?></option>
-          <?php endforeach; ?>
-        </select>
-        <button type="submit" class="ght-button ght-button--secondary text-sm font-medium"><span class="ght-button-label">Search</span></button>
-        <?php if ($search !== '' || $type_filter !== '' || $term_filter !== ''): ?>
-          <a href="index.php?p=fee-setup" class="cn-btn-text">Clear</a>
-        <?php endif; ?>
-      </form>
+      <div class="cn-toolbar">
+        <label class="ght-visually-hidden" for="cn-fee-search">Search fees</label>
+        <input type="search" id="cn-fee-search" class="cn-input" placeholder="Search fees&hellip;" autocomplete="off">
+        <label class="ght-visually-hidden" for="cn-fee-type-filter">Filter by type</label>
+        <select id="cn-fee-type-filter" class="cn-input cn-input--compact"></select>
+        <label class="ght-visually-hidden" for="cn-fee-term-filter">Filter by term</label>
+        <select id="cn-fee-term-filter" class="cn-input cn-input--compact"></select>
+        <label class="cn-switch">
+          <input type="checkbox" id="cn-show-inactive">
+          <span>Show inactive</span>
+        </label>
+      </div>
 
-      <?php if (count($filtered_fees) === 0): ?>
-        <div class="ght-card t-resize cn-empty">No fees match your search or filters.</div>
-      <?php else: ?>
-        <div class="cn-fee-list-wrap">
-          <div class="cn-fee-list-header"><span>Fee</span><span>Amount</span><span>Session / Term</span><span>Due</span><span>Applicable classes</span><span></span></div>
-          <?php foreach ($filtered_fees as $fee):
-            $class_names = cn_resolve_class_names($fee['assignedClasses'] ?? [], $all_classes);
-            $assigned_ids = $fee['assignedClasses'] ?? [];
-          ?>
-            <div class="cn-fee-list-row">
-              <span><?= htmlspecialchars($fee['name']) ?><br><span style="font-size:12px; color:var(--ght-color-muted);"><?= htmlspecialchars($fee['type']) ?></span></span>
-              <span><?= ght_format_naira($fee['amount']) ?></span>
-              <span><?= htmlspecialchars($fee['academicSession']) ?> &middot; <?= htmlspecialchars($fee['term']) ?></span>
-              <span><?= htmlspecialchars($fee['dueDate'] ?: '—') ?></span>
-              <span><?= htmlspecialchars(cn_format_class_names($class_names)) ?></span>
-              <span class="cn-list-row-actions">
-                <label for="cn-edit-fee-<?= htmlspecialchars($fee['id']) ?>" class="cn-btn-text">Edit</label>
-                <label for="cn-deactivate-fee-<?= htmlspecialchars($fee['id']) ?>" class="cn-btn-danger-text">Deactivate</label>
-              </span>
-            </div>
-
-            <!-- Edit fee modal -->
-            <input type="checkbox" id="cn-edit-fee-<?= htmlspecialchars($fee['id']) ?>" class="cn-modal-toggle">
-            <div class="cn-modal-overlay">
-              <label for="cn-edit-fee-<?= htmlspecialchars($fee['id']) ?>" class="cn-modal-backdrop" aria-hidden="true"></label>
-              <div class="cn-modal-panel">
-                <label for="cn-edit-fee-<?= htmlspecialchars($fee['id']) ?>" class="cn-modal-close" aria-label="Close">&times;</label>
-                <h2 class="cn-modal-title">Edit fee</h2>
-                <form method="post" action="index.php?p=fee-setup">
-                  <input type="hidden" name="action" value="edit">
-                  <input type="hidden" name="id" value="<?= htmlspecialchars($fee['id']) ?>">
-                  <?php include __DIR__ . '/../components/cn-fee-form-fields.php'; ?>
-                  <div class="cn-modal-actions">
-                    <label for="cn-edit-fee-<?= htmlspecialchars($fee['id']) ?>" class="ght-button ght-button--secondary text-sm font-medium"><span class="ght-button-label">Cancel</span></label>
-                    <button type="submit" class="ght-button ght-button--primary text-sm font-medium"><span class="ght-button-label">Save fee</span></button>
-                  </div>
-                </form>
-              </div>
-            </div>
-
-            <!-- Deactivate confirm modal -->
-            <input type="checkbox" id="cn-deactivate-fee-<?= htmlspecialchars($fee['id']) ?>" class="cn-modal-toggle">
-            <div class="cn-modal-overlay">
-              <label for="cn-deactivate-fee-<?= htmlspecialchars($fee['id']) ?>" class="cn-modal-backdrop" aria-hidden="true"></label>
-              <div class="cn-modal-panel">
-                <label for="cn-deactivate-fee-<?= htmlspecialchars($fee['id']) ?>" class="cn-modal-close" aria-label="Close">&times;</label>
-                <h2 class="cn-modal-title">Deactivate fee</h2>
-                <p class="m-0 text-sm text-[#737373]">Deactivate &quot;<?= htmlspecialchars($fee['name']) ?>&quot;? It will no longer be assignable to students.</p>
-                <form method="post" action="index.php?p=fee-setup">
-                  <input type="hidden" name="action" value="deactivate">
-                  <input type="hidden" name="id" value="<?= htmlspecialchars($fee['id']) ?>">
-                  <div class="cn-modal-actions">
-                    <label for="cn-deactivate-fee-<?= htmlspecialchars($fee['id']) ?>" class="ght-button ght-button--secondary text-sm font-medium"><span class="ght-button-label">Cancel</span></label>
-                    <button type="submit" class="ght-button text-sm font-medium" style="background: var(--ght-color-error); color:#fff;"><span class="ght-button-label">Deactivate</span></button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          <?php endforeach; ?>
-        </div>
-      <?php endif; ?>
+      <div id="cn-fee-list"></div>
+      <p class="cn-prototype-note">Prototype &mdash; changes live in this browser tab only and reset when you reload.</p>
     </section>
 
   </div>
 </div>
 
-<!-- Add fee modal -->
-<?php $fee = null; $assigned_ids = []; ?>
-<input type="checkbox" id="cn-add-fee" class="cn-modal-toggle">
-<div class="cn-modal-overlay">
-  <label for="cn-add-fee" class="cn-modal-backdrop" aria-hidden="true"></label>
+<!-- Add / edit fee -->
+<div class="cn-modal" id="cn-fee-form-modal" role="dialog" aria-modal="true" aria-labelledby="cn-fee-form-title" hidden>
+  <div class="cn-modal-backdrop" data-cn-dismiss></div>
   <div class="cn-modal-panel">
-    <label for="cn-add-fee" class="cn-modal-close" aria-label="Close">&times;</label>
-    <h2 class="cn-modal-title">Add fee</h2>
-    <form method="post" action="index.php?p=fee-setup">
-      <input type="hidden" name="action" value="add">
-      <?php include __DIR__ . '/../components/cn-fee-form-fields.php'; ?>
+    <button type="button" class="cn-modal-close" data-cn-dismiss aria-label="Close">&times;</button>
+    <h2 class="cn-modal-title" id="cn-fee-form-title">Add fee</h2>
+    <form id="cn-fee-form" novalidate>
+      <div class="cn-field-grid">
+        <div class="cn-field">
+          <label for="cn-fee-name">Fee name</label>
+          <input type="text" id="cn-fee-name" name="name" class="cn-input" placeholder="e.g. Tuition" data-cn-autofocus required>
+        </div>
+        <div class="cn-field">
+          <label for="cn-fee-type">Type</label>
+          <select id="cn-fee-type" name="type" class="cn-input" required></select>
+        </div>
+        <div class="cn-field">
+          <label for="cn-fee-amount">Amount (&#8358;)</label>
+          <input type="number" id="cn-fee-amount" name="amount" class="cn-input" min="0" step="100" placeholder="0" required>
+        </div>
+        <div class="cn-field">
+          <label for="cn-fee-session">Academic session</label>
+          <input type="text" id="cn-fee-session" name="academicSession" class="cn-input" value="<?= htmlspecialchars($cn_default_session) ?>" data-cn-default="<?= htmlspecialchars($cn_default_session) ?>" required>
+        </div>
+        <div class="cn-field">
+          <label for="cn-fee-term">Term</label>
+          <select id="cn-fee-term" name="term" class="cn-input">
+            <option value="First Term">First Term</option>
+            <option value="Second Term">Second Term</option>
+            <option value="Third Term">Third Term</option>
+          </select>
+        </div>
+        <div class="cn-field">
+          <label for="cn-fee-due">Due date</label>
+          <input type="date" id="cn-fee-due" name="dueDate" class="cn-input">
+        </div>
+      </div>
+
+      <div class="cn-field">
+        <label for="cn-fee-description">Description</label>
+        <input type="text" id="cn-fee-description" name="description" class="cn-input" placeholder="Optional">
+      </div>
+
+      <div class="cn-picker">
+        <div class="cn-picker-head">
+          <div>
+            <p class="m-0 text-sm font-medium">Applicable classes</p>
+            <p class="m-0 mt-1 text-xs text-[#737373]" id="cn-picker-count">No classes selected</p>
+          </div>
+          <label class="ght-visually-hidden" for="cn-picker-search">Search classes to assign</label>
+          <input type="search" id="cn-picker-search" class="cn-input cn-input--compact" placeholder="Find a class&hellip;" autocomplete="off">
+        </div>
+        <div class="cn-picker-list" id="cn-class-picker"></div>
+      </div>
+
       <div class="cn-modal-actions">
-        <label for="cn-add-fee" class="ght-button ght-button--secondary text-sm font-medium"><span class="ght-button-label">Cancel</span></label>
-        <button type="submit" class="ght-button ght-button--primary text-sm font-medium"><span class="ght-button-label">Save fee</span></button>
+        <button type="button" class="ght-button ght-button--secondary text-sm font-medium" data-cn-dismiss><span class="ght-button-label">Cancel</span></button>
+        <button type="submit" id="cn-fee-form-submit" class="ght-button ght-button--primary text-sm font-medium"><span class="ght-button-label">Add fee</span></button>
       </div>
     </form>
   </div>
 </div>
 
-<!-- Fee types management modal -->
-<input type="checkbox" id="cn-manage-types" class="cn-modal-toggle">
-<div class="cn-modal-overlay">
-  <label for="cn-manage-types" class="cn-modal-backdrop" aria-hidden="true"></label>
-  <div class="cn-modal-panel">
-    <label for="cn-manage-types" class="cn-modal-close" aria-label="Close">&times;</label>
-    <h2 class="cn-modal-title">Fee types</h2>
-    <ul style="list-style:none; padding:0; margin:0 0 16px;">
-      <?php foreach ($fee_types as $type): ?>
-        <li style="padding:6px 0; border-bottom:1px solid var(--ght-color-border); font-size:14px;"><?= htmlspecialchars($type['name']) ?></li>
-      <?php endforeach; ?>
-    </ul>
-    <form method="post" action="index.php?p=fee-setup" style="display:flex; gap:8px;">
-      <input type="hidden" name="action" value="add_type">
-      <input type="text" name="name" class="cn-input" placeholder="New fee type name" required>
-      <button type="submit" class="ght-button ght-button--primary text-sm font-medium"><span class="ght-button-label">Add</span></button>
+<!-- Fee types -->
+<div class="cn-modal" id="cn-fee-types-modal" role="dialog" aria-modal="true" aria-labelledby="cn-fee-types-title" hidden>
+  <div class="cn-modal-backdrop" data-cn-dismiss></div>
+  <div class="cn-modal-panel cn-modal-panel--narrow">
+    <button type="button" class="cn-modal-close" data-cn-dismiss aria-label="Close">&times;</button>
+    <h2 class="cn-modal-title" id="cn-fee-types-title">Fee types</h2>
+    <p class="cn-modal-body">Types group fees for filtering and reporting. Adding one here makes it available in every fee form.</p>
+    <ul class="cn-type-list" id="cn-fee-types-list"></ul>
+    <form id="cn-fee-type-form" class="cn-inline-form" novalidate>
+      <label class="ght-visually-hidden" for="cn-fee-type-name">New fee type</label>
+      <input type="text" id="cn-fee-type-name" name="name" class="cn-input" placeholder="e.g. Excursion" required>
+      <button type="submit" class="ght-button ght-button--primary text-sm font-medium"><span class="ght-button-label">Add type</span></button>
     </form>
     <div class="cn-modal-actions">
-      <label for="cn-manage-types" class="ght-button ght-button--secondary text-sm font-medium"><span class="ght-button-label">Close</span></label>
+      <button type="button" class="ght-button ght-button--secondary text-sm font-medium" data-cn-dismiss><span class="ght-button-label">Done</span></button>
     </div>
   </div>
 </div>
+
+<?php require __DIR__ . '/../components/cn-confirm-modal.php'; ?>
+
+<?php cn_render_seed(); ?>
+<script src="assets/js/cn-store.js"></script>
+<script src="assets/js/cn-modal.js"></script>
+<script src="assets/js/cn-fees.js"></script>

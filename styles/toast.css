@@ -1,35 +1,46 @@
+/**
+ * styles/toast.css
+ *
+ * Shared toast — loaded by render_toast() (see _inc/toast.php), driven by
+ * state classes that assets/js/toast.js toggles: .is-open for the enter
+ * transition, .is-done to swap the spinner phase for the success phase.
+ *
+ * Both phases sit in the same grid cell (grid-area: 1/1) so the crossfade
+ * doesn't resize or reflow the toast.
+ *
+ * Not cn-prefixed: this belongs to no single module.
+ */
+
+.toast-root {
+  position: fixed; bottom: 24px; right: 24px; z-index: 90;
+  display: flex; flex-direction: column; align-items: flex-end; gap: 10px;
+  pointer-events: none;
+}
 
 .toast {
-  position: fixed; bottom: 24px; right: 24px; z-index: 90;
-  display: grid; min-width: 240px; padding: 14px 18px;
-  background: var(--ght-color-primary); color: #fff; border-radius: var(--ght-radius-lg);
-  box-shadow: 0 12px 30px #00000033; font-size: 14px; font-weight: 500;
+  display: grid;
+  min-width: 240px; max-width: 360px; padding: 14px 18px;
+  background: var(--ght-color-primary); color: #fff;
+  border-radius: var(--ght-radius-lg);
+  box-shadow: 0 12px 30px #00000033;
+  font-size: 14px; font-weight: 500;
   opacity: 0; transform: translateY(8px);
-  animation: toast-enter 220ms var(--ght-ease-out) forwards,
-             toast-exit 220ms var(--ght-ease-out) forwards;
-  animation-delay: 0s, calc(var(--toast-spin-duration) + 2500ms);
+  transition: opacity 220ms var(--ght-ease-out), transform 220ms var(--ght-ease-out);
 }
+.toast.is-open { opacity: 1; transform: none; }
+
 .toast-phase {
-  grid-column: 1; grid-row: 1;
+  grid-area: 1 / 1;
   display: flex; align-items: center; gap: 10px;
-  opacity: 0;
+  transition: opacity 200ms ease;
 }
-.toast-phase--loading {
-  animation: toast-fade-in 150ms ease forwards, toast-fade-out 200ms ease forwards;
-  animation-delay: 80ms, var(--toast-spin-duration);
-}
-.toast-phase--done {
-  animation: toast-fade-in 200ms ease forwards;
-  animation-delay: calc(var(--toast-spin-duration) + 100ms);
-}
-@keyframes toast-enter { to { opacity: 1; transform: translateY(0); } }
-@keyframes toast-exit { to { opacity: 0; transform: translateY(8px); } }
-@keyframes toast-fade-in { to { opacity: 1; } }
-@keyframes toast-fade-out { to { opacity: 0; } }
+.toast-phase--done { opacity: 0; }
+.toast.is-done .toast-phase--loading { opacity: 0; }
+.toast.is-done .toast-phase--done { opacity: 1; }
 
 .toast-spinner {
   width: 15px; height: 15px; flex-shrink: 0;
-  border: 2px solid rgba(255, 255, 255, .3); border-top-color: #fff; border-radius: 50%;
+  border: 2px solid #ffffff4d; border-top-color: #fff; border-radius: 50%;
   animation: toast-spin 700ms linear infinite;
 }
 @keyframes toast-spin { to { transform: rotate(360deg); } }
@@ -39,4 +50,9 @@
   background: var(--ght-color-success); color: #fff;
   display: flex; align-items: center; justify-content: center;
   font-size: 10px; line-height: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast { transition: opacity 220ms ease; transform: none; }
+  .toast-spinner { animation-duration: 1400ms; }
 }

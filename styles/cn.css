@@ -5,11 +5,6 @@
  * tokens.css/app.css so nothing shared is touched. Everything here is
  * built on the shared tokens (--ght-color-*, --ght-radius-*), so the
  * module inherits the Greenhill look without redefining it.
- *
- * The modal system is JS-driven now (hidden + .is-open, see
- * assets/js/cn-modal.js) rather than the older checkbox-hack: one dialog
- * per purpose, filled at click time, instead of one pre-filled dialog per
- * row.
  */
 
 /* ---- Inputs & toolbar ---- */
@@ -35,12 +30,6 @@
 .cn-switch input { accent-color: var(--ght-color-accent); }
 
 .cn-prototype-note { margin: 12px 2px 0; font-size: 12px; color: var(--ght-color-muted); }
-
-/* ---- Lists ----
-   Fixed-column grids rather than tables: every row is its own grid
-   container, so any column that is empty in the header and full in the
-   rows must be a fixed width — `auto` resolves per row and pulls the
-   header out of alignment. */
 
 .cn-list-wrap, .cn-fee-list-wrap {
   background: var(--ght-color-surface);

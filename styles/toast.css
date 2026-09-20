@@ -1,15 +1,3 @@
-/**
- * styles/toast.css
- *
- * Shared toast — loaded by render_toast() (see _inc/toast.php), driven by
- * state classes that assets/js/toast.js toggles: .is-open for the enter
- * transition, .is-done to swap the spinner phase for the success phase.
- *
- * Both phases sit in the same grid cell (grid-area: 1/1) so the crossfade
- * doesn't resize or reflow the toast.
- *
- * Not cn-prefixed: this belongs to no single module.
- */
 
 .toast-root {
   position: fixed; bottom: 24px; right: 24px; z-index: 90;

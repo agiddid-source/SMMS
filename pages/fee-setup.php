@@ -1,13 +1,5 @@
 <link rel="stylesheet" href="styles/cn.css">
 <?php
-/**
- * pages/fee-setup.php
- *
- * Static shell only — same contract as pages/classes.php. Fee rows,
- * filters, the add/edit modal (including its class picker) and the fee
- * types modal are all rendered by assets/js/cn-fees.js from the seeded
- * fixtures. No form on this page posts anywhere.
- */
 $cn_default_session = '2026/2027';
 ?>
 <?php render_toast(); ?>

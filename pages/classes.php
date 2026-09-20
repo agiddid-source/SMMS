@@ -1,14 +1,5 @@
 <link rel="stylesheet" href="styles/cn.css">
-<?php
-/**
- * pages/classes.php
- *
- * Static shell only. PHP prints the page chrome and the fixture seed; the
- * list, the filters and every modal are rendered and driven by
- * assets/js/cn-classes.js. There is no form post anywhere on this page —
- * nothing here can reach the server, by design.
- */
-?>
+
 <?php render_toast(); ?>
 <div class="ght-dashboard-content">
   <div class="ght-page-enter">

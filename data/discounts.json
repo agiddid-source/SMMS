@@ -1,52 +1,62 @@
 [
-  {
-    "id": "DISC-001",
-    "name": "Community Children",
-    "type": "Full waiver",
-    "rate": 100,
-    "appliesTo": "tuition",
-    "eligibility": "Children officially identified by the school as community children. This waiver covers tuition only; other approved school fees remain payable.",
-    "status": "active",
-    "createdAt": "2026-09-01"
-  },
-  {
-    "id": "DISC-002",
-    "name": "Family of Four",
-    "type": "Full waiver",
-    "rate": 100,
-    "appliesTo": "tuition",
-    "eligibility": "Families with four enrolled children, where the school has approved one specific child for the free tuition benefit. Do not apply this waiver to the other siblings automatically.",
-    "status": "active",
-    "createdAt": "2026-09-01"
-  },
-  {
-    "id": "DISC-003",
-    "name": "Family of Three",
-    "type": "Percentage",
-    "rate": 10,
-    "appliesTo": "tuition",
-    "eligibility": "Families with three enrolled children. The 10% reduction applies to each eligible child's tuition after the family has been confirmed by the school.",
-    "status": "active",
-    "createdAt": "2026-09-01"
-  },
-  {
-    "id": "DISC-004",
-    "name": "Teacher's Child",
-    "type": "Percentage",
-    "rate": 50,
-    "appliesTo": "total_fees",
-    "eligibility": "Children of teachers who have been approved for the staff-child benefit. This reduces total school fees by 50%, including non-tuition fees covered by the account.",
-    "status": "active",
-    "createdAt": "2026-09-01"
-  },
-  {
-    "id": "DISC-005",
-    "name": "Teacher's Child - Full",
-    "type": "Full waiver",
-    "rate": 100,
-    "appliesTo": "total_fees",
-    "eligibility": "Specific children of teachers who have been individually approved for full fee support. This makes total school fees free; it does not apply to every teacher's child automatically.",
-    "status": "active",
-    "createdAt": "2026-09-01"
-  }
+    {
+        "id": "DISC-001",
+        "name": "Community Children",
+        "type": "Full waiver",
+        "rate": 100,
+        "appliesTo": "tuition",
+        "eligibility": "Children officially identified by the school as community children. This waiver covers tuition only; other approved school fees remain payable.",
+        "status": "active",
+        "createdAt": "2026-09-01"
+    },
+    {
+        "id": "DISC-002",
+        "name": "Family of Four",
+        "type": "Full waiver",
+        "rate": 100,
+        "appliesTo": "tuition",
+        "eligibility": "Families with four enrolled children, where the school has approved one specific child for the free tuition benefit. Do not apply this waiver to the other siblings automatically.",
+        "status": "active",
+        "createdAt": "2026-09-01"
+    },
+    {
+        "id": "DISC-003",
+        "name": "Family of Three",
+        "type": "Percentage",
+        "rate": 10,
+        "appliesTo": "tuition",
+        "eligibility": "Families with three enrolled children. The 10% reduction applies to each eligible child's tuition after the family has been confirmed by the school.",
+        "status": "active",
+        "createdAt": "2026-09-01"
+    },
+    {
+        "id": "DISC-004",
+        "name": "Teacher's Child",
+        "type": "Percentage",
+        "rate": 50,
+        "appliesTo": "total_fees",
+        "eligibility": "Children of teachers who have been approved for the staff-child benefit. This reduces total school fees by 50%, including non-tuition fees covered by the account.",
+        "status": "active",
+        "createdAt": "2026-09-01"
+    },
+    {
+        "id": "DISC-005",
+        "name": "Teacher's Child - Full",
+        "type": "Full waiver",
+        "rate": 100,
+        "appliesTo": "total_fees",
+        "eligibility": "Specific children of teachers who have been individually approved for full fee support. This makes total school fees free; it does not apply to every teacher's child automatically.",
+        "status": "active",
+        "createdAt": "2026-09-01"
+    },
+    {
+        "id": "DISC-006",
+        "status": "inactive",
+        "createdAt": "2026-09-23",
+        "name": "Diamond",
+        "type": "Percentage",
+        "rate": 35,
+        "appliesTo": "FEE-002",
+        "eligibility": "For the families"
+    }
 ]

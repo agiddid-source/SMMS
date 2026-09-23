@@ -7,9 +7,10 @@ $scope_filter = cure($_GET['scope'] ?? '');
 $discount_error = cure($_GET['discount_error'] ?? '');
 
 $all_discounts = cn_get_discounts();
+$all_fees = cn_get_fees();
 $filtered_discounts = cn_filter_discounts($all_discounts, $search, $type_filter, $scope_filter);
 $active_count = count(array_filter($all_discounts, fn($discount) => $discount['status'] === 'active'));
-$tuition_count = count(array_filter($all_discounts, fn($discount) => $discount['appliesTo'] === 'tuition' && $discount['status'] === 'active'));
+$fee_specific_count = count(array_filter($all_discounts, fn($discount) => $discount['appliesTo'] !== 'total_fees' && $discount['status'] === 'active'));
 $total_fees_count = count(array_filter($all_discounts, fn($discount) => $discount['appliesTo'] === 'total_fees' && $discount['status'] === 'active'));
 ?>
 <?php render_toast(); ?>
@@ -20,7 +21,7 @@ $total_fees_count = count(array_filter($all_discounts, fn($discount) => $discoun
       <div>
         <p class="m-0 text-sm text-[#737373]">Student Account Rules</p>
         <h2 class="ght-display mb-0 mt-2 text-3xl leading-none tracking-normal sm:text-4xl">Discounts.</h2>
-        <p class="mb-0 mt-3 max-w-2xl text-sm leading-6 text-[#737373]">Define approved concessions separately from the pupils who receive them. Tuition rules affect tuition only; total-fee rules affect every fee in the approved account.</p>
+        <p class="mb-0 mt-3 max-w-2xl text-sm leading-6 text-[#737373]">Define approved concessions separately from the pupils who receive them. Specific fee rules affect assigned fee items; total-fee rules affect every fee in the approved account.</p>
       </div>
       <label for="cn-add-discount" class="ght-button ght-button--primary text-sm font-medium">
         <span class="ght-button-icon"><svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span>
@@ -34,7 +35,7 @@ $total_fees_count = count(array_filter($all_discounts, fn($discount) => $discoun
 
     <section class="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
       <div class="ght-card t-resize cn-discount-summary"><p class="m-0 text-sm text-[#737373]">Active rules</p><p class="m-0 mt-2 text-2xl font-medium"><?= $active_count ?></p></div>
-      <div class="ght-card t-resize cn-discount-summary"><p class="m-0 text-sm text-[#737373]">Tuition rules</p><p class="m-0 mt-2 text-2xl font-medium"><?= $tuition_count ?></p></div>
+      <div class="ght-card t-resize cn-discount-summary"><p class="m-0 text-sm text-[#737373]">Fee-specific rules</p><p class="m-0 mt-2 text-2xl font-medium"><?= $fee_specific_count ?></p></div>
       <div class="ght-card t-resize cn-discount-summary"><p class="m-0 text-sm text-[#737373]">Total-fee rules</p><p class="m-0 mt-2 text-2xl font-medium"><?= $total_fees_count ?></p></div>
     </section>
 
@@ -48,8 +49,13 @@ $total_fees_count = count(array_filter($all_discounts, fn($discount) => $discoun
         </select>
         <select name="scope" class="cn-input" style="max-width:210px;">
           <option value="">All fee scopes</option>
-          <option value="tuition" <?= $scope_filter === 'tuition' ? 'selected' : '' ?>>Tuition</option>
           <option value="total_fees" <?= $scope_filter === 'total_fees' ? 'selected' : '' ?>>Total school fees</option>
+          <option value="tuition" <?= $scope_filter === 'tuition' ? 'selected' : '' ?>>Tuition</option>
+          <?php foreach ($all_fees as $fee):
+            if (strtolower($fee['name']) === 'tuition') continue;
+          ?>
+            <option value="<?= htmlspecialchars($fee['id']) ?>" <?= $scope_filter === $fee['id'] ? 'selected' : '' ?>><?= htmlspecialchars($fee['name']) ?></option>
+          <?php endforeach; ?>
         </select>
         <button type="submit" class="ght-button ght-button--secondary text-sm font-medium"><span class="ght-button-label">Search</span></button>
         <?php if ($search !== '' || $type_filter !== '' || $scope_filter !== ''): ?><a href="index.php?p=discounts" class="cn-btn-text">Clear</a><?php endif; ?>
@@ -63,12 +69,13 @@ $total_fees_count = count(array_filter($all_discounts, fn($discount) => $discoun
           <?php foreach ($filtered_discounts as $discount):
             $discount_id = htmlspecialchars($discount['id']);
             $is_active = $discount['status'] === 'active';
-            $scope_label = $discount['appliesTo'] === 'tuition' ? 'Tuition' : 'Total school fees';
+            $scope_label = cn_resolve_fee_scope_label($discount['appliesTo'] ?? '', $all_fees);
+            $is_total_fees = ($discount['appliesTo'] ?? '') === 'total_fees';
           ?>
             <div class="cn-discount-list-row">
               <span><strong><?= htmlspecialchars($discount['name']) ?></strong><br><small><?= htmlspecialchars($discount['id']) ?></small></span>
               <span><?= htmlspecialchars($discount['type']) ?><br><strong><?= htmlspecialchars((string) $discount['rate']) ?>%</strong></span>
-              <span><span class="ght-chip ght-chip--<?= $discount['appliesTo'] === 'tuition' ? 'accent' : 'success' ?>"><?= htmlspecialchars($scope_label) ?></span></span>
+              <span><span class="ght-chip ght-chip--<?= $is_total_fees ? 'success' : 'accent' ?>"><?= htmlspecialchars($scope_label) ?></span></span>
               <span><?= htmlspecialchars($discount['eligibility']) ?></span>
               <span><span class="ght-chip ght-chip--<?= $is_active ? 'success' : 'neutral' ?>"><?= $is_active ? 'Active' : 'Inactive' ?></span></span>
               <span class="cn-list-row-actions"><label for="cn-edit-discount-<?= $discount_id ?>" class="cn-btn-text">Edit</label><label for="cn-toggle-discount-<?= $discount_id ?>" class="<?= $is_active ? 'cn-btn-danger-text' : 'cn-btn-text' ?>"><?= $is_active ? 'Deactivate' : 'Activate' ?></label></span>

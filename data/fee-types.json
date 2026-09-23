@@ -7,5 +7,7 @@
   { "id": "TYPE-006", "name": "WAEC", "status": "active" },
   { "id": "TYPE-007", "name": "BECE", "status": "active" },
   { "id": "TYPE-008", "name": "Transportation", "status": "active" },
-  { "id": "TYPE-009", "name": "Other", "status": "active" }
+  { "id": "TYPE-009", "name": "Other", "status": "active" },
+  { "id": "TYPE-010", "name": "Excursion", "status": "active" },
+  { "id": "TYPE-011", "name": "Exam Levy", "status": "active" }
 ]

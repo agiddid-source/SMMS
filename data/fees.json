@@ -37,5 +37,31 @@
     "status": "active",
     "description": "West African Examinations Council registration",
     "createdAt": "2026-09-01"
+  },
+  {
+    "id": "FEE-004",
+    "name": "Excursion Fee",
+    "type": "Excursion",
+    "amount": 15000,
+    "academicSession": "2026/2027",
+    "term": "First Term",
+    "dueDate": "2026-10-30",
+    "assignedClasses": ["CLASS-006", "CLASS-007", "CLASS-008", "CLASS-009", "CLASS-010"],
+    "status": "active",
+    "description": "Educational field trip and excursion fee",
+    "createdAt": "2026-09-01"
+  },
+  {
+    "id": "FEE-005",
+    "name": "Exam Levy",
+    "type": "Exam Levy",
+    "amount": 8000,
+    "academicSession": "2026/2027",
+    "term": "First Term",
+    "dueDate": "2026-10-15",
+    "assignedClasses": ["CLASS-006", "CLASS-007", "CLASS-008", "CLASS-009", "CLASS-010", "CLASS-013", "CLASS-016"],
+    "status": "active",
+    "description": "Standard examination printing and materials levy",
+    "createdAt": "2026-09-01"
   }
 ]

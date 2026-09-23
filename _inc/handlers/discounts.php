@@ -9,7 +9,9 @@ $cn_applies_to = cure($_POST['appliesTo'] ?? '');
 $cn_eligibility = cure($_POST['eligibility'] ?? '');
 
 $cn_valid_types = ['Percentage', 'Full waiver'];
-$cn_valid_scopes = ['tuition', 'total_fees'];
+$cn_all_fees = cn_get_fees();
+$cn_fee_ids = array_map(fn($f) => $f['id'], $cn_all_fees);
+$cn_valid_scopes = array_merge(['tuition', 'total_fees'], $cn_fee_ids);
 
 if ($cn_action === 'toggle' && $cn_id !== '') {
     $new_status = cn_toggle_discount_status($cn_id);

@@ -71,8 +71,36 @@ function cn_filter_discounts($discounts, $search = '', $type = '', $applies_to =
     return array_values(array_filter($discounts, function ($discount) use ($needle, $type, $applies_to, $include_inactive) {
         if (!$include_inactive && $discount['status'] === 'inactive') return false;
         if ($type !== '' && $discount['type'] !== $type) return false;
-        if ($applies_to !== '' && $discount['appliesTo'] !== $applies_to) return false;
+        if ($applies_to !== '') {
+            $disc_scope = $discount['appliesTo'] ?? '';
+            $matches_scope = ($disc_scope === $applies_to);
+            if (!$matches_scope && (
+                (strtolower($applies_to) === 'tuition' && ($disc_scope === 'FEE-001' || strtolower($disc_scope) === 'tuition')) ||
+                ($applies_to === 'FEE-001' && strtolower($disc_scope) === 'tuition')
+            )) {
+                $matches_scope = true;
+            }
+            if (!$matches_scope) return false;
+        }
         if ($needle !== '' && !str_contains(strtolower($discount['name'] . ' ' . $discount['eligibility']), $needle)) return false;
         return true;
     }));
+}
+
+function cn_resolve_fee_scope_label($applies_to, $fees = []) {
+    if ($applies_to === 'total_fees') {
+        return 'Total school fees';
+    }
+    if (strtolower($applies_to) === 'tuition') {
+        return 'Tuition';
+    }
+    foreach ($fees as $fee) {
+        if ($fee['id'] === $applies_to) {
+            return $fee['name'];
+        }
+        if (strcasecmp($fee['name'], $applies_to) === 0) {
+            return $fee['name'];
+        }
+    }
+    return ucwords(str_replace(['_', '-'], ' ', $applies_to));
 }

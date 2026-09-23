@@ -1,12 +1,13 @@
 <?php
+
 require_once __DIR__ . '/_inc/config.php';
 require_once __DIR__ . '/_inc/format.php';
 require_once __DIR__ . '/_inc/route.inc.php';
 require_once __DIR__ . '/_inc/cn-data.php';
 require_once __DIR__ . '/_inc/toast.php';
 
-
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <?php require __DIR__ . '/_inc/head.inc.php'; ?>

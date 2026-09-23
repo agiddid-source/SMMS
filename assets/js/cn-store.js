@@ -1,12 +1,10 @@
+
 (function (global) {
   'use strict';
 
   var SECTION_ORDER = ['Toddler', 'Nursery', 'KG', 'Primary', 'Secondary'];
 
-  // Helpers for filtering and formatting data in the store. 
-  // These are pure functions that don't mutate state, 
-  // so they can be used in any context (store, view, etc.).
-
+  // Pure helpers 
   var CnFilters = {
     sectionOrder: SECTION_ORDER,
 
@@ -74,6 +72,7 @@
       return '\u20A6' + Number(amount || 0).toLocaleString('en-NG', { maximumFractionDigits: 0 });
     },
 
+    /** 2026-09-30 → 30 Sep 2026. Falls back to the raw value if unparseable. */
     formatDate: function (iso) {
       if (!iso) return '\u2014';
       var parts = String(iso).split('-');
@@ -81,6 +80,61 @@
       var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       var month = months[Number(parts[1]) - 1];
       return month ? Number(parts[2]) + ' ' + month + ' ' + parts[0] : iso;
+    },
+
+    /** True if iso (YYYY-MM-DD) falls within [from, to] — either bound optional. */
+    inDateRange: function (iso, from, to) {
+      if (!iso) return false;
+      if (from && iso < from) return false;
+      if (to && iso > to) return false;
+      return true;
+    },
+
+    filterExpenses: function (expenses, search, categoryId, from, to, includeVoided) {
+      var needle = String(search || '').trim().toLowerCase();
+      var self = this;
+      return expenses.filter(function (exp) {
+        if (!includeVoided && exp.status === 'voided') return false;
+        if (categoryId && exp.categoryId !== categoryId) return false;
+        if ((from || to) && !self.inDateRange(exp.expenseDate, from, to)) return false;
+        if (needle) {
+          var hay = (exp.description + ' ' + exp.payee).toLowerCase();
+          if (hay.indexOf(needle) === -1) return false;
+        }
+        return true;
+      });
+    },
+
+    filterPayments: function (payments, search, classId, feeId, from, to) {
+      var needle = String(search || '').trim().toLowerCase();
+      var self = this;
+      return payments.filter(function (pay) {
+        if (classId && pay.classId !== classId) return false;
+        if (feeId && pay.feeId !== feeId) return false;
+        if ((from || to) && !self.inDateRange(pay.paymentDate, from, to)) return false;
+        if (needle) {
+          var hay = (pay.studentName + ' ' + pay.receiptNumber).toLowerCase();
+          if (hay.indexOf(needle) === -1) return false;
+        }
+        return true;
+      });
+    },
+
+    sumAmounts: function (records) {
+      return records.reduce(function (sum, r) { return sum + Number(r.amount || 0); }, 0);
+    },
+
+    /** [{key, total}], sorted highest first — the income-by-fee /
+     *  expenditure-by-category breakdowns on the Income vs Expenditure report. */
+    sumByKey: function (records, keyFn) {
+      var totals = {};
+      records.forEach(function (r) {
+        var key = keyFn(r);
+        totals[key] = (totals[key] || 0) + Number(r.amount || 0);
+      });
+      return Object.keys(totals)
+        .map(function (key) { return { key: key, total: totals[key] }; })
+        .sort(function (a, b) { return b.total - a.total; });
     }
   };
 
@@ -88,17 +142,21 @@
 
   function readSeed() {
     var node = document.getElementById('cn-seed');
-    if (!node) return { classes: [], feeTypes: [], fees: [] };
+    var empty = { classes: [], feeTypes: [], fees: [], expenseCategories: [], expenses: [], payments: [] };
+    if (!node) return empty;
     try {
       var parsed = JSON.parse(node.textContent || '{}');
       return {
         classes: parsed.classes || [],
         feeTypes: parsed.feeTypes || [],
-        fees: parsed.fees || []
+        fees: parsed.fees || [],
+        expenseCategories: parsed.expenseCategories || [],
+        expenses: parsed.expenses || [],
+        payments: parsed.payments || []
       };
     } catch (err) {
       console.error('[cn-store] seed is not valid JSON', err);
-      return { classes: [], feeTypes: [], fees: [] };
+      return empty;
     }
   }
 
@@ -114,7 +172,10 @@
     var state = {
       classes: seed.classes.slice(),
       feeTypes: seed.feeTypes.slice(),
-      fees: seed.fees.slice()
+      fees: seed.fees.slice(),
+      expenseCategories: seed.expenseCategories.slice(),
+      expenses: seed.expenses.slice(),
+      payments: seed.payments.slice()
     };
     var listeners = [];
 
@@ -130,9 +191,15 @@
     }
 
     return {
+
       getClasses: function () { return state.classes.map(function (c) { return Object.assign({}, c); }); },
       getFeeTypes: function () { return state.feeTypes.map(function (t) { return Object.assign({}, t); }); },
       getFees: function () { return state.fees.map(function (f) { return Object.assign({}, f); }); },
+      getExpenseCategories: function () { return state.expenseCategories.map(function (c) { return Object.assign({}, c); }); },
+      getExpenses: function () { return state.expenses.map(function (e) { return Object.assign({}, e); }); },
+      /** Read-only from this side — Bursar & Payments owns writing these
+       *  for real; Reports only aggregates. */
+      getPayments: function () { return state.payments.map(function (p) { return Object.assign({}, p); }); },
 
       getClass: function (id) {
         var i = findIndex(state.classes, id);
@@ -209,6 +276,46 @@
 
       reactivateFee: function (id) {
         return this.updateFee(id, { status: 'active' });
+      },
+
+      addExpenseCategory: function (name) {
+        var existing = state.expenseCategories.filter(function (c) {
+          return c.name.toLowerCase() === String(name).toLowerCase();
+        })[0];
+        if (existing) return existing;
+        var record = { id: nextId('CAT', state.expenseCategories), name: name, status: 'active' };
+        state.expenseCategories = state.expenseCategories.concat([record]);
+        notify();
+        return record;
+      },
+
+      addExpense: function (payload) {
+        var record = Object.assign({
+          id: nextId('EXP', state.expenses),
+          account: 'MAIN-SCHOOL-ACCOUNT',
+          status: 'active',
+          createdAt: new Date().toISOString().slice(0, 10)
+        }, payload);
+        state.expenses = state.expenses.concat([record]);
+        notify();
+        return record;
+      },
+
+      updateExpense: function (id, payload) {
+        var i = findIndex(state.expenses, id);
+        if (i === -1) return null;
+        state.expenses = state.expenses.slice();
+        state.expenses[i] = Object.assign({}, state.expenses[i], payload);
+        notify();
+        return state.expenses[i];
+      },
+
+      voidExpense: function (id) {
+        return this.updateExpense(id, { status: 'voided' });
+      },
+
+      restoreExpense: function (id) {
+        return this.updateExpense(id, { status: 'active' });
       },
 
       subscribe: function (fn) {

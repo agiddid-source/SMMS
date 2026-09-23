@@ -16,8 +16,8 @@ $ght_navigation_config = [
         ['label' => 'Payments', 'href' => 'index.php?p=coming-soon&module=Bursar+%26+Payments'],
     ]],
     ['type' => 'group', 'label' => 'Expenses & Reports', 'icon' => 'report', 'items' => [
-        ['label' => 'Expenses', 'href' => 'index.php?p=coming-soon&module=Expenses'],
-        ['label' => 'Reports', 'href' => 'index.php?p=coming-soon&module=Reports'],
+        ['label' => 'Expenses', 'href' => 'index.php?p=expenses'],
+        ['label' => 'Reports', 'href' => 'index.php?p=reports'],
     ]],
     ['type' => 'bottom', 'label' => 'Results', 'href' => 'index.php?p=coming-soon&module=Results', 'icon' => 'chart'],
     ['type' => 'bottom', 'label' => 'Staff', 'href' => 'index.php?p=coming-soon&module=Staff', 'icon' => 'users'],

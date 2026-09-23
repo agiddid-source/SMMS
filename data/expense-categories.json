@@ -1,0 +1,12 @@
+[
+  { "id": "CAT-001", "name": "Salaries", "status": "active" },
+  { "id": "CAT-002", "name": "Utilities", "status": "active" },
+  { "id": "CAT-003", "name": "Maintenance", "status": "active" },
+  { "id": "CAT-004", "name": "School Supplies", "status": "active" },
+  { "id": "CAT-005", "name": "Transportation", "status": "active" },
+  { "id": "CAT-006", "name": "Rent", "status": "active" },
+  { "id": "CAT-007", "name": "Equipment", "status": "active" },
+  { "id": "CAT-008", "name": "Examination", "status": "active" },
+  { "id": "CAT-009", "name": "Events", "status": "active" },
+  { "id": "CAT-010", "name": "Other", "status": "active" }
+]

@@ -1,0 +1,44 @@
+{
+  "students": [
+    {
+      "id": "sodiq-adeyemi",
+      "initials": "SA",
+      "name": "Sodiq Adeyemi",
+      "className": "Toddler",
+      "studentNumber": "GH-2026-041",
+      "guardian": "Mariam Adeyemi",
+      "accountStatus": "Paid in full",
+      "summary": { "assigned": 112000, "payable": 25000, "paid": 25000, "outstanding": 0 },
+      "concession": { "shortLabel": "Community child", "name": "Community child tuition discount", "description": "Tuition is free for eligible community children. Activity, learning materials and transport still need to be paid.", "amount": 87000, "rule": "Tuition only · 100% discount", "appliedOn": "2 September 2026", "approvedBy": "Adaeze Nwosu" },
+      "fees": [
+        { "name": "Tuition", "note": "First Term 2026/27", "assigned": 87000, "discount": 87000, "payable": 0 },
+        { "name": "Activity & learning materials", "note": "First Term 2026/27", "assigned": 15000, "discount": 0, "payable": 15000 },
+        { "name": "Transport contribution", "note": "First Term 2026/27", "assigned": 10000, "discount": 0, "payable": 10000 }
+      ],
+      "transactions": [
+        { "reference": "GHS-REC-260901-184", "date": "1 September 2026, 08:04", "description": "Community child tuition discount added", "amount": 87000, "status": "Discount", "actor": "Approved by Adaeze Nwosu" },
+        { "reference": "GHS-REC-260830-099", "date": "30 August 2026, 13:18", "description": "Bank transfer · materials & transport", "amount": 25000, "status": "Paid", "actor": "Recorded by Bursar desk" }
+      ]
+    },
+    {
+      "id": "ifeoma-okoro",
+      "initials": "IO",
+      "name": "Ifeoma Okoro",
+      "className": "Year 2",
+      "studentNumber": "GH-2026-118",
+      "guardian": "Chinwe Okoro",
+      "accountStatus": "Partially paid",
+      "summary": { "assigned": 112000, "payable": 56000, "paid": 30000, "outstanding": 26000 },
+      "concession": { "shortLabel": "Teacher’s child", "name": "Teacher’s child discount", "description": "Eligible teachers’ children receive 50% off approved fees for the term.", "amount": 56000, "rule": "All fees · 50% discount", "appliedOn": "29 August 2026", "approvedBy": "Adaeze Nwosu" },
+      "fees": [
+        { "name": "Tuition", "note": "First Term 2026/27", "assigned": 87000, "discount": 43500, "payable": 43500 },
+        { "name": "Activity & learning materials", "note": "First Term 2026/27", "assigned": 15000, "discount": 7500, "payable": 7500 },
+        { "name": "Transport contribution", "note": "First Term 2026/27", "assigned": 10000, "discount": 5000, "payable": 5000 }
+      ],
+      "transactions": [
+        { "reference": "GHS-REC-260829-058", "date": "29 August 2026, 10:40", "description": "Teacher’s child discount added", "amount": 56000, "status": "Discount", "actor": "Approved by Adaeze Nwosu" },
+        { "reference": "GHS-REC-260902-211", "date": "2 September 2026, 12:22", "description": "POS payment · First Term fees", "amount": 30000, "status": "Paid", "actor": "Recorded by Bursar desk" }
+      ]
+    }
+  ]
+}

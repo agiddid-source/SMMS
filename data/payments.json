@@ -1,0 +1,39 @@
+{
+    "payments": [
+        {
+            "id": "PAY-260830-099",
+            "receiptNumber": "GHS-REC-260830-099",
+            "studentId": "sodiq-adeyemi",
+            "date": "2026-08-30T13:18:00",
+            "dateLabel": "30 August 2026, 13:18",
+            "amount": 25000,
+            "method": "Bank transfer",
+            "status": "Paid",
+            "purpose": "Materials & transport",
+            "allocations": [
+                { "feeName": "Activity & learning materials", "amount": 15000 },
+                { "feeName": "Transport contribution", "amount": 10000 }
+            ],
+            "note": "First Term 2026/27 materials and transport contribution.",
+            "attachment": null,
+            "actor": "Recorded by Bursar desk"
+        },
+        {
+            "id": "PAY-260902-211",
+            "receiptNumber": "GHS-REC-260902-211",
+            "studentId": "ifeoma-okoro",
+            "date": "2026-09-02T12:22:00",
+            "dateLabel": "2 September 2026, 12:22",
+            "amount": 30000,
+            "method": "POS",
+            "status": "Paid",
+            "purpose": "First Term fees",
+            "allocations": [
+                { "feeName": "Tuition", "amount": 30000 }
+            ],
+            "note": "Part payment towards First Term tuition.",
+            "attachment": null,
+            "actor": "Recorded by Bursar desk"
+        }
+    ]
+}

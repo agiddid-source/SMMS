@@ -1,0 +1,41 @@
+[
+  {
+    "id": "FEE-001",
+    "name": "Tuition",
+    "type": "Tuition",
+    "amount": 87000,
+    "academicSession": "2026/2027",
+    "term": "First Term",
+    "dueDate": "2026-09-30",
+    "assignedClasses": ["CLASS-006", "CLASS-007", "CLASS-008", "CLASS-009", "CLASS-010"],
+    "status": "active",
+    "description": "First term tuition fee",
+    "createdAt": "2026-09-01"
+  },
+  {
+    "id": "FEE-002",
+    "name": "Examination Fee",
+    "type": "Examination",
+    "amount": 20000,
+    "academicSession": "2026/2027",
+    "term": "First Term",
+    "dueDate": "2026-10-15",
+    "assignedClasses": ["CLASS-013", "CLASS-016"],
+    "status": "active",
+    "description": "Internal examination fee",
+    "createdAt": "2026-09-01"
+  },
+  {
+    "id": "FEE-003",
+    "name": "WAEC Fee",
+    "type": "WAEC",
+    "amount": 50000,
+    "academicSession": "2026/2027",
+    "term": "First Term",
+    "dueDate": "2026-11-01",
+    "assignedClasses": ["CLASS-016"],
+    "status": "active",
+    "description": "West African Examinations Council registration",
+    "createdAt": "2026-09-01"
+  }
+]

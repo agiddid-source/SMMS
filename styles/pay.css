@@ -1,0 +1,169 @@
+/* -----------------------------------------------------------------------------
+   Bursar & Payments — module styles
+   Covers the payments page, the Record Payment form, and the receipt. Built on
+   the shared tokens in styles/tokens.css so the module matches the rest of the
+   app (same radii, colours, easings, and card language). Loaded per-page by
+   pages/payments.php and pages/student-profile.php; the form and receipt classes
+   are used inside the shared record/receipt modal components.
+
+   Ported from the original JS build's css/payments.css, plus a checkbox-hack
+   modal shell (pay-modal-*) that mirrors the Classes & Fees cn-modal-* pattern
+   so the record/receipt modals open with no JS.
+----------------------------------------------------------------------------- */
+
+/* Page layout ------------------------------------------------------------- */
+.ght-payments-content { max-width: 1180px; }
+.ght-selected-panel { min-width: 0; }
+
+/* Form fields (shared inputs/selects/labels) ------------------------------ */
+.ght-field { display: block; }
+.ght-field-label {
+  color: var(--ght-color-muted);
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+.ght-field-hint {
+  color: var(--ght-color-muted);
+  display: block;
+  font-size: 11px;
+  margin-top: 6px;
+}
+.ght-input {
+  background: var(--ght-color-surface);
+  border: 1px solid var(--ght-color-secondary);
+  border-radius: var(--ght-radius-md);
+  color: var(--ght-color-on-surface);
+  display: block;
+  font-size: 14px;
+  min-height: 42px;
+  padding: 9px 12px;
+  transition: border-color 150ms var(--ght-ease-out), box-shadow 150ms var(--ght-ease-out);
+  width: 100%;
+}
+.ght-input::placeholder { color: #a3a3a3; }
+.ght-input:focus {
+  border-color: var(--ght-color-accent);
+  box-shadow: 0 0 0 3px var(--ght-color-accent-soft);
+  outline: 0;
+}
+.ght-input:disabled { background: var(--ght-color-tertiary); color: var(--ght-color-muted); cursor: not-allowed; }
+select.ght-input { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23737373' stroke-width='1.8'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); background-position: right 10px center; background-repeat: no-repeat; background-size: 16px; padding-right: 34px; }
+.ght-input[type="file"] { padding: 8px 12px; }
+.ght-input[type="file"]::file-selector-button {
+  background: var(--ght-color-tertiary);
+  border: 0;
+  border-radius: var(--ght-radius-sm);
+  color: var(--ght-color-on-surface);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  margin-right: 10px;
+  padding: 6px 10px;
+}
+
+/* Inline text button (e.g. "Pay full balance") ---------------------------- */
+.ght-link-button {
+  background: transparent;
+  border: 0;
+  color: #915239;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 0;
+  transition: color 150ms var(--ght-ease-out);
+}
+.ght-link-button:hover { color: var(--ght-color-primary); }
+
+/* Student search results -------------------------------------------------- */
+.ght-student-result {
+  background: transparent;
+  border: 0;
+  border-radius: var(--ght-radius-md);
+  color: inherit;
+  cursor: pointer;
+  padding-inline: 8px;
+  text-decoration: none;
+  transition: background-color 120ms var(--ght-ease-out);
+}
+.ght-student-result:hover { background: var(--ght-color-tertiary); }
+.ght-student-result--active { background: var(--ght-color-accent-soft); }
+.ght-student-results { max-height: 420px; overflow-y: auto; }
+
+/* Payment form: per-fee allocation rows ----------------------------------- */
+.ght-payfee-list { display: grid; gap: 10px; }
+.ght-payfee-row {
+  align-items: center;
+  border: 1px solid var(--ght-color-border);
+  border-radius: var(--ght-radius-lg);
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  padding: 12px 14px;
+}
+.ght-payfee-input-wrap { align-items: center; display: inline-flex; position: relative; width: 140px; }
+.ght-payfee-currency { color: var(--ght-color-muted); font-size: 13px; left: 12px; position: absolute; }
+.ght-payfee-input { padding-left: 24px; text-align: right; }
+/* Removes number-spinner arrows for a cleaner money input. */
+.ght-payfee-input::-webkit-outer-spin-button,
+.ght-payfee-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.ght-payfee-input { -moz-appearance: textfield; }
+
+/* Receipt ----------------------------------------------------------------- */
+.ght-receipt-sheet {
+  background: var(--ght-color-surface);
+  border: 1px solid var(--ght-color-border);
+  border-radius: var(--ght-radius-lg);
+  padding: 20px;
+}
+.ght-receipt-number { font-variant-numeric: tabular-nums; letter-spacing: .2px; }
+
+/* Print: show only the receipt sheet when printing from the receipt view.
+   The body flag is toggled by assets/pay.js around window.print(). */
+@media print {
+  body.ght-print-receipt * { visibility: hidden; }
+  body.ght-print-receipt .ght-receipt-sheet,
+  body.ght-print-receipt .ght-receipt-sheet * { visibility: visible; }
+  body.ght-print-receipt .ght-receipt-sheet {
+    border: 0;
+    left: 0;
+    padding: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+  body.ght-print-receipt .ght-receipt-actions { display: none; }
+}
+
+/* Small screens: let fee rows and money inputs stack comfortably. */
+@media (max-width: 520px) {
+  .ght-payfee-row { align-items: stretch; flex-direction: column; }
+  .ght-payfee-input-wrap { width: 100%; }
+}
+
+/* ---- Checkbox-hack modal (no JS) ----
+   Mirrors the Classes & Fees cn-modal-* shell so the record-payment and receipt
+   modals open/close without scripting; assets/pay.js only enhances behaviour
+   inside them (live total, caps, print). */
+.pay-modal-toggle { position: absolute; opacity: 0; pointer-events: none; width: 0; height: 0; }
+.pay-modal-overlay {
+  position: fixed; inset: 0; z-index: 70; display: flex; align-items: flex-start; justify-content: center;
+  padding: 24px 16px; overflow-y: auto; background: transparent; opacity: 0; pointer-events: none;
+  transition: opacity 180ms var(--ght-ease-out), background 180ms var(--ght-ease-out);
+}
+.pay-modal-toggle:checked + .pay-modal-overlay {
+  opacity: 1; pointer-events: auto; background: #0a0a0a66;
+}
+.pay-modal-backdrop { position: absolute; inset: 0; cursor: default; }
+.pay-modal-panel {
+  position: relative; background: var(--ght-color-surface); border-radius: var(--ght-radius-xl);
+  max-width: 560px; width: 100%; padding: 24px; box-shadow: 0 20px 60px #0000003a;
+  transform: translateY(-8px); transition: transform 180ms var(--ght-ease-out);
+}
+.pay-modal-toggle:checked + .pay-modal-overlay .pay-modal-panel { transform: translateY(0); }
+.pay-modal-title { margin: 0 0 18px; font-size: 18px; font-weight: 600; }
+.pay-modal-close {
+  position: absolute; top: 18px; right: 18px; cursor: pointer; color: var(--ght-color-muted);
+  font-size: 20px; line-height: 1; text-decoration: none;
+}

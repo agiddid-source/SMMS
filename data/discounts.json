@@ -5,6 +5,7 @@
         "type": "Full waiver",
         "rate": 100,
         "appliesTo": "tuition",
+        "tags": [],
         "eligibility": "Children officially identified by the school as community children. This waiver covers tuition only; other approved school fees remain payable.",
         "status": "active",
         "createdAt": "2026-09-01"
@@ -15,6 +16,7 @@
         "type": "Full waiver",
         "rate": 100,
         "appliesTo": "tuition",
+        "tags": [],
         "eligibility": "Families with four enrolled children, where the school has approved one specific child for the free tuition benefit. Do not apply this waiver to the other siblings automatically.",
         "status": "active",
         "createdAt": "2026-09-01"
@@ -25,6 +27,7 @@
         "type": "Percentage",
         "rate": 10,
         "appliesTo": "tuition",
+        "tags": [],
         "eligibility": "Families with three enrolled children. The 10% reduction applies to each eligible child's tuition after the family has been confirmed by the school.",
         "status": "active",
         "createdAt": "2026-09-01"
@@ -35,6 +38,9 @@
         "type": "Percentage",
         "rate": 50,
         "appliesTo": "total_fees",
+        "tags": [
+            "Teaching Staff"
+        ],
         "eligibility": "Children of teachers who have been approved for the staff-child benefit. This reduces total school fees by 50%, including non-tuition fees covered by the account.",
         "status": "active",
         "createdAt": "2026-09-01"
@@ -45,18 +51,38 @@
         "type": "Full waiver",
         "rate": 100,
         "appliesTo": "total_fees",
+        "tags": [
+            "Teaching Staff"
+        ],
         "eligibility": "Specific children of teachers who have been individually approved for full fee support. This makes total school fees free; it does not apply to every teacher's child automatically.",
         "status": "active",
         "createdAt": "2026-09-01"
     },
     {
         "id": "DISC-006",
-        "status": "inactive",
+        "status": "active",
         "createdAt": "2026-09-23",
         "name": "Diamond",
         "type": "Percentage",
         "rate": 35,
         "appliesTo": "FEE-002",
+        "tags": [
+            "Non-Teaching Staff",
+            "Administrative Staff"
+        ],
         "eligibility": "For the families"
+    },
+    {
+        "id": "DISC-007",
+        "status": "active",
+        "createdAt": "2026-09-24",
+        "name": "Community Kids",
+        "type": "Percentage",
+        "rate": 40,
+        "appliesTo": "FEE-001",
+        "tags": [
+            "Teaching Staff"
+        ],
+        "eligibility": "All families of Origin"
     }
 ]

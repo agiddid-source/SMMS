@@ -65,17 +65,27 @@ $total_fees_count = count(array_filter($all_discounts, fn($discount) => $discoun
         <div class="ght-card t-resize cn-empty">No discounts match your search or filters.</div>
       <?php else: ?>
         <div class="cn-discount-list-wrap">
-          <div class="cn-discount-list-header"><span>Discount</span><span>Type / rate</span><span>Applies to</span><span>Eligibility</span><span>Status</span><span></span></div>
+          <div class="cn-discount-list-header"><span>Discount</span><span>Type / rate</span><span>Fees</span><span>Applies to</span><span>Eligibility</span><span>Status</span><span></span></div>
           <?php foreach ($filtered_discounts as $discount):
             $discount_id = htmlspecialchars($discount['id']);
             $is_active = $discount['status'] === 'active';
             $scope_label = cn_resolve_fee_scope_label($discount['appliesTo'] ?? '', $all_fees);
             $is_total_fees = ($discount['appliesTo'] ?? '') === 'total_fees';
+            $discount_tags = $discount['tags'] ?? [];
           ?>
             <div class="cn-discount-list-row">
               <span><strong><?= htmlspecialchars($discount['name']) ?></strong><br><small><?= htmlspecialchars($discount['id']) ?></small></span>
               <span><?= htmlspecialchars($discount['type']) ?><br><strong><?= htmlspecialchars((string) $discount['rate']) ?>%</strong></span>
               <span><span class="ght-chip ght-chip--<?= $is_total_fees ? 'success' : 'accent' ?>"><?= htmlspecialchars($scope_label) ?></span></span>
+              <span>
+                <?php if (count($discount_tags) > 0): ?>
+                  <?php foreach ($discount_tags as $tag): ?>
+                    <span class="cn-staff-tag"><?= htmlspecialchars($tag) ?></span>
+                  <?php endforeach; ?>
+                <?php else: ?>
+                  <span class="text-xs text-[#a3a3a3]">—</span>
+                <?php endif; ?>
+              </span>
               <span><?= htmlspecialchars($discount['eligibility']) ?></span>
               <span><span class="ght-chip ght-chip--<?= $is_active ? 'success' : 'neutral' ?>"><?= $is_active ? 'Active' : 'Inactive' ?></span></span>
               <span class="cn-list-row-actions"><label for="cn-edit-discount-<?= $discount_id ?>" class="cn-btn-text">Edit</label><label for="cn-toggle-discount-<?= $discount_id ?>" class="<?= $is_active ? 'cn-btn-danger-text' : 'cn-btn-text' ?>"><?= $is_active ? 'Deactivate' : 'Activate' ?></label></span>

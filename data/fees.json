@@ -7,7 +7,7 @@
     "academicSession": "2026/2027",
     "term": "First Term",
     "dueDate": "2026-09-30",
-    "assignedClasses": ["CLASS-006", "CLASS-007", "CLASS-008", "CLASS-009", "CLASS-010"],
+    "assignedClasses": ["CLASS-006", "CLASS-007", "CLASS-008", "CLASS-009", "CLASS-010", "CLASS-011", "CLASS-012", "CLASS-013", "CLASS-014", "CLASS-015", "CLASS-016"],
     "status": "active",
     "description": "First term tuition fee",
     "createdAt": "2026-09-01"
@@ -59,7 +59,7 @@
     "academicSession": "2026/2027",
     "term": "First Term",
     "dueDate": "2026-10-15",
-    "assignedClasses": ["CLASS-006", "CLASS-007", "CLASS-008", "CLASS-009", "CLASS-010", "CLASS-013", "CLASS-016"],
+    "assignedClasses": ["CLASS-006", "CLASS-007", "CLASS-008", "CLASS-009", "CLASS-010", "CLASS-011", "CLASS-012", "CLASS-013", "CLASS-014", "CLASS-015", "CLASS-016"],
     "status": "active",
     "description": "Standard examination printing and materials levy",
     "createdAt": "2026-09-01"

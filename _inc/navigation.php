@@ -8,7 +8,7 @@ $ght_navigation_config = [
         ['label' => 'Fee settings', 'href' => 'index.php?p=fee-setup'],
     ]],
     ['type' => 'group', 'label' => 'Student Accounts', 'icon' => 'users', 'items' => [
-        ['label' => 'Student profiles', 'href' => 'index.php?p=student-profile&student=sodiq-adeyemi'],
+        ['label' => 'Student profiles', 'href' => 'index.php?p=students'],
         ['label' => 'Discount rules', 'href' => 'index.php?p=discounts'],
     ]],
     ['type' => 'group', 'label' => 'Bursar & Payments', 'icon' => 'payment', 'items' => [

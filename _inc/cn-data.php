@@ -158,3 +158,19 @@ function cn_toggle_discount_status($id) {
     }
     return null;
 }
+
+// Students
+
+function cn_get_students() {
+    $data = read_json('data/students.json');
+    return $data['students'] ?? [];
+}
+
+function cn_get_student($id) {
+    $students = cn_get_students();
+    foreach ($students as $student) {
+        if ($student['id'] === $id) return $student;
+    }
+    return null;
+}
+

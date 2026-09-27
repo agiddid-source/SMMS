@@ -3,6 +3,10 @@ $is_edit = $discount !== null;
 $form_id = 'cn-' . ($is_edit ? 'edit-discount-form-' . htmlspecialchars($discount_form_id) : 'add-discount-form');
 $available_fees = $all_fees ?? cn_get_fees();
 $active_fees = array_filter($available_fees, fn($f) => ($f['status'] ?? 'active') === 'active');
+
+// Available staff-category tags for "Applies to"
+$cn_available_tags = ['Teaching Staff', 'Non-Teaching Staff', 'Administrative Staff'];
+$cn_selected_tags = $discount['tags'] ?? [];
 ?>
 <form id="<?= $form_id ?>" method="post" action="index.php?p=discounts">
   <input type="hidden" name="action" value="<?= $is_edit ? 'edit' : 'add' ?>">
@@ -12,7 +16,7 @@ $active_fees = array_filter($available_fees, fn($f) => ($f['status'] ?? 'active'
     <div class="cn-field"><label>Type</label><select name="type" class="cn-input" required><option value="Percentage" <?= ($discount['type'] ?? '') === 'Percentage' ? 'selected' : '' ?>>Percentage</option><option value="Full waiver" <?= ($discount['type'] ?? '') === 'Full waiver' ? 'selected' : '' ?>>Full waiver</option></select></div>
     <div class="cn-field"><label>Rate (%)</label><input type="number" name="rate" class="cn-input" min="0" max="100" step="1" value="<?= htmlspecialchars((string) ($discount['rate'] ?? '')) ?>" required></div>
     <div class="cn-field">
-      <label>Applies to</label>
+      <label>Fees</label>
       <select name="appliesTo" class="cn-input" required>
         <optgroup label="General Scope">
           <option value="total_fees" <?= ($discount['appliesTo'] ?? '') === 'total_fees' ? 'selected' : '' ?>>Total school fees (All fees)</option>
@@ -30,5 +34,19 @@ $active_fees = array_filter($available_fees, fn($f) => ($f['status'] ?? 'active'
       </select>
     </div>
   </div>
+  <div class="cn-field">
+    <label>Applies to</label>
+    <p class="m-0 mb-1 text-xs text-[#737373]">Select the staff categories this discount applies to.</p>
+    <div class="cn-tag-picker">
+      <?php foreach ($cn_available_tags as $tag):
+        $tag_checked = in_array($tag, $cn_selected_tags, true);
+      ?>
+        <label class="cn-tag-option <?= $tag_checked ? 'cn-tag-option--selected' : '' ?>">
+          <input type="checkbox" name="tags[]" value="<?= htmlspecialchars($tag) ?>" <?= $tag_checked ? 'checked' : '' ?>>
+          <span class="cn-tag-label"><?= htmlspecialchars($tag) ?></span>
+        </label>
+      <?php endforeach; ?>
+    </div>
+  </div>
   <div class="cn-field"><label>Eligibility criteria</label><p class="m-0 mb-1 text-xs text-[#737373]">Explain who qualifies, what the school must approve, and whether any fees remain payable.</p><textarea name="eligibility" class="cn-input" rows="4" placeholder="e.g. Families with three enrolled children; apply to each approved child's tuition." required><?= htmlspecialchars($discount['eligibility'] ?? '') ?></textarea></div>
-</form>
+</form>

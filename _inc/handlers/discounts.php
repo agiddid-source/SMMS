@@ -7,6 +7,14 @@ $cn_type = cure($_POST['type'] ?? '');
 $cn_rate = (float) ($_POST['rate'] ?? -1);
 $cn_applies_to = cure($_POST['appliesTo'] ?? '');
 $cn_eligibility = cure($_POST['eligibility'] ?? '');
+$cn_tags = $_POST['tags'] ?? [];
+
+// Sanitise each tag value
+$cn_valid_tag_values = ['Teaching Staff', 'Non-Teaching Staff', 'Administrative Staff'];
+$cn_tags = array_values(array_filter(
+    array_map('trim', $cn_tags),
+    fn($t) => in_array($t, $cn_valid_tag_values, true)
+));
 
 $cn_valid_types = ['Percentage', 'Full waiver'];
 $cn_all_fees = cn_get_fees();
@@ -42,6 +50,7 @@ if ($cn_action === 'add' || $cn_action === 'edit') {
         'type' => $cn_type,
         'rate' => $cn_rate,
         'appliesTo' => $cn_applies_to,
+        'tags' => $cn_tags,
         'eligibility' => $cn_eligibility,
     ];
 

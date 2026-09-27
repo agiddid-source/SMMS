@@ -1,44 +1,4392 @@
 {
-  "students": [
-    {
-      "id": "sodiq-adeyemi",
-      "initials": "SA",
-      "name": "Sodiq Adeyemi",
-      "className": "Toddler",
-      "studentNumber": "GH-2026-041",
-      "guardian": "Mariam Adeyemi",
-      "accountStatus": "Paid in full",
-      "summary": { "assigned": 112000, "payable": 25000, "paid": 25000, "outstanding": 0 },
-      "concession": { "shortLabel": "Community child", "name": "Community child tuition discount", "description": "Tuition is free for eligible community children. Activity, learning materials and transport still need to be paid.", "amount": 87000, "rule": "Tuition only · 100% discount", "appliedOn": "2 September 2026", "approvedBy": "Adaeze Nwosu" },
-      "fees": [
-        { "name": "Tuition", "note": "First Term 2026/27", "assigned": 87000, "discount": 87000, "payable": 0 },
-        { "name": "Activity & learning materials", "note": "First Term 2026/27", "assigned": 15000, "discount": 0, "payable": 15000 },
-        { "name": "Transport contribution", "note": "First Term 2026/27", "assigned": 10000, "discount": 0, "payable": 10000 }
-      ],
-      "transactions": [
-        { "reference": "GHS-REC-260901-184", "date": "1 September 2026, 08:04", "description": "Community child tuition discount added", "amount": 87000, "status": "Discount", "actor": "Approved by Adaeze Nwosu" },
-        { "reference": "GHS-REC-260830-099", "date": "30 August 2026, 13:18", "description": "Bank transfer · materials & transport", "amount": 25000, "status": "Paid", "actor": "Recorded by Bursar desk" }
-      ]
-    },
-    {
-      "id": "ifeoma-okoro",
-      "initials": "IO",
-      "name": "Ifeoma Okoro",
-      "className": "Year 2",
-      "studentNumber": "GH-2026-118",
-      "guardian": "Chinwe Okoro",
-      "accountStatus": "Partially paid",
-      "summary": { "assigned": 112000, "payable": 56000, "paid": 30000, "outstanding": 26000 },
-      "concession": { "shortLabel": "Teacher’s child", "name": "Teacher’s child discount", "description": "Eligible teachers’ children receive 50% off approved fees for the term.", "amount": 56000, "rule": "All fees · 50% discount", "appliedOn": "29 August 2026", "approvedBy": "Adaeze Nwosu" },
-      "fees": [
-        { "name": "Tuition", "note": "First Term 2026/27", "assigned": 87000, "discount": 43500, "payable": 43500 },
-        { "name": "Activity & learning materials", "note": "First Term 2026/27", "assigned": 15000, "discount": 7500, "payable": 7500 },
-        { "name": "Transport contribution", "note": "First Term 2026/27", "assigned": 10000, "discount": 5000, "payable": 5000 }
-      ],
-      "transactions": [
-        { "reference": "GHS-REC-260829-058", "date": "29 August 2026, 10:40", "description": "Teacher’s child discount added", "amount": 56000, "status": "Discount", "actor": "Approved by Adaeze Nwosu" },
-        { "reference": "GHS-REC-260902-211", "date": "2 September 2026, 12:22", "description": "POS payment · First Term fees", "amount": 30000, "status": "Paid", "actor": "Recorded by Bursar desk" }
-      ]
-    }
-  ]
+    "students": [
+        {
+            "id": "sodiq-adeyemi",
+            "initials": "SA",
+            "name": "Sodiq Adeyemi",
+            "className": "Toddler A",
+            "classId": "CLASS-001",
+            "studentNumber": "GH-2026-041",
+            "guardian": "Mariam Adeyemi",
+            "guardianRelationship": "Mother",
+            "phone": "+234 803 234 5678",
+            "email": "mariam.adeyemi@gmail.com",
+            "accountStatus": "Paid in full",
+            "summary": {
+                "assigned": 112000,
+                "payable": 25000,
+                "paid": 25000,
+                "outstanding": 0
+            },
+            "concession": {
+                "discountId": "DISC-001",
+                "shortLabel": "Community child",
+                "name": "Community Children",
+                "description": "Tuition is free for eligible community children. Activity, learning materials and transport still need to be paid.",
+                "amount": 87000,
+                "rule": "Tuition only · 100% discount",
+                "appliedOn": "2 September 2026",
+                "approvedBy": "Adaeze Nwosu"
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 87000,
+                    "payable": 0
+                },
+                {
+                    "name": "Activity & learning materials",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Transport contribution",
+                    "note": "First Term 2026/27",
+                    "assigned": 10000,
+                    "discount": 0,
+                    "payable": 10000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-260901-184",
+                    "date": "1 September 2026, 08:04",
+                    "description": "Community child tuition discount added",
+                    "amount": 87000,
+                    "status": "Discount",
+                    "actor": "Approved by Adaeze Nwosu"
+                },
+                {
+                    "reference": "GHS-REC-260830-099",
+                    "date": "30 August 2026, 13:18",
+                    "description": "Bank transfer · materials & transport",
+                    "amount": 25000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "ifeoma-okoro",
+            "initials": "IO",
+            "name": "Ifeoma Okoro",
+            "className": "Year 2",
+            "classId": "CLASS-007",
+            "studentNumber": "GH-2026-118",
+            "guardian": "Chinwe Okoro",
+            "guardianRelationship": "Mother",
+            "phone": "+234 802 918 3401",
+            "email": "chinwe.okoro@greenhill.sch.ng",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 110000,
+                "payable": 55000,
+                "paid": 30000,
+                "outstanding": 25000
+            },
+            "concession": {
+                "discountId": "DISC-004",
+                "shortLabel": "Teacher's child",
+                "name": "Teacher's Child",
+                "description": "Eligible teachers' children receive 50% off approved fees for the term.",
+                "amount": 55000,
+                "rule": "All fees · 50% discount",
+                "appliedOn": "29 August 2026",
+                "approvedBy": "Adaeze Nwosu"
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 43500,
+                    "payable": 43500
+                },
+                {
+                    "name": "Excursion Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 7500,
+                    "payable": 7500
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 4000,
+                    "payable": 4000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-260829-058",
+                    "date": "29 August 2026, 10:40",
+                    "description": "Teacher's child discount added",
+                    "amount": 55000,
+                    "status": "Discount",
+                    "actor": "Approved by Adaeze Nwosu"
+                },
+                {
+                    "reference": "GHS-REC-260902-211",
+                    "date": "2 September 2026, 12:22",
+                    "description": "POS payment · First Term fees",
+                    "amount": 30000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "john-ojo-837",
+            "initials": "JO",
+            "name": "John Ojo",
+            "className": "Toddler A",
+            "classId": "CLASS-001",
+            "studentNumber": "GH-2026-837",
+            "guardian": "Joy Ojo",
+            "guardianRelationship": "Mother",
+            "phone": "+234 803 952 4514",
+            "email": "joy.ojo@gmail.com",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 112000,
+                "payable": 112000,
+                "paid": 40000,
+                "outstanding": 72000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Activity & learning materials",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Transport contribution",
+                    "note": "First Term 2026/27",
+                    "assigned": 10000,
+                    "discount": 0,
+                    "payable": 10000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609201",
+                    "date": "28 August 2026, 09:15",
+                    "description": "Bank transfer · First Term fees",
+                    "amount": 40000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "emeka-kehinde-198",
+            "initials": "EK",
+            "name": "Emeka Kehinde",
+            "className": "Toddler A",
+            "classId": "CLASS-001",
+            "studentNumber": "GH-2026-198",
+            "guardian": "Samuel Kehinde",
+            "guardianRelationship": "Father",
+            "phone": "+234 802 889 2705",
+            "email": "samuel.kehinde@yahoo.com",
+            "accountStatus": "Paid in full",
+            "summary": {
+                "assigned": 112000,
+                "payable": 112000,
+                "paid": 112000,
+                "outstanding": 0
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Activity & learning materials",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Transport contribution",
+                    "note": "First Term 2026/27",
+                    "assigned": 10000,
+                    "discount": 0,
+                    "payable": 10000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609202",
+                    "date": "1 September 2026, 08:45",
+                    "description": "Cash payment · Bursar desk",
+                    "amount": 112000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "ifeoma-nwosu-943",
+            "initials": "IN",
+            "name": "Ifeoma Nwosu",
+            "className": "Toddler A",
+            "classId": "CLASS-001",
+            "studentNumber": "GH-2026-943",
+            "guardian": "Esther Nwosu",
+            "guardianRelationship": "Mother",
+            "phone": "+234 805 954 7800",
+            "email": "esther.nwosu@outlook.com",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 112000,
+                "payable": 112000,
+                "paid": 70000,
+                "outstanding": 42000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Activity & learning materials",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Transport contribution",
+                    "note": "First Term 2026/27",
+                    "assigned": 10000,
+                    "discount": 0,
+                    "payable": 10000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609203",
+                    "date": "4 September 2026, 09:30",
+                    "description": "Mobile transfer · Fees installment",
+                    "amount": 70000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "mary-lawal-291",
+            "initials": "ML",
+            "name": "Mary Lawal",
+            "className": "Toddler A",
+            "classId": "CLASS-001",
+            "studentNumber": "GH-2026-291",
+            "guardian": "Ifeoma Lawal",
+            "guardianRelationship": "Mother",
+            "phone": "+234 814 670 5588",
+            "email": "ifeoma.lawal@greenhill.sch.ng",
+            "accountStatus": "Not yet paid",
+            "summary": {
+                "assigned": 112000,
+                "payable": 112000,
+                "paid": 0,
+                "outstanding": 112000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Activity & learning materials",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Transport contribution",
+                    "note": "First Term 2026/27",
+                    "assigned": 10000,
+                    "discount": 0,
+                    "payable": 10000
+                }
+            ],
+            "transactions": []
+        },
+        {
+            "id": "sarah-balogun-639",
+            "initials": "SB",
+            "name": "Sarah Balogun",
+            "className": "Toddler A",
+            "classId": "CLASS-001",
+            "studentNumber": "GH-2026-639",
+            "guardian": "Samuel Balogun",
+            "guardianRelationship": "Father",
+            "phone": "+234 703 286 7376",
+            "email": "samuel.balogun@gmail.com",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 112000,
+                "payable": 112000,
+                "paid": 50000,
+                "outstanding": 62000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Activity & learning materials",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Transport contribution",
+                    "note": "First Term 2026/27",
+                    "assigned": 10000,
+                    "discount": 0,
+                    "payable": 10000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609204",
+                    "date": "12 September 2026, 14:00",
+                    "description": "Cash payment · Bursar desk",
+                    "amount": 50000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "sodiq-umar-403",
+            "initials": "SU",
+            "name": "Sodiq Umar",
+            "className": "Nursery 1",
+            "classId": "CLASS-002",
+            "studentNumber": "GH-2026-403",
+            "guardian": "Sodiq Umar Sr.",
+            "guardianRelationship": "Father",
+            "phone": "+234 816 774 9060",
+            "email": "sodiq.sr@yahoo.com",
+            "accountStatus": "Paid in full",
+            "summary": {
+                "assigned": 112000,
+                "payable": 0,
+                "paid": 0,
+                "outstanding": 0
+            },
+            "concession": {
+                "discountId": "DISC-005",
+                "shortLabel": "Staff child full",
+                "name": "Teacher's Child - Full",
+                "description": "Specific children of staff individually approved for full fee support.",
+                "amount": 112000,
+                "rule": "All fees · 100% discount",
+                "appliedOn": "1 September 2026",
+                "approvedBy": "Adaeze Nwosu"
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 87000,
+                    "payable": 0
+                },
+                {
+                    "name": "Activity & learning materials",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 15000,
+                    "payable": 0
+                },
+                {
+                    "name": "Transport contribution",
+                    "note": "First Term 2026/27",
+                    "assigned": 10000,
+                    "discount": 10000,
+                    "payable": 0
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609205",
+                    "date": "1 September 2026, 08:30",
+                    "description": "Teacher's Child - Full discount added",
+                    "amount": 112000,
+                    "status": "Discount",
+                    "actor": "Approved by Adaeze Nwosu"
+                }
+            ]
+        },
+        {
+            "id": "elizabeth-usman-661",
+            "initials": "EU",
+            "name": "Elizabeth Usman",
+            "className": "Nursery 1",
+            "classId": "CLASS-002",
+            "studentNumber": "GH-2026-661",
+            "guardian": "Esther Usman",
+            "guardianRelationship": "Mother",
+            "phone": "+234 903 660 8058",
+            "email": "esther.usman@outlook.com",
+            "accountStatus": "Paid in full",
+            "summary": {
+                "assigned": 112000,
+                "payable": 112000,
+                "paid": 112000,
+                "outstanding": 0
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Activity & learning materials",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Transport contribution",
+                    "note": "First Term 2026/27",
+                    "assigned": 10000,
+                    "discount": 0,
+                    "payable": 10000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609206",
+                    "date": "15 September 2026, 09:10",
+                    "description": "POS payment · First Term fees",
+                    "amount": 112000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "peter-nwosu-141",
+            "initials": "PN",
+            "name": "Peter Nwosu",
+            "className": "Nursery 1",
+            "classId": "CLASS-002",
+            "studentNumber": "GH-2026-141",
+            "guardian": "Amira Nwosu",
+            "guardianRelationship": "Mother",
+            "phone": "+234 806 820 9938",
+            "email": "amira.nwosu@greenhill.sch.ng",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 112000,
+                "payable": 112000,
+                "paid": 60000,
+                "outstanding": 52000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Activity & learning materials",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Transport contribution",
+                    "note": "First Term 2026/27",
+                    "assigned": 10000,
+                    "discount": 0,
+                    "payable": 10000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609207",
+                    "date": "18 September 2026, 10:15",
+                    "description": "Bank transfer · Tuition & levies",
+                    "amount": 60000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "daniel-chukwu-416",
+            "initials": "DC",
+            "name": "Daniel Chukwu",
+            "className": "Nursery 1",
+            "classId": "CLASS-002",
+            "studentNumber": "GH-2026-416",
+            "guardian": "Emeka Chukwu",
+            "guardianRelationship": "Father",
+            "phone": "+234 812 995 9463",
+            "email": "emeka.chukwu@gmail.com",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 112000,
+                "payable": 112000,
+                "paid": 35000,
+                "outstanding": 77000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Activity & learning materials",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Transport contribution",
+                    "note": "First Term 2026/27",
+                    "assigned": 10000,
+                    "discount": 0,
+                    "payable": 10000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609208",
+                    "date": "23 September 2026, 12:10",
+                    "description": "POS payment · Term balance",
+                    "amount": 35000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "esther-okafor-460",
+            "initials": "EO",
+            "name": "Esther Okafor",
+            "className": "Nursery 1",
+            "classId": "CLASS-002",
+            "studentNumber": "GH-2026-460",
+            "guardian": "Sarah Okafor",
+            "guardianRelationship": "Mother",
+            "phone": "+234 708 843 1827",
+            "email": "sarah.okafor@yahoo.com",
+            "accountStatus": "Not yet paid",
+            "summary": {
+                "assigned": 112000,
+                "payable": 112000,
+                "paid": 0,
+                "outstanding": 112000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Activity & learning materials",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Transport contribution",
+                    "note": "First Term 2026/27",
+                    "assigned": 10000,
+                    "discount": 0,
+                    "payable": 10000
+                }
+            ],
+            "transactions": []
+        },
+        {
+            "id": "samuel-kehinde-285",
+            "initials": "SK",
+            "name": "Samuel Kehinde",
+            "className": "Nursery 2",
+            "classId": "CLASS-003",
+            "studentNumber": "GH-2026-285",
+            "guardian": "Mary Kehinde",
+            "guardianRelationship": "Mother",
+            "phone": "+234 803 568 5402",
+            "email": "mary.kehinde@outlook.com",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 112000,
+                "payable": 103300,
+                "paid": 60000,
+                "outstanding": 43300
+            },
+            "concession": {
+                "discountId": "DISC-003",
+                "shortLabel": "Family of 3",
+                "name": "Family of Three",
+                "description": "Families with three enrolled children receive 10% reduction on tuition.",
+                "amount": 8700,
+                "rule": "Tuition only · 10% discount",
+                "appliedOn": "1 September 2026",
+                "approvedBy": "Adaeze Nwosu"
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 8700,
+                    "payable": 78300
+                },
+                {
+                    "name": "Activity & learning materials",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Transport contribution",
+                    "note": "First Term 2026/27",
+                    "assigned": 10000,
+                    "discount": 0,
+                    "payable": 10000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609209",
+                    "date": "1 September 2026, 08:30",
+                    "description": "Family of Three discount added",
+                    "amount": 8700,
+                    "status": "Discount",
+                    "actor": "Approved by Adaeze Nwosu"
+                },
+                {
+                    "reference": "GHS-REC-2609210",
+                    "date": "24 September 2026, 11:00",
+                    "description": "Mobile transfer · Fees installment",
+                    "amount": 60000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "david-adeyemi-565",
+            "initials": "DA",
+            "name": "David Adeyemi",
+            "className": "Nursery 2",
+            "classId": "CLASS-003",
+            "studentNumber": "GH-2026-565",
+            "guardian": "Joy Adeyemi",
+            "guardianRelationship": "Mother",
+            "phone": "+234 802 828 5082",
+            "email": "joy.adeyemi@greenhill.sch.ng",
+            "accountStatus": "Paid in full",
+            "summary": {
+                "assigned": 112000,
+                "payable": 112000,
+                "paid": 112000,
+                "outstanding": 0
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Activity & learning materials",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Transport contribution",
+                    "note": "First Term 2026/27",
+                    "assigned": 10000,
+                    "discount": 0,
+                    "payable": 10000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609211",
+                    "date": "30 August 2026, 14:10",
+                    "description": "Bank transfer · First Term fees",
+                    "amount": 112000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "elizabeth-ojo-775",
+            "initials": "EO",
+            "name": "Elizabeth Ojo",
+            "className": "Nursery 2",
+            "classId": "CLASS-003",
+            "studentNumber": "GH-2026-775",
+            "guardian": "Elizabeth Ojo Sr.",
+            "guardianRelationship": "Mother",
+            "phone": "+234 805 798 2592",
+            "email": "elizabeth.sr@gmail.com",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 112000,
+                "payable": 112000,
+                "paid": 55000,
+                "outstanding": 57000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Activity & learning materials",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Transport contribution",
+                    "note": "First Term 2026/27",
+                    "assigned": 10000,
+                    "discount": 0,
+                    "payable": 10000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609212",
+                    "date": "3 September 2026, 12:00",
+                    "description": "Cash payment · Bursar desk",
+                    "amount": 55000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "ifeoma-usman-688",
+            "initials": "IU",
+            "name": "Ifeoma Usman",
+            "className": "Nursery 2",
+            "classId": "CLASS-003",
+            "studentNumber": "GH-2026-688",
+            "guardian": "Emeka Usman",
+            "guardianRelationship": "Father",
+            "phone": "+234 814 219 8895",
+            "email": "emeka.usman@yahoo.com",
+            "accountStatus": "Not yet paid",
+            "summary": {
+                "assigned": 112000,
+                "payable": 112000,
+                "paid": 0,
+                "outstanding": 112000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Activity & learning materials",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Transport contribution",
+                    "note": "First Term 2026/27",
+                    "assigned": 10000,
+                    "discount": 0,
+                    "payable": 10000
+                }
+            ],
+            "transactions": []
+        },
+        {
+            "id": "joseph-taiwo-812",
+            "initials": "JT",
+            "name": "Joseph Taiwo",
+            "className": "Nursery 2",
+            "classId": "CLASS-003",
+            "studentNumber": "GH-2026-812",
+            "guardian": "Emeka Taiwo",
+            "guardianRelationship": "Father",
+            "phone": "+234 703 527 3739",
+            "email": "emeka.taiwo@outlook.com",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 112000,
+                "payable": 112000,
+                "paid": 75000,
+                "outstanding": 37000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Activity & learning materials",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Transport contribution",
+                    "note": "First Term 2026/27",
+                    "assigned": 10000,
+                    "discount": 0,
+                    "payable": 10000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609213",
+                    "date": "11 September 2026, 10:45",
+                    "description": "Bank transfer · First Term fees",
+                    "amount": 75000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "hannah-eze-660",
+            "initials": "HE",
+            "name": "Hannah Eze",
+            "className": "KG 1",
+            "classId": "CLASS-004",
+            "studentNumber": "GH-2026-660",
+            "guardian": "Emeka Eze",
+            "guardianRelationship": "Father",
+            "phone": "+234 816 643 8027",
+            "email": "emeka.eze@greenhill.sch.ng",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 112000,
+                "payable": 112000,
+                "paid": 45000,
+                "outstanding": 67000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Activity & learning materials",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Transport contribution",
+                    "note": "First Term 2026/27",
+                    "assigned": 10000,
+                    "discount": 0,
+                    "payable": 10000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609214",
+                    "date": "9 September 2026, 13:50",
+                    "description": "Bank transfer · Tuition & levies",
+                    "amount": 45000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "michael-umar-234",
+            "initials": "MU",
+            "name": "Michael Umar",
+            "className": "KG 1",
+            "classId": "CLASS-004",
+            "studentNumber": "GH-2026-234",
+            "guardian": "Esther Umar",
+            "guardianRelationship": "Mother",
+            "phone": "+234 903 601 3821",
+            "email": "esther.umar@gmail.com",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 112000,
+                "payable": 112000,
+                "paid": 70000,
+                "outstanding": 42000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Activity & learning materials",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Transport contribution",
+                    "note": "First Term 2026/27",
+                    "assigned": 10000,
+                    "discount": 0,
+                    "payable": 10000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609215",
+                    "date": "12 September 2026, 14:00",
+                    "description": "POS payment · Term balance",
+                    "amount": 70000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "mary-adeleke-845",
+            "initials": "MA",
+            "name": "Mary Adeleke",
+            "className": "KG 1",
+            "classId": "CLASS-004",
+            "studentNumber": "GH-2026-845",
+            "guardian": "John Adeleke",
+            "guardianRelationship": "Father",
+            "phone": "+234 806 188 4762",
+            "email": "john.adeleke@yahoo.com",
+            "accountStatus": "Not yet paid",
+            "summary": {
+                "assigned": 112000,
+                "payable": 112000,
+                "paid": 0,
+                "outstanding": 112000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Activity & learning materials",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Transport contribution",
+                    "note": "First Term 2026/27",
+                    "assigned": 10000,
+                    "discount": 0,
+                    "payable": 10000
+                }
+            ],
+            "transactions": []
+        },
+        {
+            "id": "joy-umar-548",
+            "initials": "JU",
+            "name": "Joy Umar",
+            "className": "KG 1",
+            "classId": "CLASS-004",
+            "studentNumber": "GH-2026-548",
+            "guardian": "Sarah Umar",
+            "guardianRelationship": "Mother",
+            "phone": "+234 812 539 4555",
+            "email": "sarah.umar@outlook.com",
+            "accountStatus": "Paid in full",
+            "summary": {
+                "assigned": 112000,
+                "payable": 112000,
+                "paid": 112000,
+                "outstanding": 0
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Activity & learning materials",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Transport contribution",
+                    "note": "First Term 2026/27",
+                    "assigned": 10000,
+                    "discount": 0,
+                    "payable": 10000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609216",
+                    "date": "22 September 2026, 08:50",
+                    "description": "Bank transfer · Tuition & levies",
+                    "amount": 112000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "sodiq-chukwu-781",
+            "initials": "SC",
+            "name": "Sodiq Chukwu",
+            "className": "KG 1",
+            "classId": "CLASS-004",
+            "studentNumber": "GH-2026-781",
+            "guardian": "Joshua Chukwu",
+            "guardianRelationship": "Father",
+            "phone": "+234 708 900 2778",
+            "email": "joshua.chukwu@greenhill.sch.ng",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 112000,
+                "payable": 112000,
+                "paid": 50000,
+                "outstanding": 62000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Activity & learning materials",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Transport contribution",
+                    "note": "First Term 2026/27",
+                    "assigned": 10000,
+                    "discount": 0,
+                    "payable": 10000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609217",
+                    "date": "28 August 2026, 09:15",
+                    "description": "POS payment · Term balance",
+                    "amount": 50000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "joy-adeleke-473",
+            "initials": "JA",
+            "name": "Joy Adeleke",
+            "className": "KG 2",
+            "classId": "CLASS-005",
+            "studentNumber": "GH-2026-473",
+            "guardian": "Esther Adeleke",
+            "guardianRelationship": "Mother",
+            "phone": "+234 803 164 2230",
+            "email": "esther.adeleke@gmail.com",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 112000,
+                "payable": 112000,
+                "paid": 60000,
+                "outstanding": 52000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Activity & learning materials",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Transport contribution",
+                    "note": "First Term 2026/27",
+                    "assigned": 10000,
+                    "discount": 0,
+                    "payable": 10000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609218",
+                    "date": "23 September 2026, 12:10",
+                    "description": "Cash payment · Bursar desk",
+                    "amount": 60000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "john-okafor-170",
+            "initials": "JO",
+            "name": "John Okafor",
+            "className": "KG 2",
+            "classId": "CLASS-005",
+            "studentNumber": "GH-2026-170",
+            "guardian": "John Okafor Sr.",
+            "guardianRelationship": "Father",
+            "phone": "+234 802 413 1837",
+            "email": "john.sr@yahoo.com",
+            "accountStatus": "Not yet paid",
+            "summary": {
+                "assigned": 112000,
+                "payable": 112000,
+                "paid": 0,
+                "outstanding": 112000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Activity & learning materials",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Transport contribution",
+                    "note": "First Term 2026/27",
+                    "assigned": 10000,
+                    "discount": 0,
+                    "payable": 10000
+                }
+            ],
+            "transactions": []
+        },
+        {
+            "id": "elizabeth-okeke-529",
+            "initials": "EO",
+            "name": "Elizabeth Okeke",
+            "className": "KG 2",
+            "classId": "CLASS-005",
+            "studentNumber": "GH-2026-529",
+            "guardian": "Hannah Okeke",
+            "guardianRelationship": "Mother",
+            "phone": "+234 805 216 3966",
+            "email": "hannah.okeke@outlook.com",
+            "accountStatus": "Paid in full",
+            "summary": {
+                "assigned": 112000,
+                "payable": 112000,
+                "paid": 112000,
+                "outstanding": 0
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Activity & learning materials",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Transport contribution",
+                    "note": "First Term 2026/27",
+                    "assigned": 10000,
+                    "discount": 0,
+                    "payable": 10000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609219",
+                    "date": "2 September 2026, 10:20",
+                    "description": "Bank transfer · First Term fees",
+                    "amount": 112000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "david-taiwo-717",
+            "initials": "DT",
+            "name": "David Taiwo",
+            "className": "KG 2",
+            "classId": "CLASS-005",
+            "studentNumber": "GH-2026-717",
+            "guardian": "Joshua Taiwo",
+            "guardianRelationship": "Father",
+            "phone": "+234 814 712 9794",
+            "email": "joshua.taiwo@greenhill.sch.ng",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 112000,
+                "payable": 112000,
+                "paid": 40000,
+                "outstanding": 72000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Activity & learning materials",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Transport contribution",
+                    "note": "First Term 2026/27",
+                    "assigned": 10000,
+                    "discount": 0,
+                    "payable": 10000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609220",
+                    "date": "5 September 2026, 15:40",
+                    "description": "Cash payment · Bursar desk",
+                    "amount": 40000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "ruth-chukwu-992",
+            "initials": "RC",
+            "name": "Ruth Chukwu",
+            "className": "KG 2",
+            "classId": "CLASS-005",
+            "studentNumber": "GH-2026-992",
+            "guardian": "Esther Chukwu",
+            "guardianRelationship": "Mother",
+            "phone": "+234 703 887 9319",
+            "email": "esther.chukwu@gmail.com",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 112000,
+                "payable": 112000,
+                "paid": 80000,
+                "outstanding": 32000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Activity & learning materials",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Transport contribution",
+                    "note": "First Term 2026/27",
+                    "assigned": 10000,
+                    "discount": 0,
+                    "payable": 10000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609221",
+                    "date": "10 September 2026, 08:30",
+                    "description": "Mobile transfer · Fees installment",
+                    "amount": 80000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "sarah-okoro-304",
+            "initials": "SO",
+            "name": "Sarah Okoro",
+            "className": "Year 1",
+            "classId": "CLASS-006",
+            "studentNumber": "GH-2026-304",
+            "guardian": "Amira Okoro",
+            "guardianRelationship": "Mother",
+            "phone": "+234 816 891 5991",
+            "email": "amira.okoro@yahoo.com",
+            "accountStatus": "Paid in full",
+            "summary": {
+                "assigned": 110000,
+                "payable": 23000,
+                "paid": 23000,
+                "outstanding": 0
+            },
+            "concession": {
+                "discountId": "DISC-002",
+                "shortLabel": "Family of 4",
+                "name": "Family of Four",
+                "description": "Families with four enrolled children; approved fourth child receives free tuition.",
+                "amount": 87000,
+                "rule": "Tuition only · 100% discount",
+                "appliedOn": "1 September 2026",
+                "approvedBy": "Adaeze Nwosu"
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 87000,
+                    "payable": 0
+                },
+                {
+                    "name": "Excursion Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609222",
+                    "date": "1 September 2026, 08:30",
+                    "description": "Family of Four discount added",
+                    "amount": 87000,
+                    "status": "Discount",
+                    "actor": "Approved by Adaeze Nwosu"
+                },
+                {
+                    "reference": "GHS-REC-2609223",
+                    "date": "8 September 2026, 11:15",
+                    "description": "POS payment · First Term fees",
+                    "amount": 23000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "joshua-kehinde-609",
+            "initials": "JK",
+            "name": "Joshua Kehinde",
+            "className": "Year 1",
+            "classId": "CLASS-006",
+            "studentNumber": "GH-2026-609",
+            "guardian": "Amira Kehinde",
+            "guardianRelationship": "Mother",
+            "phone": "+234 903 676 6446",
+            "email": "amira.kehinde@outlook.com",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 110000,
+                "payable": 110000,
+                "paid": 60000,
+                "outstanding": 50000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Excursion Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609224",
+                    "date": "11 September 2026, 10:45",
+                    "description": "Bank transfer · Tuition & levies",
+                    "amount": 60000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "elizabeth-adeyemi-263",
+            "initials": "EA",
+            "name": "Elizabeth Adeyemi",
+            "className": "Year 1",
+            "classId": "CLASS-006",
+            "studentNumber": "GH-2026-263",
+            "guardian": "Mary Adeyemi",
+            "guardianRelationship": "Mother",
+            "phone": "+234 806 194 4720",
+            "email": "mary.adeyemi@greenhill.sch.ng",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 110000,
+                "payable": 110000,
+                "paid": 50000,
+                "outstanding": 60000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Excursion Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609225",
+                    "date": "16 September 2026, 11:25",
+                    "description": "POS payment · Term balance",
+                    "amount": 50000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "hannah-balogun-223",
+            "initials": "HB",
+            "name": "Hannah Balogun",
+            "className": "Year 1",
+            "classId": "CLASS-006",
+            "studentNumber": "GH-2026-223",
+            "guardian": "Sarah Balogun",
+            "guardianRelationship": "Mother",
+            "phone": "+234 812 414 3480",
+            "email": "sarah.balogun@gmail.com",
+            "accountStatus": "Paid in full",
+            "summary": {
+                "assigned": 110000,
+                "payable": 110000,
+                "paid": 110000,
+                "outstanding": 0
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Excursion Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609226",
+                    "date": "19 September 2026, 13:30",
+                    "description": "POS payment · First Term fees",
+                    "amount": 110000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "grace-lawal-668",
+            "initials": "GL",
+            "name": "Grace Lawal",
+            "className": "Year 1",
+            "classId": "CLASS-006",
+            "studentNumber": "GH-2026-668",
+            "guardian": "Joshua Lawal",
+            "guardianRelationship": "Father",
+            "phone": "+234 708 779 8275",
+            "email": "joshua.lawal@yahoo.com",
+            "accountStatus": "Not yet paid",
+            "summary": {
+                "assigned": 110000,
+                "payable": 110000,
+                "paid": 0,
+                "outstanding": 110000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Excursion Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": []
+        },
+        {
+            "id": "peter-okoro-239",
+            "initials": "PO",
+            "name": "Peter Okoro",
+            "className": "Year 2",
+            "classId": "CLASS-007",
+            "studentNumber": "GH-2026-239",
+            "guardian": "Esther Okoro",
+            "guardianRelationship": "Mother",
+            "phone": "+234 803 686 3976",
+            "email": "esther.okoro@outlook.com",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 110000,
+                "payable": 110000,
+                "paid": 75000,
+                "outstanding": 35000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Excursion Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609227",
+                    "date": "22 September 2026, 08:50",
+                    "description": "Bank transfer · First Term fees",
+                    "amount": 75000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "mary-ogunleye-376",
+            "initials": "MO",
+            "name": "Mary Ogunleye",
+            "className": "Year 2",
+            "classId": "CLASS-007",
+            "studentNumber": "GH-2026-376",
+            "guardian": "Peter Ogunleye",
+            "guardianRelationship": "Father",
+            "phone": "+234 802 315 8223",
+            "email": "peter.ogunleye@greenhill.sch.ng",
+            "accountStatus": "Paid in full",
+            "summary": {
+                "assigned": 110000,
+                "payable": 110000,
+                "paid": 110000,
+                "outstanding": 0
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Excursion Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609228",
+                    "date": "28 August 2026, 09:15",
+                    "description": "Cash payment · Bursar desk",
+                    "amount": 110000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "sarah-ibrahim-963",
+            "initials": "SI",
+            "name": "Sarah Ibrahim",
+            "className": "Year 2",
+            "classId": "CLASS-007",
+            "studentNumber": "GH-2026-963",
+            "guardian": "Joy Ibrahim",
+            "guardianRelationship": "Mother",
+            "phone": "+234 805 394 8420",
+            "email": "joy.ibrahim@gmail.com",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 110000,
+                "payable": 110000,
+                "paid": 50000,
+                "outstanding": 60000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Excursion Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609229",
+                    "date": "1 September 2026, 08:45",
+                    "description": "Mobile transfer · Fees installment",
+                    "amount": 50000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "amira-lawal-966",
+            "initials": "AL",
+            "name": "Amira Lawal",
+            "className": "Year 2",
+            "classId": "CLASS-007",
+            "studentNumber": "GH-2026-966",
+            "guardian": "Grace Lawal",
+            "guardianRelationship": "Mother",
+            "phone": "+234 814 445 8513",
+            "email": "grace.lawal@yahoo.com",
+            "accountStatus": "Not yet paid",
+            "summary": {
+                "assigned": 110000,
+                "payable": 110000,
+                "paid": 0,
+                "outstanding": 110000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Excursion Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": []
+        },
+        {
+            "id": "peter-adeleke-921",
+            "initials": "PA",
+            "name": "Peter Adeleke",
+            "className": "Year 2",
+            "classId": "CLASS-007",
+            "studentNumber": "GH-2026-921",
+            "guardian": "Samuel Adeleke",
+            "guardianRelationship": "Father",
+            "phone": "+234 703 580 7118",
+            "email": "samuel.adeleke@outlook.com",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 110000,
+                "payable": 110000,
+                "paid": 65000,
+                "outstanding": 45000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Excursion Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609230",
+                    "date": "9 September 2026, 13:50",
+                    "description": "Cash payment · Bursar desk",
+                    "amount": 65000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "peter-adeyemi-677",
+            "initials": "PA",
+            "name": "Peter Adeyemi",
+            "className": "Year 3",
+            "classId": "CLASS-008",
+            "studentNumber": "GH-2026-677",
+            "guardian": "Sodiq Adeyemi",
+            "guardianRelationship": "Father",
+            "phone": "+234 816 932 8554",
+            "email": "sodiq.adeyemi@greenhill.sch.ng",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 110000,
+                "payable": 110000,
+                "paid": 50000,
+                "outstanding": 60000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Excursion Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609231",
+                    "date": "5 September 2026, 15:40",
+                    "description": "POS payment · Term balance",
+                    "amount": 50000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "amira-okafor-102",
+            "initials": "AO",
+            "name": "Amira Okafor",
+            "className": "Year 3",
+            "classId": "CLASS-008",
+            "studentNumber": "GH-2026-102",
+            "guardian": "Joshua Okafor",
+            "guardianRelationship": "Father",
+            "phone": "+234 903 157 8729",
+            "email": "joshua.okafor@gmail.com",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 110000,
+                "payable": 110000,
+                "paid": 70000,
+                "outstanding": 40000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Excursion Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609232",
+                    "date": "10 September 2026, 08:30",
+                    "description": "POS payment · First Term fees",
+                    "amount": 70000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "ruth-kehinde-523",
+            "initials": "RK",
+            "name": "Ruth Kehinde",
+            "className": "Year 3",
+            "classId": "CLASS-008",
+            "studentNumber": "GH-2026-523",
+            "guardian": "Esther Kehinde",
+            "guardianRelationship": "Mother",
+            "phone": "+234 806 114 3780",
+            "email": "esther.kehinde@yahoo.com",
+            "accountStatus": "Paid in full",
+            "summary": {
+                "assigned": 110000,
+                "payable": 110000,
+                "paid": 110000,
+                "outstanding": 0
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Excursion Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609233",
+                    "date": "15 September 2026, 09:10",
+                    "description": "Bank transfer · Tuition & levies",
+                    "amount": 110000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "joy-okoro-476",
+            "initials": "JO",
+            "name": "Joy Okoro",
+            "className": "Year 3",
+            "classId": "CLASS-008",
+            "studentNumber": "GH-2026-476",
+            "guardian": "Daniel Okoro",
+            "guardianRelationship": "Father",
+            "phone": "+234 812 215 2323",
+            "email": "daniel.okoro@outlook.com",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 110000,
+                "payable": 110000,
+                "paid": 40000,
+                "outstanding": 70000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Excursion Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609234",
+                    "date": "18 September 2026, 10:15",
+                    "description": "POS payment · Term balance",
+                    "amount": 40000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "esther-adebayo-357",
+            "initials": "EA",
+            "name": "Esther Adebayo",
+            "className": "Year 3",
+            "classId": "CLASS-008",
+            "studentNumber": "GH-2026-357",
+            "guardian": "Samuel Adebayo",
+            "guardianRelationship": "Father",
+            "phone": "+234 708 892 7634",
+            "email": "samuel.adebayo@greenhill.sch.ng",
+            "accountStatus": "Not yet paid",
+            "summary": {
+                "assigned": 110000,
+                "payable": 110000,
+                "paid": 0,
+                "outstanding": 110000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Excursion Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": []
+        },
+        {
+            "id": "ifeoma-kehinde-724",
+            "initials": "IK",
+            "name": "Ifeoma Kehinde",
+            "className": "Year 4",
+            "classId": "CLASS-009",
+            "studentNumber": "GH-2026-724",
+            "guardian": "Mary Kehinde",
+            "guardianRelationship": "Mother",
+            "phone": "+234 803 831 1011",
+            "email": "mary.kehinde@gmail.com",
+            "accountStatus": "Not yet paid",
+            "summary": {
+                "assigned": 110000,
+                "payable": 110000,
+                "paid": 0,
+                "outstanding": 110000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Excursion Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": []
+        },
+        {
+            "id": "samuel-nwosu-242",
+            "initials": "SN",
+            "name": "Samuel Nwosu",
+            "className": "Year 4",
+            "classId": "CLASS-009",
+            "studentNumber": "GH-2026-242",
+            "guardian": "Emeka Nwosu",
+            "guardianRelationship": "Father",
+            "phone": "+234 802 737 4069",
+            "email": "emeka.nwosu@yahoo.com",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 110000,
+                "payable": 110000,
+                "paid": 60000,
+                "outstanding": 50000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Excursion Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609235",
+                    "date": "24 September 2026, 11:00",
+                    "description": "Bank transfer · First Term fees",
+                    "amount": 60000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "esther-kehinde-600",
+            "initials": "EK",
+            "name": "Esther Kehinde",
+            "className": "Year 4",
+            "classId": "CLASS-009",
+            "studentNumber": "GH-2026-600",
+            "guardian": "Amira Kehinde",
+            "guardianRelationship": "Mother",
+            "phone": "+234 805 523 6167",
+            "email": "amira.kehinde@outlook.com",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 110000,
+                "payable": 110000,
+                "paid": 45000,
+                "outstanding": 65000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Excursion Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609236",
+                    "date": "30 August 2026, 14:10",
+                    "description": "Cash payment · Bursar desk",
+                    "amount": 45000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "daniel-nwosu-394",
+            "initials": "DN",
+            "name": "Daniel Nwosu",
+            "className": "Year 4",
+            "classId": "CLASS-009",
+            "studentNumber": "GH-2026-394",
+            "guardian": "Peter Nwosu",
+            "guardianRelationship": "Father",
+            "phone": "+234 814 621 8781",
+            "email": "peter.nwosu@greenhill.sch.ng",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 110000,
+                "payable": 75200,
+                "paid": 50000,
+                "outstanding": 25200
+            },
+            "concession": {
+                "discountId": "DISC-007",
+                "shortLabel": "Community kids",
+                "name": "Community Kids",
+                "description": "Community origin scholarship providing 40% reduction on term tuition.",
+                "amount": 34800,
+                "rule": "Tuition only · 40% discount",
+                "appliedOn": "1 September 2026",
+                "approvedBy": "Adaeze Nwosu"
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 34800,
+                    "payable": 52200
+                },
+                {
+                    "name": "Excursion Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609237",
+                    "date": "1 September 2026, 08:30",
+                    "description": "Community Kids discount added",
+                    "amount": 34800,
+                    "status": "Discount",
+                    "actor": "Approved by Adaeze Nwosu"
+                },
+                {
+                    "reference": "GHS-REC-2609238",
+                    "date": "3 September 2026, 12:00",
+                    "description": "Mobile transfer · Fees installment",
+                    "amount": 50000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "joseph-ogunleye-967",
+            "initials": "JO",
+            "name": "Joseph Ogunleye",
+            "className": "Year 4",
+            "classId": "CLASS-009",
+            "studentNumber": "GH-2026-967",
+            "guardian": "Esther Ogunleye",
+            "guardianRelationship": "Mother",
+            "phone": "+234 703 462 8544",
+            "email": "esther.ogunleye@gmail.com",
+            "accountStatus": "Paid in full",
+            "summary": {
+                "assigned": 110000,
+                "payable": 110000,
+                "paid": 110000,
+                "outstanding": 0
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Excursion Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609239",
+                    "date": "8 September 2026, 11:15",
+                    "description": "Bank transfer · First Term fees",
+                    "amount": 110000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "sodiq-abubakar-327",
+            "initials": "SA",
+            "name": "Sodiq Abubakar",
+            "className": "Year 5",
+            "classId": "CLASS-010",
+            "studentNumber": "GH-2026-327",
+            "guardian": "Amira Abubakar",
+            "guardianRelationship": "Mother",
+            "phone": "+234 816 382 6704",
+            "email": "amira.abubakar@yahoo.com",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 110000,
+                "payable": 110000,
+                "paid": 55000,
+                "outstanding": 55000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Excursion Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609240",
+                    "date": "4 September 2026, 09:30",
+                    "description": "Bank transfer · Tuition & levies",
+                    "amount": 55000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "joseph-ojo-313",
+            "initials": "JO",
+            "name": "Joseph Ojo",
+            "className": "Year 5",
+            "classId": "CLASS-010",
+            "studentNumber": "GH-2026-313",
+            "guardian": "Michael Ojo",
+            "guardianRelationship": "Father",
+            "phone": "+234 903 144 6270",
+            "email": "michael.ojo@outlook.com",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 110000,
+                "payable": 110000,
+                "paid": 70000,
+                "outstanding": 40000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Excursion Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609241",
+                    "date": "9 September 2026, 13:50",
+                    "description": "POS payment · Term balance",
+                    "amount": 70000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "sodiq-adeleke-412",
+            "initials": "SA",
+            "name": "Sodiq Adeleke",
+            "className": "Year 5",
+            "classId": "CLASS-010",
+            "studentNumber": "GH-2026-412",
+            "guardian": "Sarah Adeleke",
+            "guardianRelationship": "Mother",
+            "phone": "+234 806 927 9339",
+            "email": "sarah.adeleke@greenhill.sch.ng",
+            "accountStatus": "Not yet paid",
+            "summary": {
+                "assigned": 110000,
+                "payable": 110000,
+                "paid": 0,
+                "outstanding": 110000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Excursion Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": []
+        },
+        {
+            "id": "elizabeth-ogunleye-601",
+            "initials": "EO",
+            "name": "Elizabeth Ogunleye",
+            "className": "Year 5",
+            "classId": "CLASS-010",
+            "studentNumber": "GH-2026-601",
+            "guardian": "Sodiq Ogunleye",
+            "guardianRelationship": "Father",
+            "phone": "+234 812 540 6198",
+            "email": "sodiq.ogunleye@gmail.com",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 110000,
+                "payable": 110000,
+                "paid": 40000,
+                "outstanding": 70000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Excursion Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609242",
+                    "date": "17 September 2026, 16:00",
+                    "description": "Bank transfer · Tuition & levies",
+                    "amount": 40000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "joy-taiwo-191",
+            "initials": "JT",
+            "name": "Joy Taiwo",
+            "className": "Year 5",
+            "classId": "CLASS-010",
+            "studentNumber": "GH-2026-191",
+            "guardian": "John Taiwo",
+            "guardianRelationship": "Father",
+            "phone": "+234 708 770 2488",
+            "email": "john.taiwo@yahoo.com",
+            "accountStatus": "Paid in full",
+            "summary": {
+                "assigned": 110000,
+                "payable": 110000,
+                "paid": 110000,
+                "outstanding": 0
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Excursion Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 15000,
+                    "discount": 0,
+                    "payable": 15000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609243",
+                    "date": "22 September 2026, 08:50",
+                    "description": "POS payment · Term balance",
+                    "amount": 110000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "joy-eze-258",
+            "initials": "JE",
+            "name": "Joy Eze",
+            "className": "JSS 1",
+            "classId": "CLASS-011",
+            "studentNumber": "GH-2026-258",
+            "guardian": "Hannah Eze",
+            "guardianRelationship": "Mother",
+            "phone": "+234 803 109 4565",
+            "email": "hannah.eze@outlook.com",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 95000,
+                "payable": 86300,
+                "paid": 50000,
+                "outstanding": 36300
+            },
+            "concession": {
+                "discountId": "DISC-003",
+                "shortLabel": "Family of 3",
+                "name": "Family of Three",
+                "description": "Families with three enrolled children receive 10% reduction on tuition.",
+                "amount": 8700,
+                "rule": "Tuition only · 10% discount",
+                "appliedOn": "1 September 2026",
+                "approvedBy": "Adaeze Nwosu"
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 8700,
+                    "payable": 78300
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609244",
+                    "date": "1 September 2026, 08:30",
+                    "description": "Family of Three discount added",
+                    "amount": 8700,
+                    "status": "Discount",
+                    "actor": "Approved by Adaeze Nwosu"
+                },
+                {
+                    "reference": "GHS-REC-2609245",
+                    "date": "18 September 2026, 10:15",
+                    "description": "Cash payment · Bursar desk",
+                    "amount": 50000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "daniel-balogun-124",
+            "initials": "DB",
+            "name": "Daniel Balogun",
+            "className": "JSS 1",
+            "classId": "CLASS-011",
+            "studentNumber": "GH-2026-124",
+            "guardian": "Joshua Balogun",
+            "guardianRelationship": "Father",
+            "phone": "+234 802 531 9411",
+            "email": "joshua.balogun@greenhill.sch.ng",
+            "accountStatus": "Paid in full",
+            "summary": {
+                "assigned": 95000,
+                "payable": 95000,
+                "paid": 95000,
+                "outstanding": 0
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609246",
+                    "date": "23 September 2026, 12:10",
+                    "description": "Mobile transfer · Fees installment",
+                    "amount": 95000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "esther-usman-445",
+            "initials": "EU",
+            "name": "Esther Usman",
+            "className": "JSS 1",
+            "classId": "CLASS-011",
+            "studentNumber": "GH-2026-445",
+            "guardian": "Sarah Usman",
+            "guardianRelationship": "Mother",
+            "phone": "+234 805 588 1362",
+            "email": "sarah.usman@gmail.com",
+            "accountStatus": "Not yet paid",
+            "summary": {
+                "assigned": 95000,
+                "payable": 95000,
+                "paid": 0,
+                "outstanding": 95000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": []
+        },
+        {
+            "id": "esther-lawal-887",
+            "initials": "EL",
+            "name": "Esther Lawal",
+            "className": "JSS 1",
+            "classId": "CLASS-011",
+            "studentNumber": "GH-2026-887",
+            "guardian": "Joy Lawal",
+            "guardianRelationship": "Mother",
+            "phone": "+234 814 902 6064",
+            "email": "joy.lawal@yahoo.com",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 95000,
+                "payable": 95000,
+                "paid": 60000,
+                "outstanding": 35000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609247",
+                    "date": "2 September 2026, 10:20",
+                    "description": "Cash payment · Bursar desk",
+                    "amount": 60000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "amira-nwosu-359",
+            "initials": "AN",
+            "name": "Amira Nwosu",
+            "className": "JSS 1",
+            "classId": "CLASS-011",
+            "studentNumber": "GH-2026-359",
+            "guardian": "Michael Nwosu",
+            "guardianRelationship": "Father",
+            "phone": "+234 703 926 7696",
+            "email": "michael.nwosu@outlook.com",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 95000,
+                "payable": 95000,
+                "paid": 45000,
+                "outstanding": 50000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609248",
+                    "date": "5 September 2026, 15:40",
+                    "description": "Mobile transfer · Fees installment",
+                    "amount": 45000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "joshua-eze-714",
+            "initials": "JE",
+            "name": "Joshua Eze",
+            "className": "JSS 2",
+            "classId": "CLASS-012",
+            "studentNumber": "GH-2026-714",
+            "guardian": "Joseph Eze",
+            "guardianRelationship": "Father",
+            "phone": "+234 816 661 9701",
+            "email": "joseph.eze@greenhill.sch.ng",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 95000,
+                "payable": 95000,
+                "paid": 50000,
+                "outstanding": 45000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609249",
+                    "date": "3 September 2026, 12:00",
+                    "description": "POS payment · First Term fees",
+                    "amount": 50000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "amira-usman-505",
+            "initials": "AU",
+            "name": "Amira Usman",
+            "className": "JSS 2",
+            "classId": "CLASS-012",
+            "studentNumber": "GH-2026-505",
+            "guardian": "David Usman",
+            "guardianRelationship": "Father",
+            "phone": "+234 903 708 3222",
+            "email": "david.usman@gmail.com",
+            "accountStatus": "Not yet paid",
+            "summary": {
+                "assigned": 95000,
+                "payable": 95000,
+                "paid": 0,
+                "outstanding": 95000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": []
+        },
+        {
+            "id": "hannah-adebayo-992",
+            "initials": "HA",
+            "name": "Hannah Adebayo",
+            "className": "JSS 2",
+            "classId": "CLASS-012",
+            "studentNumber": "GH-2026-992",
+            "guardian": "Sarah Adebayo",
+            "guardianRelationship": "Mother",
+            "phone": "+234 806 887 9319",
+            "email": "sarah.adebayo@yahoo.com",
+            "accountStatus": "Paid in full",
+            "summary": {
+                "assigned": 95000,
+                "payable": 95000,
+                "paid": 95000,
+                "outstanding": 0
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609250",
+                    "date": "11 September 2026, 10:45",
+                    "description": "POS payment · Term balance",
+                    "amount": 95000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "sarah-adeyemi-958",
+            "initials": "SA",
+            "name": "Sarah Adeyemi",
+            "className": "JSS 2",
+            "classId": "CLASS-012",
+            "studentNumber": "GH-2026-958",
+            "guardian": "Emeka Adeyemi",
+            "guardianRelationship": "Father",
+            "phone": "+234 812 309 8265",
+            "email": "emeka.adeyemi@outlook.com",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 95000,
+                "payable": 95000,
+                "paid": 60000,
+                "outstanding": 35000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609251",
+                    "date": "16 September 2026, 11:25",
+                    "description": "POS payment · First Term fees",
+                    "amount": 60000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "amira-chukwu-240",
+            "initials": "AC",
+            "name": "Amira Chukwu",
+            "className": "JSS 2",
+            "classId": "CLASS-012",
+            "studentNumber": "GH-2026-240",
+            "guardian": "Joseph Chukwu",
+            "guardianRelationship": "Father",
+            "phone": "+234 708 703 4007",
+            "email": "joseph.chukwu@greenhill.sch.ng",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 95000,
+                "payable": 95000,
+                "paid": 40000,
+                "outstanding": 55000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609252",
+                    "date": "19 September 2026, 13:30",
+                    "description": "Bank transfer · Tuition & levies",
+                    "amount": 40000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "john-ogunleye-642",
+            "initials": "JO",
+            "name": "John Ogunleye",
+            "className": "JSS 3",
+            "classId": "CLASS-013",
+            "studentNumber": "GH-2026-642",
+            "guardian": "Joy Ogunleye",
+            "guardianRelationship": "Mother",
+            "phone": "+234 803 337 7469",
+            "email": "joy.ogunleye@gmail.com",
+            "accountStatus": "Paid in full",
+            "summary": {
+                "assigned": 115000,
+                "payable": 108000,
+                "paid": 108000,
+                "outstanding": 0
+            },
+            "concession": {
+                "discountId": "DISC-006",
+                "shortLabel": "Diamond concession",
+                "name": "Diamond",
+                "description": "Concession on examination fees for eligible staff families.",
+                "amount": 7000,
+                "rule": "Examination fee · 35% discount",
+                "appliedOn": "1 September 2026",
+                "approvedBy": "Adaeze Nwosu"
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Examination Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 20000,
+                    "discount": 7000,
+                    "payable": 13000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609253",
+                    "date": "1 September 2026, 08:30",
+                    "description": "Diamond discount added",
+                    "amount": 7000,
+                    "status": "Discount",
+                    "actor": "Approved by Adaeze Nwosu"
+                },
+                {
+                    "reference": "GHS-REC-2609254",
+                    "date": "17 September 2026, 16:00",
+                    "description": "Bank transfer · First Term fees",
+                    "amount": 108000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "ifeoma-ibrahim-791",
+            "initials": "II",
+            "name": "Ifeoma Ibrahim",
+            "className": "JSS 3",
+            "classId": "CLASS-013",
+            "studentNumber": "GH-2026-791",
+            "guardian": "Amira Ibrahim",
+            "guardianRelationship": "Mother",
+            "phone": "+234 802 170 3088",
+            "email": "amira.ibrahim@yahoo.com",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 115000,
+                "payable": 115000,
+                "paid": 70000,
+                "outstanding": 45000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Examination Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 20000,
+                    "discount": 0,
+                    "payable": 20000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609255",
+                    "date": "22 September 2026, 08:50",
+                    "description": "Cash payment · Bursar desk",
+                    "amount": 70000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "peter-abubakar-831",
+            "initials": "PA",
+            "name": "Peter Abubakar",
+            "className": "JSS 3",
+            "classId": "CLASS-013",
+            "studentNumber": "GH-2026-831",
+            "guardian": "Peter Abubakar Sr.",
+            "guardianRelationship": "Father",
+            "phone": "+234 805 850 4328",
+            "email": "peter.sr@outlook.com",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 115000,
+                "payable": 115000,
+                "paid": 50000,
+                "outstanding": 65000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Examination Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 20000,
+                    "discount": 0,
+                    "payable": 20000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609256",
+                    "date": "28 August 2026, 09:15",
+                    "description": "Mobile transfer · Fees installment",
+                    "amount": 50000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "david-umar-369",
+            "initials": "DU",
+            "name": "David Umar",
+            "className": "JSS 3",
+            "classId": "CLASS-013",
+            "studentNumber": "GH-2026-369",
+            "guardian": "Emeka Umar",
+            "guardianRelationship": "Father",
+            "phone": "+234 814 196 8006",
+            "email": "emeka.umar@greenhill.sch.ng",
+            "accountStatus": "Paid in full",
+            "summary": {
+                "assigned": 115000,
+                "payable": 115000,
+                "paid": 115000,
+                "outstanding": 0
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Examination Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 20000,
+                    "discount": 0,
+                    "payable": 20000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609257",
+                    "date": "1 September 2026, 08:45",
+                    "description": "Bank transfer · First Term fees",
+                    "amount": 115000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "peter-ibrahim-552",
+            "initials": "PI",
+            "name": "Peter Ibrahim",
+            "className": "JSS 3",
+            "classId": "CLASS-013",
+            "studentNumber": "GH-2026-552",
+            "guardian": "Sodiq Ibrahim",
+            "guardianRelationship": "Father",
+            "phone": "+234 703 607 4679",
+            "email": "sodiq.ibrahim@gmail.com",
+            "accountStatus": "Not yet paid",
+            "summary": {
+                "assigned": 115000,
+                "payable": 115000,
+                "paid": 0,
+                "outstanding": 115000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Examination Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 20000,
+                    "discount": 0,
+                    "payable": 20000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": []
+        },
+        {
+            "id": "daniel-kehinde-657",
+            "initials": "DK",
+            "name": "Daniel Kehinde",
+            "className": "SS 1",
+            "classId": "CLASS-014",
+            "studentNumber": "GH-2026-657",
+            "guardian": "John Kehinde",
+            "guardianRelationship": "Father",
+            "phone": "+234 816 592 7934",
+            "email": "john.kehinde@yahoo.com",
+            "accountStatus": "Not yet paid",
+            "summary": {
+                "assigned": 95000,
+                "payable": 95000,
+                "paid": 0,
+                "outstanding": 95000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": []
+        },
+        {
+            "id": "samuel-usman-509",
+            "initials": "SU",
+            "name": "Samuel Usman",
+            "className": "SS 1",
+            "classId": "CLASS-014",
+            "studentNumber": "GH-2026-509",
+            "guardian": "Esther Usman",
+            "guardianRelationship": "Mother",
+            "phone": "+234 903 776 3346",
+            "email": "esther.usman@outlook.com",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 95000,
+                "payable": 95000,
+                "paid": 60000,
+                "outstanding": 35000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609258",
+                    "date": "5 September 2026, 15:40",
+                    "description": "POS payment · First Term fees",
+                    "amount": 60000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "samuel-abubakar-231",
+            "initials": "SA",
+            "name": "Samuel Abubakar",
+            "className": "SS 1",
+            "classId": "CLASS-014",
+            "studentNumber": "GH-2026-231",
+            "guardian": "Ruth Abubakar",
+            "guardianRelationship": "Mother",
+            "phone": "+234 806 550 3728",
+            "email": "ruth.abubakar@greenhill.sch.ng",
+            "accountStatus": "Paid in full",
+            "summary": {
+                "assigned": 95000,
+                "payable": 95000,
+                "paid": 95000,
+                "outstanding": 0
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609259",
+                    "date": "10 September 2026, 08:30",
+                    "description": "Bank transfer · Tuition & levies",
+                    "amount": 95000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "michael-lawal-855",
+            "initials": "ML",
+            "name": "Michael Lawal",
+            "className": "SS 1",
+            "classId": "CLASS-014",
+            "studentNumber": "GH-2026-855",
+            "guardian": "Elizabeth Lawal",
+            "guardianRelationship": "Mother",
+            "phone": "+234 812 358 5072",
+            "email": "elizabeth.lawal@gmail.com",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 95000,
+                "payable": 95000,
+                "paid": 50000,
+                "outstanding": 45000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609260",
+                    "date": "15 September 2026, 09:10",
+                    "description": "POS payment · Term balance",
+                    "amount": 50000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "emeka-eze-817",
+            "initials": "EE",
+            "name": "Emeka Eze",
+            "className": "SS 1",
+            "classId": "CLASS-014",
+            "studentNumber": "GH-2026-817",
+            "guardian": "Peter Eze",
+            "guardianRelationship": "Father",
+            "phone": "+234 708 612 3894",
+            "email": "peter.eze@yahoo.com",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 95000,
+                "payable": 95000,
+                "paid": 35000,
+                "outstanding": 60000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609261",
+                    "date": "18 September 2026, 10:15",
+                    "description": "POS payment · First Term fees",
+                    "amount": 35000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "daniel-ojo-845",
+            "initials": "DO",
+            "name": "Daniel Ojo",
+            "className": "SS 2",
+            "classId": "CLASS-015",
+            "studentNumber": "GH-2026-845",
+            "guardian": "Joseph Ojo",
+            "guardianRelationship": "Father",
+            "phone": "+234 803 188 4762",
+            "email": "joseph.ojo@outlook.com",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 95000,
+                "payable": 95000,
+                "paid": 55000,
+                "outstanding": 40000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609262",
+                    "date": "16 September 2026, 11:25",
+                    "description": "Mobile transfer · Fees installment",
+                    "amount": 55000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "joshua-umar-636",
+            "initials": "JU",
+            "name": "Joshua Umar",
+            "className": "SS 2",
+            "classId": "CLASS-015",
+            "studentNumber": "GH-2026-636",
+            "guardian": "Joshua Umar Sr.",
+            "guardianRelationship": "Father",
+            "phone": "+234 802 235 7283",
+            "email": "joshua.sr@greenhill.sch.ng",
+            "accountStatus": "Paid in full",
+            "summary": {
+                "assigned": 95000,
+                "payable": 95000,
+                "paid": 95000,
+                "outstanding": 0
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609263",
+                    "date": "19 September 2026, 13:30",
+                    "description": "Bank transfer · First Term fees",
+                    "amount": 95000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "samuel-okafor-783",
+            "initials": "SO",
+            "name": "Samuel Okafor",
+            "className": "SS 2",
+            "classId": "CLASS-015",
+            "studentNumber": "GH-2026-783",
+            "guardian": "Grace Okafor",
+            "guardianRelationship": "Mother",
+            "phone": "+234 805 934 2840",
+            "email": "grace.okafor@gmail.com",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 95000,
+                "payable": 95000,
+                "paid": 40000,
+                "outstanding": 55000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609264",
+                    "date": "24 September 2026, 11:00",
+                    "description": "Cash payment · Bursar desk",
+                    "amount": 40000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "daniel-kehinde-941",
+            "initials": "DK",
+            "name": "Daniel Kehinde",
+            "className": "SS 2",
+            "classId": "CLASS-015",
+            "studentNumber": "GH-2026-941",
+            "guardian": "Joshua Kehinde",
+            "guardianRelationship": "Father",
+            "phone": "+234 814 920 7738",
+            "email": "joshua.kehinde@yahoo.com",
+            "accountStatus": "Not yet paid",
+            "summary": {
+                "assigned": 95000,
+                "payable": 95000,
+                "paid": 0,
+                "outstanding": 95000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": []
+        },
+        {
+            "id": "ifeoma-lawal-772",
+            "initials": "IL",
+            "name": "Ifeoma Lawal",
+            "className": "SS 2",
+            "classId": "CLASS-015",
+            "studentNumber": "GH-2026-772",
+            "guardian": "Elizabeth Lawal",
+            "guardianRelationship": "Mother",
+            "phone": "+234 703 747 2499",
+            "email": "elizabeth.lawal@outlook.com",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 95000,
+                "payable": 95000,
+                "paid": 60000,
+                "outstanding": 35000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609265",
+                    "date": "3 September 2026, 12:00",
+                    "description": "Bank transfer · First Term fees",
+                    "amount": 60000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "sodiq-ibrahim-537",
+            "initials": "SI",
+            "name": "Sodiq Ibrahim",
+            "className": "SS 3",
+            "classId": "CLASS-016",
+            "studentNumber": "GH-2026-537",
+            "guardian": "Samuel Ibrahim",
+            "guardianRelationship": "Father",
+            "phone": "+234 816 352 4214",
+            "email": "samuel.ibrahim@greenhill.sch.ng",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 165000,
+                "payable": 165000,
+                "paid": 100000,
+                "outstanding": 65000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Examination Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 20000,
+                    "discount": 0,
+                    "payable": 20000
+                },
+                {
+                    "name": "WAEC Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 50000,
+                    "discount": 0,
+                    "payable": 50000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609266",
+                    "date": "1 September 2026, 08:45",
+                    "description": "Bank transfer · Tuition & levies",
+                    "amount": 100000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "joy-kalu-623",
+            "initials": "JK",
+            "name": "Joy Kalu",
+            "className": "SS 3",
+            "classId": "CLASS-016",
+            "studentNumber": "GH-2026-623",
+            "guardian": "Emeka Kalu",
+            "guardianRelationship": "Father",
+            "phone": "+234 903 914 6880",
+            "email": "emeka.kalu@gmail.com",
+            "accountStatus": "Not yet paid",
+            "summary": {
+                "assigned": 165000,
+                "payable": 165000,
+                "paid": 0,
+                "outstanding": 165000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Examination Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 20000,
+                    "discount": 0,
+                    "payable": 20000
+                },
+                {
+                    "name": "WAEC Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 50000,
+                    "discount": 0,
+                    "payable": 50000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": []
+        },
+        {
+            "id": "peter-adeleke-772",
+            "initials": "PA",
+            "name": "Peter Adeleke",
+            "className": "SS 3",
+            "classId": "CLASS-016",
+            "studentNumber": "GH-2026-772",
+            "guardian": "Hannah Adeleke",
+            "guardianRelationship": "Mother",
+            "phone": "+234 806 747 2499",
+            "email": "hannah.adeleke@yahoo.com",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 165000,
+                "payable": 158000,
+                "paid": 100000,
+                "outstanding": 58000
+            },
+            "concession": {
+                "discountId": "DISC-006",
+                "shortLabel": "Diamond concession",
+                "name": "Diamond",
+                "description": "Concession on examination fees for eligible staff families.",
+                "amount": 7000,
+                "rule": "Examination fee · 35% discount",
+                "appliedOn": "1 September 2026",
+                "approvedBy": "Adaeze Nwosu"
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Examination Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 20000,
+                    "discount": 7000,
+                    "payable": 13000
+                },
+                {
+                    "name": "WAEC Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 50000,
+                    "discount": 0,
+                    "payable": 50000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609267",
+                    "date": "1 September 2026, 08:30",
+                    "description": "Diamond discount added",
+                    "amount": 7000,
+                    "status": "Discount",
+                    "actor": "Approved by Adaeze Nwosu"
+                },
+                {
+                    "reference": "GHS-REC-2609268",
+                    "date": "9 September 2026, 13:50",
+                    "description": "POS payment · First Term fees",
+                    "amount": 100000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "emeka-kehinde-891",
+            "initials": "EK",
+            "name": "Emeka Kehinde",
+            "className": "SS 3",
+            "classId": "CLASS-016",
+            "studentNumber": "GH-2026-891",
+            "guardian": "Emeka Kehinde",
+            "guardianRelationship": "Father",
+            "phone": "+234 812 970 6188",
+            "email": "emeka.kehinde@outlook.com",
+            "accountStatus": "Paid in full",
+            "summary": {
+                "assigned": 165000,
+                "payable": 165000,
+                "paid": 165000,
+                "outstanding": 0
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Examination Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 20000,
+                    "discount": 0,
+                    "payable": 20000
+                },
+                {
+                    "name": "WAEC Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 50000,
+                    "discount": 0,
+                    "payable": 50000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609269",
+                    "date": "12 September 2026, 14:00",
+                    "description": "Bank transfer · Tuition & levies",
+                    "amount": 165000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        },
+        {
+            "id": "joy-ojo-500",
+            "initials": "JO",
+            "name": "Joy Ojo",
+            "className": "SS 3",
+            "classId": "CLASS-016",
+            "studentNumber": "GH-2026-500",
+            "guardian": "Emeka Ojo",
+            "guardianRelationship": "Father",
+            "phone": "+234 708 623 3067",
+            "email": "emeka.ojo@greenhill.sch.ng",
+            "accountStatus": "Partially paid",
+            "summary": {
+                "assigned": 165000,
+                "payable": 165000,
+                "paid": 80000,
+                "outstanding": 85000
+            },
+            "concession": {
+                "amount": 0
+            },
+            "fees": [
+                {
+                    "name": "Tuition",
+                    "note": "First Term 2026/27",
+                    "assigned": 87000,
+                    "discount": 0,
+                    "payable": 87000
+                },
+                {
+                    "name": "Examination Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 20000,
+                    "discount": 0,
+                    "payable": 20000
+                },
+                {
+                    "name": "WAEC Fee",
+                    "note": "First Term 2026/27",
+                    "assigned": 50000,
+                    "discount": 0,
+                    "payable": 50000
+                },
+                {
+                    "name": "Exam Levy",
+                    "note": "First Term 2026/27",
+                    "assigned": 8000,
+                    "discount": 0,
+                    "payable": 8000
+                }
+            ],
+            "transactions": [
+                {
+                    "reference": "GHS-REC-2609270",
+                    "date": "17 September 2026, 16:00",
+                    "description": "POS payment · Term balance",
+                    "amount": 80000,
+                    "status": "Paid",
+                    "actor": "Recorded by Bursar desk"
+                }
+            ]
+        }
+    ]
 }

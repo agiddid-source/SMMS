@@ -5,6 +5,10 @@ $pages = [
         'file' => 'pages/dashboard.php',
         'title' => 'Overview · Greenhill School OS',
     ],
+    'students' => [
+        'file' => 'pages/students.php',
+        'title' => 'Students · Greenhill School OS',
+    ],
     'student-profile' => [
         'file' => 'pages/student-profile.php',
         'title' => 'Student account · Greenhill School OS',
@@ -28,6 +32,10 @@ $pages = [
     'discounts' => [
         'file' => 'pages/discounts.php',
         'title' => 'Discounts · Greenhill School OS',
+    ],
+    'statement' => [
+        'file' => 'pages/statement.php',
+        'title' => 'Account Statement · Greenhill School OS',
     ],
 ];
 

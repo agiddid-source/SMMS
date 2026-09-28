@@ -35,7 +35,10 @@
     var self = this;
 
     root.addEventListener('click', function (event) {
-      if (event.target.hasAttribute('data-cn-dismiss')) {
+      // closest(): a click on the label <span> inside a button has the span as
+      // its target, not the button, so checking the target alone missed most clicks.
+      var trigger = event.target.closest ? event.target.closest('[data-cn-dismiss]') : null;
+      if (trigger && root.contains(trigger)) {
         event.preventDefault();
         self.close();
       }

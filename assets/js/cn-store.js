@@ -3,19 +3,41 @@
   'use strict';
 
   var SECTION_ORDER = ['Toddler', 'Nursery', 'KG', 'Primary', 'Secondary'];
+  var TERM_ORDER = ['First Term', 'Second Term', 'Third Term'];
 
   // Pure helpers 
   var CnFilters = {
     sectionOrder: SECTION_ORDER,
 
     filterClasses: function (classes, search, section, includeArchived) {
-      var term = String(search || '').trim().toLowerCase();
+      // Every word typed must appear in the class name or its section, so
+      // "primary", "year 3" and "primary year 3" all find what you'd expect.
+      var words = String(search || '').trim().toLowerCase().split(/\s+/).filter(Boolean);
       return classes.filter(function (cls) {
         if (!includeArchived && cls.status === 'archived') return false;
         if (section && cls.section !== section) return false;
-        if (term && cls.name.toLowerCase().indexOf(term) === -1) return false;
+        if (words.length) {
+          var hay = (cls.name + ' ' + cls.section).toLowerCase();
+          for (var i = 0; i < words.length; i++) {
+            if (hay.indexOf(words[i]) === -1) return false;
+          }
+        }
         return true;
       });
+    },
+
+    /** Like groupBySection, but newest-added classes lead their section and the
+     *  section holding the newest class leads the list. Seed classes keep their order. */
+    groupBySectionNewestFirst: function (classes) {
+      var stamp = function (c) { return c.addedAt || 0; };
+      var groups = this.groupBySection(classes).map(function (entry, gi) {
+        var indexed = entry[1].map(function (c, i) { return { c: c, i: i }; });
+        indexed.sort(function (a, b) { return (stamp(b.c) - stamp(a.c)) || (a.i - b.i); });
+        var list = indexed.map(function (x) { return x.c; });
+        return { entry: [entry[0], list], newest: Math.max.apply(null, list.map(stamp).concat(0)), gi: gi };
+      });
+      groups.sort(function (a, b) { return (b.newest - a.newest) || (a.gi - b.gi); });
+      return groups.map(function (g) { return g.entry; });
     },
 
     /** Returns [[sectionName, classes], …] in curriculum order, unknown sections last. */
@@ -44,15 +66,32 @@
       return fees.filter(function (fee) {
         if (!includeInactive && fee.status === 'inactive') return false;
         if (type && fee.type !== type) return false;
-        if (term && fee.term !== term) return false;
+        if (term && CnFilters.feeTerms(fee).indexOf(term) === -1) return false;
         if (needle && fee.name.toLowerCase().indexOf(needle) === -1) return false;
         return true;
       });
     },
 
+    /** A fee can run in several terms. Older records carry a single `term` string. */
+    feeTerms: function (fee) {
+      if (Array.isArray(fee.terms) && fee.terms.length) return fee.terms.slice();
+      return fee.term ? [fee.term] : [];
+    },
+
     distinctTerms: function (fees) {
-      var seen = fees.map(function (f) { return f.term; });
-      return seen.filter(function (t, i) { return t && seen.indexOf(t) === i; }).sort();
+      var all = [];
+      fees.forEach(function (f) {
+        CnFilters.feeTerms(f).forEach(function (t) { if (all.indexOf(t) === -1) all.push(t); });
+      });
+      var known = TERM_ORDER.filter(function (t) { return all.indexOf(t) !== -1; });
+      var other = all.filter(function (t) { return TERM_ORDER.indexOf(t) === -1; }).sort();
+      return known.concat(other);
+    },
+
+    formatTerms: function (terms) {
+      if (!terms.length) return '\u2014';
+      if (terms.length === TERM_ORDER.length) return 'All terms';
+      return terms.join(', ');
     },
 
     resolveClassNames: function (classIds, classes) {
@@ -168,11 +207,20 @@
     return prefix + '-' + String(highest + 1).padStart(3, '0');
   }
 
+  /** Keeps `terms` (source of truth) and the legacy `term` string in step. */
+  function withTerms(fee) {
+    var terms = CnFilters.feeTerms(fee);
+    return Object.assign({}, fee, { terms: terms, term: terms.join(', ') });
+  }
+
+  var classSequence = 0;
+
   function createStore(seed) {
     var state = {
       classes: seed.classes.slice(),
       feeTypes: seed.feeTypes.slice(),
-      fees: seed.fees.slice(),
+      fees: seed.fees.map(withTerms),
+      deletedClassIds: [],
       expenseCategories: seed.expenseCategories.slice(),
       expenses: seed.expenses.slice(),
       payments: seed.payments.slice()
@@ -211,11 +259,13 @@
       },
 
       addClass: function (payload) {
+        var taken = state.classes.concat(state.deletedClassIds.map(function (id) { return { id: id }; }));
         var record = {
-          id: nextId('CLASS', state.classes),
+          id: nextId('CLASS', taken),
           name: payload.name,
           section: payload.section,
-          status: 'active'
+          status: 'active',
+          addedAt: ++classSequence
         };
         state.classes = state.classes.concat([record]);
         notify();
@@ -231,12 +281,22 @@
         return state.classes[i];
       },
 
-      archiveClass: function (id) {
-        return this.updateClass(id, { status: 'archived' });
-      },
-
-      restoreClass: function (id) {
-        return this.updateClass(id, { status: 'active' });
+      /** Permanent. Also unassigns the class from any fee that used it. */
+      deleteClass: function (id) {
+        var i = findIndex(state.classes, id);
+        if (i === -1) return null;
+        var removed = state.classes[i];
+        state.classes = state.classes.filter(function (c) { return c.id !== id; });
+        state.deletedClassIds = state.deletedClassIds.concat([id]);
+        state.fees = state.fees.map(function (fee) {
+          var assigned = fee.assignedClasses || [];
+          if (assigned.indexOf(id) === -1) return fee;
+          return Object.assign({}, fee, {
+            assignedClasses: assigned.filter(function (x) { return x !== id; })
+          });
+        });
+        notify();
+        return removed;
       },
 
       addFeeType: function (name) {
@@ -251,11 +311,11 @@
       },
 
       addFee: function (payload) {
-        var record = Object.assign({
+        var record = withTerms(Object.assign({
           id: nextId('FEE', state.fees),
           status: 'active',
           createdAt: new Date().toISOString().slice(0, 10)
-        }, payload);
+        }, payload));
         state.fees = state.fees.concat([record]);
         notify();
         return record;
@@ -265,7 +325,7 @@
         var i = findIndex(state.fees, id);
         if (i === -1) return null;
         state.fees = state.fees.slice();
-        state.fees[i] = Object.assign({}, state.fees[i], payload);
+        state.fees[i] = withTerms(Object.assign({}, state.fees[i], payload));
         notify();
         return state.fees[i];
       },

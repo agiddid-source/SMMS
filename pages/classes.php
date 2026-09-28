@@ -19,12 +19,8 @@
     <section class="mt-6">
       <div class="cn-toolbar">
         <label class="ght-visually-hidden" for="cn-class-search">Search classes</label>
-        <input type="search" id="cn-class-search" class="cn-input" placeholder="Search classes&hellip;" autocomplete="off">
+        <input type="search" id="cn-class-search" class="cn-input" placeholder="Search by class name or section&hellip;" autocomplete="off">
         <nav class="ght-chart-views" id="cn-section-nav" aria-label="Filter classes by section"></nav>
-        <label class="cn-switch">
-          <input type="checkbox" id="cn-show-archived">
-          <span>Show archived</span>
-        </label>
       </div>
 
       <div id="cn-class-list"></div>

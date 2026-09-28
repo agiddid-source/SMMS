@@ -90,7 +90,8 @@
     return values.filter(function (v, i) { return v && values.indexOf(v) === i; }).sort();
   }
   function distinctFeeSessions() { return uniqueSorted(store.getFees().map(function (f) { return f.academicSession; })); }
-  function distinctFeeTerms() { return uniqueSorted(store.getFees().map(function (f) { return f.term; })); }
+  function distinctFeeTerms() { return window.CnFilters.distinctTerms(store.getFees()); }
+  function feeInTerm(fee, term) { return window.CnFilters.feeTerms(fee).indexOf(term) !== -1; }
 
   function classOptions() {
     return store.getClasses()
@@ -119,7 +120,7 @@
     var fees = store.getFees().filter(function (f) {
       if (f.status !== 'active') return false;
       if (s.session && f.academicSession !== s.session) return false;
-      if (s.term && f.term !== s.term) return false;
+      if (s.term && !feeInTerm(f, s.term)) return false;
       if (s.classId && (f.assignedClasses || []).indexOf(s.classId) === -1) return false;
       return true;
     });
@@ -183,7 +184,7 @@
     var fees = store.getFees().filter(function (f) {
       if (f.status !== 'active') return false;
       if (s.session && f.academicSession !== s.session) return false;
-      if (s.term && f.term !== s.term) return false;
+      if (s.term && !feeInTerm(f, s.term)) return false;
       return true;
     });
     var payments = store.getPayments();

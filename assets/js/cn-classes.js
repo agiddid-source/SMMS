@@ -6,12 +6,11 @@
   var store = window.CnStore;
   var filters = window.CnFilters;
 
-  var view = { search: '', section: '', includeArchived: false };
+  var view = { search: '', section: '' };
 
   var listNode = document.getElementById('cn-class-list');
   var sectionNav = document.getElementById('cn-section-nav');
   var searchInput = document.getElementById('cn-class-search');
-  var archivedToggle = document.getElementById('cn-show-archived');
   var summaryNode = document.getElementById('cn-class-summary');
   var sectionDatalist = document.getElementById('cn-section-datalist');
 
@@ -64,14 +63,6 @@
   }
 
   function rowActions(cls) {
-    if (cls.status === 'archived') {
-      return el('span', { className: 'cn-list-row-actions' }, [
-        el('button', {
-          type: 'button', className: 'cn-btn-text',
-          onclick: function () { restoreClass(cls); }
-        }, ['Restore'])
-      ]);
-    }
     return el('span', { className: 'cn-list-row-actions' }, [
       el('button', {
         type: 'button', className: 'cn-btn-text',
@@ -79,14 +70,14 @@
       }, ['Edit']),
       el('button', {
         type: 'button', className: 'cn-btn-danger-text',
-        onclick: function () { askArchive(cls); }
-      }, ['Archive'])
+        onclick: function () { askDelete(cls); }
+      }, ['Delete'])
     ]);
   }
 
   function renderList() {
     var visible = filters.filterClasses(
-      store.getClasses(), view.search, view.section, view.includeArchived
+      store.getClasses(), view.search, view.section, false
     );
     clear(listNode);
 
@@ -119,7 +110,7 @@
       ])
     ]);
 
-    filters.groupBySection(visible).forEach(function (entry) {
+    filters.groupBySectionNewestFirst(visible).forEach(function (entry) {
       var section = entry[0];
       var classes = entry[1];
       wrap.appendChild(el('div', { className: 'cn-list-section-row' }, [
@@ -130,7 +121,7 @@
       ]));
       classes.forEach(function (cls) {
         wrap.appendChild(el('div', {
-          className: 'cn-list-row' + (cls.status === 'archived' ? ' is-archived' : ''),
+          className: 'cn-list-row',
           dataset: { cnId: cls.id }
         }, [
           el('span', { className: 'cn-list-row-name' }, [cls.name]),
@@ -163,9 +154,7 @@
   function resetFilters() {
     view.search = '';
     view.section = '';
-    view.includeArchived = false;
     searchInput.value = '';
-    archivedToggle.checked = false;
     render();
   }
 
@@ -187,21 +176,16 @@
     formModal.open();
   }
 
-  function askArchive(cls) {
+  function askDelete(cls) {
     confirm.ask({
-      title: 'Archive class',
-      body: 'Archive ' + cls.name + '? It stays in the records but can no longer be assigned new fees.',
-      confirmLabel: 'Archive class',
+      title: 'Delete class',
+      body: 'Delete ' + cls.name + '? This removes it permanently and unassigns it from any fees it was attached to.',
+      confirmLabel: 'Delete class',
       onConfirm: function () {
-        store.archiveClass(cls.id);
-        showToast('Archiving class', 'Class archived', cls.name);
+        store.deleteClass(cls.id);
+        showToast('Deleting class', 'Class deleted', cls.name);
       }
     });
-  }
-
-  function restoreClass(cls) {
-    store.restoreClass(cls.id);
-    showToast('Restoring class', 'Class restored', cls.name);
   }
 
   form.addEventListener('submit', function (event) {
@@ -224,11 +208,6 @@
 
   searchInput.addEventListener('input', function () {
     view.search = searchInput.value;
-    renderList();
-  });
-
-  archivedToggle.addEventListener('change', function () {
-    view.includeArchived = archivedToggle.checked;
     renderList();
   });
 

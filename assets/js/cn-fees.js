@@ -18,20 +18,22 @@
   var summaryNode = document.getElementById('cn-fee-summary');
 
   var formModal = new window.CnModal('cn-fee-form-modal');
-  var typesModal = new window.CnModal('cn-fee-types-modal');
   var confirm = new window.CnConfirm('cn-confirm-modal');
 
   var form = document.getElementById('cn-fee-form');
   var formTitle = document.getElementById('cn-fee-form-title');
   var formSubmit = document.getElementById('cn-fee-form-submit');
   var typeField = form.elements.type;
+  var NEW_TYPE = '__new__';
+  var lastType = '';
+  var newTypeBox = document.getElementById('cn-new-type');
+  var newTypeInput = document.getElementById('cn-new-type-name');
+  var termBoxes = form.querySelectorAll('input[name="terms"]');
+  var termsError = document.getElementById('cn-fee-terms-error');
   var pickerNode = document.getElementById('cn-class-picker');
   var pickerSearchInput = document.getElementById('cn-picker-search');
   var pickerCount = document.getElementById('cn-picker-count');
   var editingId = null;
-
-  var typesList = document.getElementById('cn-fee-types-list');
-  var typesForm = document.getElementById('cn-fee-type-form');
 
   // ---- Fee list -----------------------------------------------------
 
@@ -51,7 +53,7 @@
         ])
       ]),
       el('span', { className: 'cn-fee-amount' }, [filters.formatNaira(fee.amount)]),
-      el('span', {}, [fee.academicSession + ' \u00B7 ' + fee.term]),
+      el('span', {}, [fee.academicSession + ' \u00B7 ' + filters.formatTerms(filters.feeTerms(fee))]),
       el('span', {}, [filters.formatDate(fee.dueDate)]),
       el('span', {
         title: names.length ? names.join(', ') : 'None assigned'
@@ -166,7 +168,56 @@
     store.getFeeTypes().forEach(function (type) {
       typeField.appendChild(el('option', { value: type.name }, [type.name]));
     });
+    typeField.appendChild(el('option', { value: NEW_TYPE }, ['+ Add new fee type\u2026']));
     if (current) typeField.value = current;
+    if (typeField.value === NEW_TYPE) {
+      showNewType();
+    } else {
+      lastType = typeField.value;
+      hideNewType();
+    }
+  }
+
+  function showNewType() {
+    newTypeBox.hidden = false;
+    newTypeInput.focus();
+  }
+
+  function hideNewType() {
+    newTypeBox.hidden = true;
+    newTypeInput.value = '';
+  }
+
+  function cancelNewType() {
+    hideNewType();
+    typeField.value = lastType || (typeField.options[0] && typeField.options[0].value) || '';
+    if (typeField.value === NEW_TYPE) showNewType();
+    else typeField.focus();
+  }
+
+  function commitNewType() {
+    var name = newTypeInput.value.trim();
+    if (!name) { newTypeInput.focus(); return; }
+    var before = store.getFeeTypes().length;
+    var record = store.addFeeType(name);
+    renderTypeOptions(record.name);
+    if (store.getFeeTypes().length > before) {
+      showToast('Adding fee type', 'Fee type added', record.name);
+    }
+  }
+
+  // ---- Terms (multi-select) -----------------------------------------
+
+  function selectedTerms() {
+    return Array.prototype.filter.call(termBoxes, function (box) { return box.checked; })
+      .map(function (box) { return box.value; });
+  }
+
+  function setTerms(list) {
+    Array.prototype.forEach.call(termBoxes, function (box) {
+      box.checked = list.indexOf(box.value) !== -1;
+    });
+    termsError.hidden = true;
   }
 
   function renderPicker() {
@@ -243,6 +294,7 @@
   function openAdd() {
     editingId = null;
     form.reset();
+    setTerms(['First Term']);
     formTitle.textContent = 'Add fee';
     formSubmit.querySelector('.ght-button-label').textContent = 'Add fee';
     renderTypeOptions();
@@ -262,7 +314,7 @@
     form.elements.name.value = fee.name;
     form.elements.amount.value = fee.amount;
     form.elements.academicSession.value = fee.academicSession;
-    form.elements.term.value = fee.term;
+    setTerms(filters.feeTerms(fee));
     form.elements.dueDate.value = fee.dueDate || '';
     form.elements.description.value = fee.description || '';
     selectedClassIds = (fee.assignedClasses || []).slice();
@@ -291,11 +343,17 @@
       type: form.elements.type.value,
       amount: Number(form.elements.amount.value),
       academicSession: form.elements.academicSession.value.trim(),
-      term: form.elements.term.value,
+      terms: selectedTerms(),
       dueDate: form.elements.dueDate.value,
       description: form.elements.description.value.trim(),
       assignedClasses: selectedClassIds.slice()
     };
+    if (payload.type === NEW_TYPE) { showNewType(); return; }
+    if (!payload.terms.length) {
+      termsError.hidden = false;
+      termBoxes[0].focus();
+      return;
+    }
     if (!payload.name || !payload.type || !(payload.amount > 0) || !payload.academicSession) return;
 
     if (editingId) {
@@ -306,36 +364,6 @@
       showToast('Adding fee', 'Fee added', payload.name);
     }
     formModal.close();
-  });
-
-  // Fee types 
-
-  function renderTypes() {
-    clear(typesList);
-    store.getFeeTypes().forEach(function (type) {
-      var inUse = store.getFees().filter(function (fee) {
-        return fee.type === type.name && fee.status === 'active';
-      }).length;
-      typesList.appendChild(el('li', { className: 'cn-type-row' }, [
-        el('span', {}, [type.name]),
-        el('span', { className: 'cn-type-count' }, [
-          inUse ? inUse + (inUse === 1 ? ' fee' : ' fees') : 'Unused'
-        ])
-      ]));
-    });
-  }
-
-  typesForm.addEventListener('submit', function (event) {
-    event.preventDefault();
-    var name = typesForm.elements.name.value.trim();
-    if (!name) return;
-    var before = store.getFeeTypes().length;
-    store.addFeeType(name);
-    typesForm.reset();
-    typesForm.elements.name.focus();
-    if (store.getFeeTypes().length > before) {
-      showToast('Adding fee type', 'Fee type added', name);
-    }
   });
 
   // Wiring 
@@ -362,14 +390,35 @@
   });
 
   document.getElementById('cn-add-fee').addEventListener('click', openAdd);
-  document.getElementById('cn-manage-types').addEventListener('click', function () {
-    renderTypes();
-    typesModal.open();
+
+  typeField.addEventListener('change', function () {
+    if (typeField.value === NEW_TYPE) {
+      showNewType();
+    } else {
+      lastType = typeField.value;
+      hideNewType();
+    }
+  });
+  document.getElementById('cn-new-type-add').addEventListener('click', commitNewType);
+  document.getElementById('cn-new-type-cancel').addEventListener('click', cancelNewType);
+  newTypeInput.addEventListener('keydown', function (event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      commitNewType();
+    } else if (event.key === 'Escape') {
+      // Cancels just the new-type box, not the whole fee form.
+      event.stopPropagation();
+      cancelNewType();
+    }
+  });
+  Array.prototype.forEach.call(termBoxes, function (box) {
+    box.addEventListener('change', function () {
+      if (selectedTerms().length) termsError.hidden = true;
+    });
   });
 
   store.subscribe(function () {
     render();
-    if (typesModal.isOpen()) renderTypes();
     if (formModal.isOpen()) renderPicker();
   });
   render();

@@ -84,7 +84,7 @@
         <div class="cn-field">
           <label for="cn-expense-account">Account</label>
           <input type="text" id="cn-expense-account" class="cn-input" value="Main School Account" disabled>
-          <p class="m-0 mt-1 text-xs text-[#737373]">Every expense links to the one Main School Account for this MVP.</p>
+          <p class="m-0 mt-1 text-xs text-[#737373]">Every expense links to the one Main School Account.</p>
         </div>
       </div>
 

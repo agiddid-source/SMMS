@@ -156,7 +156,11 @@ function pay_save_payment($input) {
         'allocations' => $input['allocations'] ?? [],
         'note' => $input['note'] ?? '',
         'attachment' => $input['attachment'] ?? null,
-        'actor' => 'Recorded by Bursar desk',
+        'payer' => $input['payer'] ?? '',
+        'receivedBy' => $input['receivedBy'] ?? '',
+        'actor' => ($input['receivedBy'] ?? '') !== ''
+            ? 'Received by ' . $input['receivedBy']
+            : 'Recorded by Bursar desk',
     ];
 
     $data = read_json('data/payments.json');
@@ -238,6 +242,104 @@ function pay_get_invoice($student) {
             'payable' => $payable,
             'paid' => $paid,
             'outstanding' => $outstanding,
+        ],
+    ];
+}
+
+// Ledger (cashbook) ---------------------------------------------------------
+
+// The payment methods the Bursar can record and the ledger can filter by. One
+// source so the record form and the ledger filter never drift apart.
+function pay_methods() {
+    return ['Cash', 'Bank transfer', 'POS', 'Cheque', 'Mobile money'];
+}
+
+// Builds the school cashbook: every recorded payment as a credit, in time
+// order, with a running cash balance. Single-entry — debits (expenses) slot in
+// later. Returns ['rows' => <newest-first>, 'summary' => [...]].
+//
+// The running balance is accumulated over *all* transactions before any filter
+// is applied, so a narrowed view still shows each row's true balance at that
+// moment, exactly like a bank statement. $filters keys (all optional): from,
+// to (YYYY-MM-DD), method, search (student name/number/class/purpose/receipt).
+function pay_get_ledger($filters = []) {
+    // Student lookup once, so each transaction can name who it was for.
+    $students = [];
+    foreach (pay_get_students() as $pay_s) {
+        $students[$pay_s['id']] = $pay_s;
+    }
+
+    // Oldest-first to accumulate the running balance.
+    $payments = pay_get_payments();
+    usort($payments, fn($a, $b) => strcmp($a['date'] ?? '', $b['date'] ?? ''));
+
+    $running = 0.0;
+    $rows = [];
+    foreach ($payments as $pay_p) {
+        $running += (float) ($pay_p['amount'] ?? 0);
+        $student = $students[$pay_p['studentId'] ?? ''] ?? null;
+
+        // Received-by: new records store receivedBy; older ones only carry the
+        // actor label ("Recorded by Bursar desk" / "Received by X").
+        $received_by = $pay_p['receivedBy'] ?? '';
+        if ($received_by === '') {
+            $received_by = trim(preg_replace('/^(Received|Recorded) by\s*/i', '', $pay_p['actor'] ?? ''));
+        }
+        if ($received_by === '') $received_by = 'Bursar desk';
+
+        $rows[] = [
+            'id' => $pay_p['id'] ?? '',
+            'date' => $pay_p['date'] ?? '',
+            'dateLabel' => $pay_p['dateLabel'] ?? '',
+            'receiptNumber' => $pay_p['receiptNumber'] ?? '',
+            'studentId' => $pay_p['studentId'] ?? '',
+            'studentName' => $student['name'] ?? ($pay_p['studentId'] ?? 'Unknown student'),
+            'className' => $student['className'] ?? '',
+            'studentNumber' => $student['studentNumber'] ?? '',
+            'purpose' => $pay_p['purpose'] ?? '',
+            'method' => $pay_p['method'] ?? '',
+            'payer' => ($pay_p['payer'] ?? '') !== '' ? $pay_p['payer'] : ($student['guardian'] ?? ''),
+            'receivedBy' => $received_by,
+            'amount' => (float) ($pay_p['amount'] ?? 0),
+            'balance' => $running,
+        ];
+    }
+
+    // Apply the view filters after balances are fixed.
+    $from = $filters['from'] ?? '';
+    $to = $filters['to'] ?? '';
+    $method = $filters['method'] ?? '';
+    $search = strtolower(trim($filters['search'] ?? ''));
+
+    $visible = [];
+    foreach ($rows as $row) {
+        $day = substr($row['date'], 0, 10);
+        if ($from !== '' && $day < $from) continue;
+        if ($to !== '' && $day > $to) continue;
+        if ($method !== '' && $row['method'] !== $method) continue;
+        if ($search !== '') {
+            $hay = strtolower($row['studentName'] . ' ' . $row['studentNumber'] . ' ' . $row['className'] . ' ' . $row['purpose'] . ' ' . $row['receiptNumber']);
+            if (!str_contains($hay, $search)) continue;
+        }
+        $visible[] = $row;
+    }
+
+    // Summaries over the visible set.
+    $period_collected = 0.0;
+    $by_method = [];
+    foreach ($visible as $row) {
+        $period_collected += $row['amount'];
+        $by_method[$row['method']] = ($by_method[$row['method']] ?? 0) + $row['amount'];
+    }
+    arsort($by_method);
+
+    return [
+        'rows' => array_reverse($visible), // newest first for display
+        'summary' => [
+            'periodCollected' => $period_collected,
+            'periodCount' => count($visible),
+            'allCollected' => $running,
+            'byMethod' => $by_method,
         ],
     ];
 }

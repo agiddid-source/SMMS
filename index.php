@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && is_file($cn_handler_file)) {
 <?php require __DIR__ . '/_inc/head.inc.php'; ?>
 <body class="min-h-screen bg-white" data-page="<?= htmlspecialchars($page) ?>">
 <?php require __DIR__ . '/components/sidebar.php'; ?>
-<main class="ght-app-main min-w-0 flex-1 lg:pl-[232px]">
+<main class="ght-app-main min-w-0 flex-1">
 <?php require __DIR__ . '/' . $file; ?>
 </main>
 </body>

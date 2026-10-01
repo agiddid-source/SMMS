@@ -27,6 +27,14 @@ if ($pay_action === 'record') {
         $pay_method = cure($_POST['method'] ?? '') ?: 'Cash';
         $pay_note = cure($_POST['note'] ?? '');
 
+        // Who handed the money over (defaults to the guardian on record) and the
+        // school officer who received and recorded it. Both are captured on the
+        // receipt for accountability; payer falls back to the guardian, and the
+        // officer line falls back to a generic label in the data layer.
+        $pay_payer = cure($_POST['payer'] ?? '');
+        if ($pay_payer === '') $pay_payer = $pay_student['guardian'] ?? '';
+        $pay_received_by = cure($_POST['received_by'] ?? '');
+
         // Fees this student can actually be paid against, keyed by name with the
         // remaining balance as each per-line cap. The form clamps live in JS,
         // but the server re-clamps here so a hand-crafted POST can neither
@@ -71,6 +79,8 @@ if ($pay_action === 'record') {
                 'allocations' => $pay_allocations,
                 'note' => $pay_note,
                 'attachment' => $pay_attachment,
+                'payer' => $pay_payer,
+                'receivedBy' => $pay_received_by,
             ]);
 
             // ?receipt= makes the destination page render the printable receipt.

@@ -2,7 +2,7 @@
 
 $ght_navigation_config = [
     ['type' => 'link', 'label' => 'Overview', 'href' => 'index.php?p=dashboard', 'icon' => 'grid'],
-    ['type' => 'link', 'label' => 'Ledger', 'href' => 'index.php?p=coming-soon&module=Ledger', 'icon' => 'ledger'],
+    ['type' => 'link', 'label' => 'Ledger', 'href' => 'index.php?p=ledger', 'icon' => 'ledger'],
     ['type' => 'group', 'label' => 'Classes & Fees', 'icon' => 'school', 'items' => [
         ['label' => 'Classes', 'href' => 'index.php?p=classes'],
         ['label' => 'Fee settings', 'href' => 'index.php?p=fee-setup'],
@@ -12,8 +12,8 @@ $ght_navigation_config = [
         ['label' => 'Fee discounts', 'href' => 'index.php?p=student-profile&student=sodiq-adeyemi#ght-concessions'],
     ]],
     ['type' => 'group', 'label' => 'Bursar & Payments', 'icon' => 'payment', 'items' => [
-        ['label' => 'Invoices', 'href' => 'index.php?p=invoices'],
-        ['label' => 'Payments', 'href' => 'index.php?p=payments'],
+        ['label' => 'Payments and Receipt', 'href' => 'index.php?p=invoices'],
+        ['label' => 'Students', 'href' => 'index.php?p=payments'],
     ]],
     ['type' => 'group', 'label' => 'Expenses & Reports', 'icon' => 'report', 'items' => [
         ['label' => 'Expenses', 'href' => 'index.php?p=coming-soon&module=Expenses'],

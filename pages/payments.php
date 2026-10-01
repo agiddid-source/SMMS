@@ -35,7 +35,7 @@ $receipt_student = $receipt ? pay_get_student($receipt['studentId']) : null;
       <p class="mb-0 mt-3 max-w-xl text-sm leading-6 text-[#737373]">Search for a student, review what they owe, record the payment and issue a receipt.</p>
     </div>
 
-    <section class="mt-7 grid grid-cols-1 gap-4 lg:grid-cols-[.85fr_1.15fr]">
+    <section class="ght-pay-grid mt-7 grid grid-cols-1 gap-4 lg:grid-cols-[.85fr_1.15fr]">
       <div class="ght-card">
         <form method="get" class="ght-field">
           <input type="hidden" name="p" value="payments">
@@ -81,7 +81,7 @@ $receipt_student = $receipt ? pay_get_student($receipt['studentId']) : null;
           $balance_label = $selected_has_balance ? ght_format_naira($selected['summary']['outstanding']) . ' due' : 'Paid in full';
           $balance_tone = $selected_has_balance ? 'accent' : 'success';
         ?>
-          <div class="ght-card">
+          <div class="ght-pay-detail-card ght-card">
             <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
               <div class="flex items-start gap-4">
                 <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#f7e7d8] text-sm font-medium text-[#915239]"><?= htmlspecialchars($selected['initials']) ?></span>
@@ -91,54 +91,53 @@ $receipt_student = $receipt ? pay_get_student($receipt['studentId']) : null;
                   <p class="m-0 mt-1 text-xs text-[#737373]">Guardian · <?= htmlspecialchars($selected['guardian']) ?></p>
                 </div>
               </div>
-              <span class="ght-chip ght-chip--<?= $balance_tone ?>"><?= htmlspecialchars($balance_label) ?></span>
+              <div class="flex flex-col flex-shrink-0 flex-wrap items-end gap-2">
+                <?php if ($selected_has_balance): ?>
+                  <label for="pay-record-modal" class="ght-button ght-button--primary text-sm font-medium">
+                    <span class="ght-button-icon"><svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 7h18M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm1 11h4"/></svg></span>
+                    <span>Record payment</span>
+                  </label>
+                <?php else: ?>
+                  <button type="button" class="ght-button ght-button--primary text-sm font-medium" disabled>
+                    <span class="ght-button-icon"><svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 7h18M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm1 11h4"/></svg></span>
+                    <span>Record payment</span>
+                  </button>
+                <?php endif; ?>
+                <a class="ght-button ght-button--secondary text-sm font-medium" href="index.php?p=student-profile&student=<?= urlencode($selected['id']) ?>">View full profile</a>
+              </div>
             </div>
 
             <div class="mt-6 grid grid-cols-3 gap-4 border-t border-[#f5f5f5] pt-5">
               <div><p class="m-0 text-xs text-[#737373]">Payable</p><p class="m-0 mt-1 text-sm font-medium"><?= ght_format_naira($selected['summary']['payable']) ?></p></div>
               <div><p class="m-0 text-xs text-[#737373]">Paid</p><p class="m-0 mt-1 text-sm font-medium text-[#16803b]"><?= ght_format_naira($selected['summary']['paid']) ?></p></div>
               <div><p class="m-0 text-xs text-[#737373]">Outstanding</p><p class="m-0 mt-1 text-sm font-medium"><?= ght_format_naira($selected['summary']['outstanding']) ?></p></div>
+              
             </div>
 
-            <div class="mt-6 flex flex-wrap gap-2 border-t border-[#f5f5f5] pt-5">
-              <?php if ($selected_has_balance): ?>
-                <label for="pay-record-modal" class="ght-button ght-button--primary text-sm font-medium">
-                  <span class="ght-button-icon"><svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 7h18M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm1 11h4"/></svg></span>
-                  <span>Record payment</span>
-                </label>
-              <?php else: ?>
-                <button type="button" class="ght-button ght-button--primary text-sm font-medium" disabled>
-                  <span class="ght-button-icon"><svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 7h18M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm1 11h4"/></svg></span>
-                  <span>Record payment</span>
-                </button>
-              <?php endif; ?>
-              <a class="ght-button ght-button--secondary text-sm font-medium" href="index.php?p=student-profile&student=<?= urlencode($selected['id']) ?>">View full profile</a>
+            <div class="ght-pay-history mt-6 flex flex-1 flex-col border-t border-[#f5f5f5] pt-5">
+              <div>
+                <p class="m-0 text-sm text-[#737373]">Payment history</p>
+                <h2 class="m-0 mt-2 text-xl font-medium tracking-[-.5px]">Receipts &amp; transactions</h2>
+              </div>
+              <ul class="ght-history-list m-0 mt-5 list-none divide-y divide-[#f5f5f5] p-0">
+                <?php if (count($selected_payments) === 0): ?>
+                  <li class="py-4 text-sm text-[#737373]">No payments recorded yet.</li>
+                <?php else: foreach ($selected_payments as $payment): ?>
+                  <li class="ght-history-row">
+                    <div>
+                      <p class="m-0 text-sm font-medium"><?= htmlspecialchars($payment['purpose']) ?></p>
+                      <p class="mb-0 mt-1 text-xs text-[#737373]"><?= htmlspecialchars($payment['dateLabel'] . ' · ' . $payment['receiptNumber']) ?></p>
+                      <p class="mb-0 mt-1 text-xs text-[#737373]"><?= htmlspecialchars($payment['method'] . ' · ' . $payment['actor']) ?></p>
+                    </div>
+                    <div class="text-left sm:text-right">
+                      <p class="m-0 text-sm font-medium"><?= ght_format_naira($payment['amount']) ?></p>
+                      <div class="mt-2"><span class="ght-chip ght-chip--success"><?= htmlspecialchars($payment['status']) ?></span></div>
+                    </div>
+                  </li>
+                <?php endforeach; endif; ?>
+              </ul>
             </div>
           </div>
-
-          <section class="ght-card mt-4">
-            <div>
-              <p class="m-0 text-sm text-[#737373]">Payment history</p>
-              <h2 class="m-0 mt-2 text-xl font-medium tracking-[-.5px]">Receipts &amp; transactions</h2>
-            </div>
-            <ul class="ght-history-list m-0 mt-5 list-none divide-y divide-[#f5f5f5] p-0">
-              <?php if (count($selected_payments) === 0): ?>
-                <li class="py-4 text-sm text-[#737373]">No payments recorded yet.</li>
-              <?php else: foreach ($selected_payments as $payment): ?>
-                <li class="ght-history-row">
-                  <div>
-                    <p class="m-0 text-sm font-medium"><?= htmlspecialchars($payment['purpose']) ?></p>
-                    <p class="mb-0 mt-1 text-xs text-[#737373]"><?= htmlspecialchars($payment['dateLabel'] . ' · ' . $payment['receiptNumber']) ?></p>
-                    <p class="mb-0 mt-1 text-xs text-[#737373]"><?= htmlspecialchars($payment['method'] . ' · ' . $payment['actor']) ?></p>
-                  </div>
-                  <div class="text-left sm:text-right">
-                    <p class="m-0 text-sm font-medium"><?= ght_format_naira($payment['amount']) ?></p>
-                    <div class="mt-2"><span class="ght-chip ght-chip--success"><?= htmlspecialchars($payment['status']) ?></span></div>
-                  </div>
-                </li>
-              <?php endforeach; endif; ?>
-            </ul>
-          </section>
         <?php endif; ?>
       </div>
     </section>

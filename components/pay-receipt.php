@@ -57,7 +57,7 @@ $pay_r_student = $pay_receipt_student;
           </div>
           <div class="text-right">
             <p class="m-0 text-xs text-[#737373]">Payer</p>
-            <p class="m-0 mt-1 text-sm font-medium"><?= htmlspecialchars($pay_r_student['guardian']) ?></p>
+            <p class="m-0 mt-1 text-sm font-medium"><?= htmlspecialchars(!empty($pay_r['payer']) ? $pay_r['payer'] : $pay_r_student['guardian']) ?></p>
             <p class="m-0 mt-1 text-xs text-[#737373]"><?= htmlspecialchars($pay_r['method']) ?></p>
           </div>
         </div>

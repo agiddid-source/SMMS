@@ -29,6 +29,10 @@ $pages = [
         'file' => 'pages/payments.php',
         'title' => 'Payments · Greenhill School OS',
     ],
+    'ledger' => [
+        'file' => 'pages/ledger.php',
+        'title' => 'Ledger · Greenhill School OS',
+    ],
 ];
 
 $p = cure($_GET['p'] ?? '');

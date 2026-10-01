@@ -26,7 +26,11 @@ $pay_form_has_fees = count($pay_form_fees) > 0;
   <label for="<?= htmlspecialchars($pay_form_modal_id) ?>" class="pay-modal-backdrop" aria-hidden="true"></label>
   <div class="pay-modal-panel">
     <label for="<?= htmlspecialchars($pay_form_modal_id) ?>" class="pay-modal-close" aria-label="Close">&times;</label>
-    <h2 class="pay-modal-title">Record payment</h2>
+    <span class="flex items-center gap-2 mb-4">
+      <span class="ght-button-icon"><svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 7h18M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm1 11h4"/></svg></span>
+      <h2 class="pay-modal-title m-0 leading-none">Record payment</h2>
+    </span>
+    
 
     <form class="ght-payment-form" method="post" action="index.php?p=payments" enctype="multipart/form-data" data-pay-form>
       <input type="hidden" name="action" value="record">
@@ -92,15 +96,26 @@ $pay_form_has_fees = count($pay_form_fees) > 0;
           </label>
         </div>
 
-        <label class="ght-field mt-4">
-          <span class="ght-field-label">Purpose / note <span class="text-[#a3a3a3]">(optional)</span></span>
-          <input type="text" class="ght-input" name="note" placeholder="e.g. First Term fees">
-        </label>
+        <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <label class="ght-field">
+            <span class="ght-field-label">Paid by</span>
+            <input type="text" class="ght-input" name="payer" value="<?= htmlspecialchars($pay_form_student['guardian']) ?>" placeholder="Who is making this payment">
+          </label>
+          <label class="ght-field">
+            <span class="ght-field-label">Received by</span>
+            <input type="text" class="ght-input" name="received_by" placeholder="School officer recording it">
+          </label>
+        </div>
 
         <label class="ght-field mt-4">
           <span class="ght-field-label">Supporting attachment <span class="text-[#a3a3a3]">(optional)</span></span>
           <input type="file" class="ght-input" name="attachment" accept="image/*,application/pdf">
           <span class="ght-field-hint">Bank slip, POS receipt or transfer screenshot.</span>
+        </label>
+
+        <label class="ght-field mt-4">
+          <span class="ght-field-label">Purpose / note <span class="text-[#a3a3a3]">(optional)</span></span>
+          <input type="text" class="ght-input" name="note" placeholder="e.g. First Term fees">
         </label>
 
         <div class="mt-5 flex items-center justify-between border-t border-[#f5f5f5] pt-4">

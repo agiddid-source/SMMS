@@ -71,7 +71,7 @@ $profile_receipt_student = $profile_receipt ? pay_get_student($profile_receipt['
               <span class="ght-button-icon"><svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M15 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5ZM14 3v5h5M9 13h6M9 17h4"/></svg></span>
               <span class="ght-button-label">View invoice</span>
             </a>
-            <a class="ght-button ght-button--secondary text-sm font-medium" href="index.php?p=coming-soon&module=Statement">
+            <a class="ght-button ght-button--secondary text-sm font-medium" href="index.php?p=statement&student=<?= urlencode($student['id']) ?>">
               <span class="ght-button-icon"><svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3h12v18H6zM9 7h6M9 11h6M9 15h3"/></svg></span>
               <span class="ght-button-label">Statement</span>
             </a>

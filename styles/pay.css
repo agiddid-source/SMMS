@@ -190,3 +190,29 @@ select.ght-input { appearance: none; background-image: url("data:image/svg+xml,%
    min-width keeps the money columns readable and lets the overflow-x wrapper
    scroll horizontally on narrow screens instead of crushing them. */
 .ght-ledger-table { border-collapse: collapse; min-width: 760px; }
+
+/* Statement of account sheet ----------------------------------------------
+   The printable per-student statement (pages/statement.php). Base styling
+   mirrors the receipt sheet; the print block isolates the sheet the same way,
+   keyed off a ght-print-statement body flag toggled by assets/pay.js. */
+.ght-statement-sheet {
+  background: var(--ght-color-surface);
+  border: 1px solid var(--ght-color-border);
+  border-radius: var(--ght-radius-lg);
+  padding: 20px;
+}
+.ght-statement-table { border-collapse: collapse; min-width: 640px; }
+
+@media print {
+  body.ght-print-statement * { visibility: hidden; }
+  body.ght-print-statement .ght-statement-sheet,
+  body.ght-print-statement .ght-statement-sheet * { visibility: visible; }
+  body.ght-print-statement .ght-statement-sheet {
+    border: 0;
+    left: 0;
+    padding: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+}

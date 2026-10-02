@@ -343,3 +343,115 @@ function pay_get_ledger($filters = []) {
         ],
     ];
 }
+
+// Statement of account (per student) ----------------------------------------
+
+// Builds one student's statement of account: every fee charged as a debit, every
+// concession as a contra-credit, every payment as a credit — in that order, with
+// a running balance after each line. The closing balance must equal the student's
+// stored outstanding; `reconciles` reports whether it does, so the page can flag a
+// data inconsistency instead of hiding it.
+//
+// This is the per-student counterpart to pay_get_ledger() (the school cashbook):
+// same single-entry, running-balance idea, scoped to one account. Everything is
+// derived live from the student's fee lines and their payments — nothing new is
+// stored. Fee lines carry no date, so charges group as the term's opening block;
+// payments follow in time order. Returns null for an unknown student.
+function pay_get_statement($student_id) {
+    $student = pay_get_student($student_id);
+    if (!$student) return null;
+
+    $entries = [];
+    $balance = 0.0;
+    $total_charge = 0.0;
+    $total_discount = 0.0;
+    $total_paid = 0.0;
+
+    // Charges first — one debit per fee at its assigned (gross) amount, then a
+    // contra-credit for any concession on that fee, so the running balance walks
+    // down to the net payable exactly the way the invoice totals do.
+    foreach ($student['fees'] ?? [] as $fee) {
+        $assigned = (float) ($fee['assigned'] ?? 0);
+        $discount = (float) ($fee['discount'] ?? 0);
+
+        $balance += $assigned;
+        $total_charge += $assigned;
+        $entries[] = [
+            'kind' => 'charge',
+            'dateLabel' => 'Term open',
+            'date' => '',
+            'title' => $fee['name'] ?? 'Fee',
+            'meta' => $fee['note'] ?? '',
+            'charge' => $assigned,
+            'credit' => 0.0,
+            'balance' => $balance,
+        ];
+
+        if ($discount > 0) {
+            $balance -= $discount;
+            $total_discount += $discount;
+            $percent = $assigned > 0 ? round($discount / $assigned * 100) : 0;
+            $entries[] = [
+                'kind' => 'discount',
+                'dateLabel' => '',
+                'date' => '',
+                'title' => ($fee['name'] ?? 'Fee') . ' — concession',
+                'meta' => $percent > 0 ? $percent . '% concession' : 'Concession',
+                'charge' => 0.0,
+                'credit' => $discount,
+                'balance' => $balance,
+            ];
+        }
+    }
+
+    // Payments next — each a credit, oldest first, so the balance ends on what the
+    // family still owes today.
+    $payments = pay_get_payments($student_id);
+    usort($payments, fn($a, $b) => strcmp($a['date'] ?? '', $b['date'] ?? ''));
+    foreach ($payments as $pay_p) {
+        $amount = (float) ($pay_p['amount'] ?? 0);
+        $balance -= $amount;
+        $total_paid += $amount;
+
+        // Name the fees this payment was applied to, for the Description cell.
+        $applied = [];
+        foreach ($pay_p['allocations'] ?? [] as $alloc) {
+            $applied[] = $alloc['feeName'] ?? '';
+        }
+        $applied = array_filter($applied);
+        $meta = $pay_p['receiptNumber'] ?? '';
+        if ($applied) $meta = trim($meta . ' · ' . ('Applied to ' . implode(', ', $applied)), ' ·');
+
+        $entries[] = [
+            'kind' => 'payment',
+            'dateLabel' => $pay_p['dateLabel'] ?? substr($pay_p['date'] ?? '', 0, 10),
+            'date' => $pay_p['date'] ?? '',
+            'title' => 'Payment' . (($pay_p['method'] ?? '') !== '' ? ' · ' . $pay_p['method'] : ''),
+            'meta' => $meta,
+            'charge' => 0.0,
+            'credit' => $amount,
+            'balance' => $balance,
+        ];
+    }
+
+    $summary = $student['summary'] ?? [];
+    $outstanding = isset($summary['outstanding'])
+        ? (float) $summary['outstanding']
+        : $balance;
+
+    return [
+        'student' => $student,
+        'entries' => $entries,
+        'totals' => [
+            'charged' => $total_charge,
+            'discount' => $total_discount,
+            'netCharged' => $total_charge - $total_discount,
+            'paid' => $total_paid,
+            'closing' => $balance,
+            'outstanding' => $outstanding,
+        ],
+        // The built-in correctness check: the running balance must land on the
+        // figure the rest of the app trusts. Tolerance for float noise.
+        'reconciles' => abs($balance - $outstanding) < 0.01,
+    ];
+}

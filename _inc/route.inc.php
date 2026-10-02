@@ -33,6 +33,10 @@ $pages = [
         'file' => 'pages/ledger.php',
         'title' => 'Ledger · Greenhill School OS',
     ],
+    'statement' => [
+        'file' => 'pages/statement.php',
+        'title' => 'Statement of account · Greenhill School OS',
+    ],
 ];
 
 $p = cure($_GET['p'] ?? '');

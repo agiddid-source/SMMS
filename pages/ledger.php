@@ -125,7 +125,7 @@ foreach (pay_get_students() as $book_student) {
                     <?php if ($r['receiptNumber'] !== ''): ?><span class="mt-1 block text-xs text-[#737373]"><?= htmlspecialchars($r['receiptNumber']) ?></span><?php endif; ?>
                   </td>
                   <td class="py-3 pr-4">
-                    <a class="font-medium text-[#0a0a0a] hover:underline" href="index.php?p=payments&student=<?= urlencode($r['studentId']) ?>"><?= htmlspecialchars($r['studentName']) ?></a>
+                    <a class="font-medium text-[#0a0a0a] hover:underline" href="index.php?p=statement&student=<?= urlencode($r['studentId']) ?>"><?= htmlspecialchars($r['studentName']) ?></a>
                     <?php $meta = trim($r['className'] . ' · ' . $r['studentNumber'], ' ·'); ?>
                     <?php if ($meta !== ''): ?><span class="mt-1 block text-xs text-[#737373]"><?= htmlspecialchars($meta) ?></span><?php endif; ?>
                   </td>

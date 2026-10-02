@@ -60,10 +60,14 @@
   // Wires a "Print receipt" button to print just the receipt sheet, using the
   // body flag the print rules in styles/pay.css key off.
   function ghtBindPrint(button) {
+    // Which scoped-print body flag to toggle; defaults to the receipt so the
+    // receipt button keeps working untouched. The statement button passes
+    // data-print-flag="ght-print-statement".
+    var flag = button.getAttribute('data-print-flag') || 'ght-print-receipt';
     button.addEventListener('click', function () {
-      document.body.classList.add('ght-print-receipt');
+      document.body.classList.add(flag);
       function cleanup() {
-        document.body.classList.remove('ght-print-receipt');
+        document.body.classList.remove(flag);
         window.removeEventListener('afterprint', cleanup);
       }
       window.addEventListener('afterprint', cleanup);

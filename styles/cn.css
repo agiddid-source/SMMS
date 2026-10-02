@@ -5,7 +5,7 @@
   border: 1px solid var(--ght-color-border);
   border-radius: var(--ght-radius-md);
   background: var(--ght-color-surface);
-  font-size: 14px;
+  font-size: 16px;
   color: var(--ght-color-on-surface);
   width: 100%;
 }
@@ -44,14 +44,14 @@
 }
 
 .cn-list-header, .cn-fee-list-header {
-  font-size: 12px; font-weight: 500; color: var(--ght-color-muted);
+  font-size: 14px; font-weight: 500; color: var(--ght-color-muted);
   background: var(--ght-color-tertiary);
   border-bottom: 1px solid var(--ght-color-border);
 }
 
 .cn-list-row, .cn-fee-list-row {
   border-bottom: 1px solid var(--ght-color-border);
-  font-size: 14px;
+  font-size: 16px;
   animation: cn-row-in 320ms var(--ght-ease-out) both;
 }
 .cn-list-row:last-child, .cn-fee-list-row:last-child { border-bottom: none; }
@@ -137,11 +137,10 @@ body.cn-modal-open { overflow: hidden; }
 .cn-field { margin-bottom: 12px; }
 .cn-field label { display: block; font-size: 12px; color: var(--ght-color-muted); margin-bottom: 4px; }
 .cn-field-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
-
 .cn-inline-form { display: flex; gap: 8px; align-items: center; }
 
 /* ---- Class picker (inside the fee form) ---- */
-.cn-picker { margin-top: 16px; border-top: 1px solid var(--ght-color-border); padding-top: 14px; }
+.cn-picker { margin-top: 16px; margin-bottom: 6px; border-top: 1px solid var(--ght-color-border); padding-top: 14px; }
 .cn-picker-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .cn-picker-head .cn-input { max-width: 190px; min-height: 36px; }
 .cn-picker-list {

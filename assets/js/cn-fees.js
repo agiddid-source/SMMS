@@ -35,7 +35,7 @@
   var pickerCount = document.getElementById('cn-picker-count');
   var editingId = null;
 
-  // ---- Fee list -----------------------------------------------------
+  // Fee list 
 
   function feeRow(fee) {
     var classes = store.getClasses();
@@ -161,7 +161,7 @@
     render();
   }
 
-  // ---- Fee form -----------------------------------------------------
+  // Fee form 
 
   function renderTypeOptions(current) {
     clear(typeField);
@@ -206,7 +206,7 @@
     }
   }
 
-  // ---- Terms (multi-select) -----------------------------------------
+  // Terms (multi-select) 
 
   function selectedTerms() {
     return Array.prototype.filter.call(termBoxes, function (box) { return box.checked; })
@@ -368,8 +368,8 @@
 
   // Wiring 
 
-  searchInput.addEventListener('input', function () {
-    view.search = searchInput.value;
+  window.CnSearch.bind(searchInput, function (value) {
+    view.search = value;
     renderList();
   });
   typeSelect.addEventListener('change', function () {
@@ -384,8 +384,8 @@
     view.includeInactive = inactiveToggle.checked;
     renderList();
   });
-  pickerSearchInput.addEventListener('input', function () {
-    pickerSearch = pickerSearchInput.value;
+  window.CnSearch.bind(pickerSearchInput, function (value) {
+    pickerSearch = value;
     renderPicker();
   });
 

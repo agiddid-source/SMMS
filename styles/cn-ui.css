@@ -1,0 +1,224 @@
+/* cn-ui.css — additions layered on top of cn.css (loaded after it on every Classes / Fees /
+   Expenses / Reports page): textarea, inline "new type" box, term pickers, type-ahead
+   suggestions, the Search button, and Order mode. Kept separate so replacing cn.css never
+   drops these styles. */
+
+.cn-textarea { min-height: 84px; resize: vertical; font-family: inherit; line-height: 1.45; }
+.cn-toolbar[hidden] { display: none; }
+
+/* ---- Inline "add new fee type" (inside the Type field) ---- */
+.cn-new-type { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.cn-new-type[hidden] { display: none; }
+.cn-new-type .cn-input { flex: 1 1 100%; }
+
+/* ---- Term multi-select dropdown (report filters) ---- */
+.cn-multi { position: relative; flex: 0 0 auto; }
+.cn-multi-btn {
+  display: inline-flex; align-items: center; justify-content: space-between; gap: 8px;
+  width: auto; min-width: 140px; max-width: 220px; text-align: left; cursor: pointer;
+}
+.cn-multi-btn::after { content: ""; width: 6px; height: 6px; border: solid currentColor; border-width: 0 1.5px 1.5px 0; transform: rotate(45deg) translateY(-2px); opacity: .6; }
+.cn-multi-pop {
+  position: absolute; z-index: 30; top: calc(100% + 4px); left: 0; min-width: 100%; padding: 6px;
+  background: var(--ght-color-surface); border: 1px solid var(--ght-color-border);
+  border-radius: var(--ght-radius-md); box-shadow: 0 12px 32px #0000002e;
+}
+.cn-multi-pop[hidden] { display: none; }
+.cn-multi-row { display: flex; align-items: center; gap: 8px; min-height: 34px; padding: 4px 8px; font-size: 13px; white-space: nowrap; cursor: pointer; border-radius: 6px; }
+.cn-multi-row:hover { background: #0000000d; }
+.cn-multi-row input { accent-color: var(--ght-color-accent); }
+.cn-multi-clear { display: block; margin: 2px 8px 4px auto; }
+
+/* ---- Suggestions (autocomplete) ---- */
+.cn-suggest {
+  position: absolute; z-index: 90; margin: 0; padding: 4px; list-style: none;
+  max-height: 264px; overflow-y: auto;
+  background: var(--ght-color-surface); border: 1px solid var(--ght-color-border);
+  border-radius: var(--ght-radius-md); box-shadow: 0 12px 32px #0000002e;
+}
+.cn-suggest[hidden] { display: none; }
+.cn-suggest-item {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+  padding: 8px 10px; border-radius: 6px; font-size: 14px; cursor: pointer;
+  color: var(--ght-color-on-surface);
+}
+.cn-suggest-item.is-active { background: #0000000f; }
+.cn-suggest-item mark { background: transparent; color: inherit; font-weight: 600; text-decoration: underline; text-decoration-color: var(--ght-color-accent); text-underline-offset: 2px; }
+.cn-suggest-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cn-suggest-hint { flex: none; font-size: 11px; color: var(--ght-color-muted); }
+
+/* ---- Term picker in fee form: horizontal flow  ---- */
+.cn-terms { border: 0; padding: 0; margin: 0 0 10px; min-width: 0; }
+.cn-terms legend { padding: 0; font-size: 12px; color: var(--ght-color-muted); margin-bottom: 4px; }
+.cn-terms-hint { color: var(--ght-color-muted); opacity: .8; }
+.cn-check-group { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.cn-check {
+  display: flex; align-items: center; justify-content: center; gap: 8px; min-width: 0;
+  min-height: 36px; padding: 4px 8px; white-space: nowrap;
+  border: 1px solid var(--ght-color-border); border-radius: var(--ght-radius-md);
+  font-size: 13px; cursor: pointer; user-select: none;
+}
+.cn-check input { flex: none; accent-color: var(--ght-color-accent); }
+.cn-check:has(input:checked) { border-color: var(--ght-color-accent); }
+.cn-field-error { margin: 6px 0 0; font-size: 12px; color: #b42318; }
+.cn-field-error[hidden] { display: none; }
+@media (max-width: 360px) { .cn-check { font-size: 12px; padding: 4px 6px; gap: 6px; } }
+
+#cn-fee-form-modal .cn-modal-title { margin-bottom: 10px; }
+#cn-fee-form-modal .cn-field { margin-bottom: 10px; }
+#cn-fee-form-modal .cn-textarea { min-height: 64px; }
+#cn-fee-form-modal .cn-picker { margin-top: 12px; padding-top: 10px; }
+#cn-fee-form-modal .cn-picker-list { max-height: 168px; margin-top: 8px; }
+#cn-fee-form-modal .cn-modal-actions { margin-top: 14px; }
+
+/* ---- Search box with Search button ---- */
+.cn-search { position: relative; display: flex; flex: 1 1 180px; min-width: 160px; }
+.cn-toolbar .cn-search .cn-input, .cn-search .cn-input { flex: 1 1 auto; width: 100%; min-width: 0; padding-right: 46px; }
+.cn-picker-head .cn-search { flex: 0 1 200px; }
+.cn-picker-head .cn-search .cn-input { max-width: none; }
+.cn-search-btn {
+  position: absolute; top: 4px; right: 4px; bottom: 4px; width: 34px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 0; border-radius: calc(var(--ght-radius-md) - 2px);
+  background: transparent; color: var(--ght-color-muted); cursor: pointer;
+}
+.cn-search-btn svg { width: 16px; height: 16px; }
+.cn-search-btn:focus-visible { outline: 2px solid var(--ght-color-accent); outline-offset: -1px; }
+@media (hover: hover) {
+  .cn-search-btn:hover { background: var(--ght-color-tertiary); color: var(--ght-color-accent); }
+}
+
+/* ---- Classes: Order mode ---- */
+.cn-page-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+#cn-order-toggle.is-active { border-color: var(--ght-color-accent); color: var(--ght-color-accent); }
+.cn-order-bar {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px;
+  margin-bottom: 14px; padding: 10px 14px; font-size: 13px;
+  border: 1px dashed var(--ght-color-accent); border-radius: var(--ght-radius-lg);
+  background: var(--ght-color-tertiary);
+}
+.cn-order-bar[hidden] { display: none; }
+.cn-order-hint { margin: 0; max-width: 62ch; }
+.cn-order-actions { display: flex; gap: 8px; }
+
+.cn-list-wrap.is-ordering .cn-list-row { grid-template-columns: 1fr auto; animation: none; cursor: grab; }
+.cn-list-wrap.is-ordering .cn-list-row-actions { grid-column: auto; justify-content: flex-end; }
+.cn-list-section-row.cn-order-section { align-items: center; cursor: grab; }
+.cn-order-name { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.cn-order-section .cn-order-name { flex: 1; }
+.cn-grip {
+  flex: none; width: 12px; height: 18px; opacity: .55; color: var(--ght-color-muted);
+  background-image: radial-gradient(circle, currentColor 1.5px, transparent 1.8px);
+  background-size: 6px 6px;
+}
+.cn-move-btn {
+  width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--ght-color-border); border-radius: var(--ght-radius-sm);
+  background: var(--ght-color-surface); color: var(--ght-color-on-surface);
+  font-size: 15px; line-height: 1; cursor: pointer;
+}
+.cn-move-btn:disabled { opacity: .35; cursor: default; }
+.cn-move-btn:focus-visible { outline: 2px solid var(--ght-color-accent); outline-offset: 1px; }
+@media (hover: hover) { .cn-move-btn:not(:disabled):hover { border-color: var(--ght-color-accent); color: var(--ght-color-accent); } }
+.cn-list-wrap .is-dragging { opacity: .4; }
+.cn-list-wrap .drop-before { box-shadow: inset 0 3px 0 var(--ght-color-accent); }
+.cn-list-wrap .drop-after { box-shadow: inset 0 -3px 0 var(--ght-color-accent); }
+.cn-list-wrap .drop-into { outline: 2px solid var(--ght-color-accent); outline-offset: -2px; background: var(--ght-color-tertiary); }
+.cn-list-wrap.is-section-dragging .cn-list-row { display: none; }
+
+/* ---- Expenses table: even columns, room to breathe ----
+   Selectors are anchored on .cn-expense-list-wrap so they win over the older rules in cn.css
+   (which listed 7 column tracks for 6 columns and squeezed the Actions cell). */
+.cn-expense-list-wrap .cn-expense-list-header,
+.cn-expense-list-wrap .cn-expense-list-row {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 2.3fr)      /* description + category */
+    minmax(108px, .9fr)   /* amount */
+    minmax(100px, .8fr)   /* date */
+    minmax(0, 1.5fr)      /* payee */
+    minmax(0, 1.7fr)      /* attachments */
+    150px;                /* actions */
+  grid-template-areas: "desc amount date payee files actions";
+  column-gap: 24px;
+  align-items: center;
+  padding: 16px 24px;
+}
+.cn-expense-list-wrap .cn-expense-list-header { font-size: 14px; padding-top: 12px; padding-bottom: 12px; }
+.cn-expense-list-wrap .cn-expense-list-row { font-size: 16px; line-height: 1.4; }
+
+.cn-expense-list-wrap :is(.cn-expense-list-header, .cn-expense-list-row) > .cn-exp-desc    { grid-area: desc; min-width: 0; }
+.cn-expense-list-wrap :is(.cn-expense-list-header, .cn-expense-list-row) > .cn-exp-amount  { grid-area: amount; text-align: right; white-space: nowrap; }
+.cn-expense-list-wrap :is(.cn-expense-list-header, .cn-expense-list-row) > .cn-exp-date    { grid-area: date; white-space: nowrap; padding-left: 12px; }
+.cn-expense-list-wrap :is(.cn-expense-list-header, .cn-expense-list-row) > .cn-exp-payee   { grid-area: payee; min-width: 0; overflow-wrap: anywhere; }
+.cn-expense-list-wrap :is(.cn-expense-list-header, .cn-expense-list-row) > .cn-exp-files   { grid-area: files; min-width: 0; }
+.cn-expense-list-wrap :is(.cn-expense-list-header, .cn-expense-list-row) > .cn-exp-actions { grid-area: actions; }
+
+.cn-expense-list-wrap .cn-expense-name { overflow-wrap: anywhere; }
+.cn-expense-list-wrap .cn-expense-meta { margin-top: 2px; font-size: 13px; }
+
+/* Attachments: at most one line per kind, however many files there are */
+.cn-expense-list-wrap .cn-attachments { display: grid; gap: 4px; }
+.cn-attachment-line { display: flex; align-items: baseline; gap: 8px; min-width: 0; font-size: 13px; }
+.cn-attachment-kind { flex: none; min-width: 52px; font-size: 12px; color: var(--ght-color-muted); }
+.cn-attachment-file { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cn-attachment-more {
+  flex: none; padding: 0 6px; border-radius: 999px; font-size: 11px; line-height: 18px;
+  background: var(--ght-color-tertiary); color: var(--ght-color-muted);
+}
+.cn-expense-list-wrap .cn-attachment-none { font-size: 13px; }
+
+/* Medium screens: two tidy lines per expense instead of six squeezed columns */
+@media (max-width: 1200px) {
+  .cn-expense-list-wrap .cn-expense-list-header { display: none; }
+  .cn-expense-list-wrap .cn-expense-list-row {
+    grid-template-columns: minmax(0, 2fr) minmax(108px, .8fr) minmax(0, 1fr) 150px;
+    grid-template-areas:
+      "desc  amount date   actions"
+      "payee payee  files  files";
+    row-gap: 10px;
+    align-items: start;
+  }
+  .cn-expense-list-wrap .cn-expense-list-row > .cn-exp-amount { text-align: left; }
+  .cn-expense-list-wrap .cn-expense-list-row > .cn-exp-payee { color: var(--ght-color-muted); font-size: 14px; }
+  .cn-expense-list-wrap .cn-expense-list-row > .cn-exp-date { color: var(--ght-color-muted); padding-left: 0; font-size: 16px; }
+}
+
+/* Phones */
+@media (max-width: 860px) {
+  .cn-expense-list-wrap .cn-expense-list-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "desc    amount"
+      "payee   date"
+      "files   files"
+      "actions actions";
+    padding: 14px 16px;
+    row-gap: 8px;
+  }
+  .cn-expense-list-wrap .cn-expense-list-row > .cn-exp-amount { text-align: right; font-weight: 500; }
+  .cn-expense-list-wrap .cn-expense-list-row > .cn-exp-date { text-align: right; font-size: 14px; }
+  .cn-expense-list-wrap .cn-expense-list-row > .cn-exp-payee { font-size: 14px; }
+  .cn-expense-list-wrap .cn-expense-list-row > .cn-exp-actions { justify-content: flex-start; }
+}
+
+/* ---- Invoice / receipt fields in the record-expense form: 3 separate rows each ---- */
+.cn-attach-grid { align-items: start; }
+.cn-attach {
+  display: grid; gap: 6px; padding: 10px;
+  border: 1px dashed var(--ght-color-border); border-radius: var(--ght-radius-md);
+}
+.cn-file-row { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.cn-file-row .cn-file-pick { flex: none; min-height: 34px; padding-inline: 12px; }
+.cn-file-name {
+  flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-size: 13px; color: var(--ght-color-muted);
+}
+.cn-file-row.has-file .cn-file-name { color: var(--ght-color-on-surface); }
+.cn-file-clear {
+  flex: none; width: 26px; height: 26px; border: 0; border-radius: 50%; background: transparent;
+  color: var(--ght-color-muted); font-size: 18px; line-height: 1; cursor: pointer;
+}
+.cn-file-clear[hidden] { display: none; }
+.cn-file-clear:focus-visible { outline: 2px solid var(--ght-color-accent); outline-offset: 1px; }
+@media (hover: hover) { .cn-file-clear:hover { background: #0000001a; color: var(--ght-color-error); } }

@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="styles/cn.css">
+<link rel="stylesheet" href="styles/cn-ui.css">
 
 <div class="ght-dashboard-content">
   <div class="ght-page-enter">
@@ -19,4 +20,6 @@
 <?php cn_render_seed(); ?>
 <script src="assets/js/cn-store.js"></script>
 <script src="assets/js/cn-modal.js"></script>
+<script src="assets/js/cn-suggest.js"></script>
+<script src="assets/js/cn-search.js"></script>
 <script src="assets/js/cn-reports.js"></script>

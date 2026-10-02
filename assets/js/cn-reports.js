@@ -11,8 +11,8 @@
 
   var activeTab = 'collection';
   var state = {
-    collection: { session: '', term: '', classId: '' },
-    outstanding: { session: '', term: '', classId: '' },
+    collection: { session: '', terms: [], classId: '' },
+    outstanding: { session: '', terms: [], classId: '' },
     payments: { search: '', classId: '', from: '', to: '' },
     expenses: { search: '', categoryId: '', from: '', to: '' },
     incomeExpenditure: { from: '', to: '' }
@@ -57,14 +57,87 @@
     return node;
   }
 
-  function searchBox(value, placeholder, onChange) {
+  /** Search filter with type-ahead suggestions. `source` is a CnSuggest source. */
+  function searchBox(value, placeholder, onChange, source) {
     var node = el('input', { type: 'search', className: 'cn-input', placeholder: placeholder, value: value || '' });
-    node.oninput = function () { onChange(node.value); };
-    return node;
+    node.setAttribute('aria-label', placeholder.replace(/\u2026$/, ''));
+    if (source) window.CnSuggest.attach(node, { source: source });
+    return window.CnSearch.bind(node, onChange).wrapper;
   }
 
-  /** cols: [label,...]; colsClass: one of the cn-report-cols--* modifiers;
-   *  rows: array of arrays of strings/nodes, one per cell, in cols order. */
+  function multiSelect(options, selected, allLabel, noun, onChange) {
+    var chosen = selected.slice();
+    var root = el('div', { className: 'cn-multi' });
+    var button = el('button', { type: 'button', className: 'cn-input cn-input--compact cn-multi-btn' });
+    button.setAttribute('aria-haspopup', 'true');
+    button.setAttribute('aria-expanded', 'false');
+    var pop = el('div', { className: 'cn-multi-pop', hidden: true });
+    pop.setAttribute('role', 'group');
+    pop.setAttribute('aria-label', 'Choose ' + noun);
+    var clearButton = el('button', { type: 'button', className: 'cn-btn-text cn-btn-text--small cn-multi-clear' }, ['Clear']);
+    var boxes = [];
+
+    function label() {
+      if (!chosen.length) return allLabel;
+      if (chosen.length === options.length) return 'All ' + options.length + ' ' + noun;
+      return chosen.length === 1 ? chosen[0] : chosen.length + ' ' + noun + ' selected';
+    }
+    function sync() {
+      button.textContent = label();
+      clearButton.hidden = !chosen.length;
+    }
+    function setOpen(open) {
+      pop.hidden = !open;
+      button.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+
+    options.forEach(function (option) {
+      var box = el('input', { type: 'checkbox', value: option, checked: chosen.indexOf(option) !== -1 });
+      box.onchange = function () {
+        chosen = options.filter(function (o, i) { return boxes[i].checked; });
+        sync();
+        onChange(chosen.slice());
+      };
+      boxes.push(box);
+      pop.appendChild(el('label', { className: 'cn-multi-row' }, [box, option]));
+    });
+    clearButton.onclick = function () {
+      boxes.forEach(function (box) { box.checked = false; });
+      chosen = [];
+      sync();
+      onChange([]);
+    };
+    pop.appendChild(clearButton);
+
+    button.onclick = function () {
+      var willOpen = pop.hidden;
+      closeMultiSelects();
+      setOpen(willOpen);
+    };
+    root.onkeydown = function (event) {
+      if (event.key === 'Escape' && !pop.hidden) {
+        event.stopPropagation();
+        setOpen(false);
+        button.focus();
+      }
+    };
+    root.appendChild(button);
+    root.appendChild(pop);
+    sync();
+    return root;
+  }
+
+  function closeMultiSelects() {
+    Array.prototype.forEach.call(document.querySelectorAll('.cn-multi-pop'), function (pop) {
+      pop.hidden = true;
+      var button = pop.previousSibling;
+      if (button && button.setAttribute) button.setAttribute('aria-expanded', 'false');
+    });
+  }
+  document.addEventListener('click', function (event) {
+    if (!event.target.closest || !event.target.closest('.cn-multi')) closeMultiSelects();
+  });
+
   function reportTable(cols, colsClass, rows, emptyMessage) {
     var wrap = el('div', { className: 'cn-report-table-wrap' });
     wrap.appendChild(el('div', { className: 'cn-report-header ' + colsClass },
@@ -90,8 +163,18 @@
     return values.filter(function (v, i) { return v && values.indexOf(v) === i; }).sort();
   }
   function distinctFeeSessions() { return uniqueSorted(store.getFees().map(function (f) { return f.academicSession; })); }
-  function distinctFeeTerms() { return window.CnFilters.distinctTerms(store.getFees()); }
-  function feeInTerm(fee, term) { return window.CnFilters.feeTerms(fee).indexOf(term) !== -1; }
+  /** True when no term is picked, or the fee runs in at least one picked term. */
+  function feeInTerms(fee, terms) {
+    if (!terms.length) return true;
+    var feeTerms = window.CnFilters.feeTerms(fee);
+    return terms.some(function (term) { return feeTerms.indexOf(term) !== -1; });
+  }
+  function termFilter(s, onChange) {
+    return multiSelect(window.CnFilters.termOrder, s.terms, 'All terms', 'terms', function (list) {
+      s.terms = list;
+      onChange();
+    });
+  }
 
   function classOptions() {
     return store.getClasses()
@@ -113,186 +196,237 @@
     return match ? match.name : 'Uncategorised';
   }
 
-  // Tab 1: Fee collection 
+  // Tab 1 - Fee Collection
 
   function renderCollection() {
     var s = state.collection;
-    var fees = store.getFees().filter(function (f) {
-      if (f.status !== 'active') return false;
-      if (s.session && f.academicSession !== s.session) return false;
-      if (s.term && !feeInTerm(f, s.term)) return false;
-      if (s.classId && (f.assignedClasses || []).indexOf(s.classId) === -1) return false;
-      return true;
-    });
-    var payments = store.getPayments();
+    var results = el('div');
 
-    var totalExpected = 0, totalCollected = 0, totalOutstanding = 0;
-    var rows = fees.map(function (fee) {
-      var assignedClasses = s.classId
-        ? (fee.assignedClasses || []).filter(function (id) { return id === s.classId; })
-        : (fee.assignedClasses || []);
-      var expected = fee.amount * assignedClasses.length;
-      var matchingPayments = payments.filter(function (p) {
-        return p.feeId === fee.id && (!s.classId || p.classId === s.classId);
+    function paint() {
+      var fees = store.getFees().filter(function (f) {
+        if (f.status !== 'active') return false;
+        if (s.session && f.academicSession !== s.session) return false;
+        if (!feeInTerms(f, s.terms)) return false;
+        if (s.classId && (f.assignedClasses || []).indexOf(s.classId) === -1) return false;
+        return true;
       });
-      var collected = filters.sumAmounts(matchingPayments);
-      var outstanding = Math.max(expected - collected, 0);
+      var payments = store.getPayments();
 
-      totalExpected += expected;
-      totalCollected += collected;
-      totalOutstanding += outstanding;
+      var totalExpected = 0, totalCollected = 0, totalOutstanding = 0;
+      var rows = fees.map(function (fee) {
+        var assignedClasses = s.classId
+          ? (fee.assignedClasses || []).filter(function (id) { return id === s.classId; })
+          : (fee.assignedClasses || []);
+        var expected = fee.amount * assignedClasses.length;
+        var matchingPayments = payments.filter(function (p) {
+          return p.feeId === fee.id && (!s.classId || p.classId === s.classId);
+        });
+        var collected = filters.sumAmounts(matchingPayments);
+        var outstanding = Math.max(expected - collected, 0);
 
-      var statusCell = outstanding > 0
-        ? el('span', {}, [filters.formatNaira(outstanding) + ' outstanding'])
-        : el('span', { className: 'ght-chip ght-chip--success' }, ['Fully collected']);
+        totalExpected += expected;
+        totalCollected += collected;
+        totalOutstanding += outstanding;
 
-      return [
-        fee.name, fee.type,
-        assignedClasses.length + (assignedClasses.length === 1 ? ' class' : ' classes'),
-        filters.formatNaira(expected), filters.formatNaira(collected), statusCell
-      ];
-    });
+        var statusCell = outstanding > 0
+          ? el('span', {}, [filters.formatNaira(outstanding) + ' outstanding'])
+          : el('span', { className: 'ght-chip ght-chip--success' }, ['Fully collected']);
+
+        return [
+          fee.name, fee.type,
+          assignedClasses.length + (assignedClasses.length === 1 ? ' class' : ' classes'),
+          filters.formatNaira(expected), filters.formatNaira(collected), statusCell
+        ];
+      });
+
+      clear(results);
+      results.appendChild(el('div', { className: 'cn-stat-cards' }, [
+        statCard('Total expected', filters.formatNaira(totalExpected)),
+        statCard('Total collected', filters.formatNaira(totalCollected), 'positive'),
+        statCard('Total outstanding', filters.formatNaira(totalOutstanding), totalOutstanding > 0 ? 'negative' : 'positive')
+      ]));
+      results.appendChild(el('p', { className: 'cn-report-note' }, [
+        '\u201CExpected\u201D is the fee amount \u00D7 the number of classes it is assigned to \u2014 a per-class approximation, ' +
+        'since per-student enrolment isn\u2019t tracked until Student Fee Accounts is built.'
+      ]));
+      results.appendChild(reportTable(
+        ['Fee', 'Type', 'Assigned classes', 'Expected', 'Collected', 'Status'],
+        'cn-report-cols--collection', rows, 'No active fees match these filters.'
+      ));
+    }
 
     clear(content);
     content.appendChild(filterRow([
       select(distinctFeeSessions().map(function (v) { return { value: v, label: v }; }), s.session, 'All sessions',
-        function (v) { s.session = v; renderCollection(); }),
-      select(distinctFeeTerms().map(function (v) { return { value: v, label: v }; }), s.term, 'All terms',
-        function (v) { s.term = v; renderCollection(); }),
+        function (v) { s.session = v; paint(); }),
+      termFilter(s, paint),
       select(classOptions(), s.classId, 'All classes',
-        function (v) { s.classId = v; renderCollection(); })
+        function (v) { s.classId = v; paint(); })
     ]));
-    content.appendChild(el('div', { className: 'cn-stat-cards' }, [
-      statCard('Total expected', filters.formatNaira(totalExpected)),
-      statCard('Total collected', filters.formatNaira(totalCollected), 'positive'),
-      statCard('Total outstanding', filters.formatNaira(totalOutstanding), totalOutstanding > 0 ? 'negative' : 'positive')
-    ]));
-    content.appendChild(el('p', { className: 'cn-report-note' }, [
-      '\u201CExpected\u201D is the fee amount \u00D7 the number of classes it is assigned to \u2014 a per-class approximation, ' +
-      'since per-student enrolment isn\u2019t tracked until Student Fee Accounts is built.'
-    ]));
-    content.appendChild(reportTable(
-      ['Fee', 'Type', 'Assigned classes', 'Expected', 'Collected', 'Status'],
-      'cn-report-cols--collection', rows, 'No active fees match these filters.'
-    ));
+    content.appendChild(results);
+    paint();
   }
 
-  // Tab 2: Outstanding fees 
+  // Tab 2 - Outstanding fees 
 
   function renderOutstanding() {
     var s = state.outstanding;
-    var fees = store.getFees().filter(function (f) {
-      if (f.status !== 'active') return false;
-      if (s.session && f.academicSession !== s.session) return false;
-      if (s.term && !feeInTerm(f, s.term)) return false;
-      return true;
-    });
-    var payments = store.getPayments();
+    var results = el('div');
 
-    var rows = [];
-    var totalOutstanding = 0;
-    fees.forEach(function (fee) {
-      (fee.assignedClasses || []).forEach(function (classId) {
-        if (s.classId && classId !== s.classId) return;
-        var collected = filters.sumAmounts(payments.filter(function (p) {
-          return p.feeId === fee.id && p.classId === classId;
-        }));
-        var outstanding = fee.amount - collected;
-        if (outstanding <= 0) return;
-        totalOutstanding += outstanding;
-        rows.push([
-          className(classId), fee.name,
-          filters.formatNaira(fee.amount), filters.formatNaira(collected),
-          filters.formatNaira(outstanding)
-        ]);
+    function paint() {
+      var fees = store.getFees().filter(function (f) {
+        if (f.status !== 'active') return false;
+        if (s.session && f.academicSession !== s.session) return false;
+        if (!feeInTerms(f, s.terms)) return false;
+        return true;
       });
-    });
+      var payments = store.getPayments();
+
+      var rows = [];
+      var totalOutstanding = 0;
+      fees.forEach(function (fee) {
+        (fee.assignedClasses || []).forEach(function (classId) {
+          if (s.classId && classId !== s.classId) return;
+          var collected = filters.sumAmounts(payments.filter(function (p) {
+            return p.feeId === fee.id && p.classId === classId;
+          }));
+          var outstanding = fee.amount - collected;
+          if (outstanding <= 0) return;
+          totalOutstanding += outstanding;
+          rows.push([
+            className(classId), fee.name,
+            filters.formatNaira(fee.amount), filters.formatNaira(collected),
+            filters.formatNaira(outstanding)
+          ]);
+        });
+      });
+
+      clear(results);
+      results.appendChild(el('div', { className: 'cn-stat-cards' }, [
+        statCard('Classes with a balance', String(rows.length)),
+        statCard('Total outstanding', filters.formatNaira(totalOutstanding), totalOutstanding > 0 ? 'negative' : 'positive')
+      ]));
+      results.appendChild(el('p', { className: 'cn-report-note' }, [
+        'Shown per class, not per student \u2014 individual student balances belong to Student Fee Accounts, which isn\u2019t built yet.'
+      ]));
+      results.appendChild(reportTable(
+        ['Class', 'Fee', 'Expected', 'Collected', 'Outstanding'],
+        'cn-report-cols--outstanding', rows, 'Nothing outstanding for these filters \u2014 everything matched is fully collected.'
+      ));
+    }
 
     clear(content);
     content.appendChild(filterRow([
       select(distinctFeeSessions().map(function (v) { return { value: v, label: v }; }), s.session, 'All sessions',
-        function (v) { s.session = v; renderOutstanding(); }),
-      select(distinctFeeTerms().map(function (v) { return { value: v, label: v }; }), s.term, 'All terms',
-        function (v) { s.term = v; renderOutstanding(); }),
+        function (v) { s.session = v; paint(); }),
+      termFilter(s, paint),
       select(classOptions(), s.classId, 'All classes',
-        function (v) { s.classId = v; renderOutstanding(); })
+        function (v) { s.classId = v; paint(); })
     ]));
-    content.appendChild(el('div', { className: 'cn-stat-cards' }, [
-      statCard('Classes with a balance', String(rows.length)),
-      statCard('Total outstanding', filters.formatNaira(totalOutstanding), totalOutstanding > 0 ? 'negative' : 'positive')
-    ]));
-    content.appendChild(el('p', { className: 'cn-report-note' }, [
-      'Shown per class, not per student \u2014 individual student balances belong to Student Fee Accounts, which isn\u2019t built yet.'
-    ]));
-    content.appendChild(reportTable(
-      ['Class', 'Fee', 'Expected', 'Collected', 'Outstanding'],
-      'cn-report-cols--outstanding', rows, 'Nothing outstanding for these filters \u2014 everything matched is fully collected.'
-    ));
+    content.appendChild(results);
+    paint();
   }
 
-  // Tab 3: Payments 
+  // Tab 3 - Payments 
+
+  function paymentExtraText(p) {
+    var fee = feeById(p.feeId);
+    return className(p.classId) + ' ' + (fee ? fee.name : '');
+  }
 
   function renderPayments() {
     var s = state.payments;
-    var visible = filters.filterPayments(store.getPayments(), s.search, s.classId, '', s.from, s.to)
-      .slice().sort(function (a, b) { return b.paymentDate < a.paymentDate ? -1 : 1; });
+    var results = el('div');
+
+    function paint() {
+      var visible = filters.filterPayments(store.getPayments(), s.search, s.classId, '', s.from, s.to, paymentExtraText)
+        .slice().sort(function (a, b) { return b.paymentDate < a.paymentDate ? -1 : 1; });
+
+      clear(results);
+      results.appendChild(el('div', { className: 'cn-stat-cards' }, [
+        statCard('Payments', String(visible.length)),
+        statCard('Total collected', filters.formatNaira(filters.sumAmounts(visible)), 'positive')
+      ]));
+      results.appendChild(reportTable(
+        ['Date', 'Student', 'Fee', 'Class', 'Amount', 'Method', 'Receipt no.'],
+        'cn-report-cols--payments',
+        visible.map(function (p) {
+          var fee = feeById(p.feeId);
+          return [
+            filters.formatDate(p.paymentDate), p.studentName, fee ? fee.name : p.feeId, className(p.classId),
+            filters.formatNaira(p.amount), p.paymentMethod, p.receiptNumber
+          ];
+        }),
+        'No payments recorded for these filters.'
+      ));
+    }
+
+    var suggestions = window.CnSuggest.fromGroups([
+      { hint: 'Student', values: function () { return uniqueSorted(store.getPayments().map(function (p) { return p.studentName; })); } },
+      { hint: 'Receipt no.', values: function () { return uniqueSorted(store.getPayments().map(function (p) { return p.receiptNumber; })); } },
+      { hint: 'Class', values: function () { return store.getClasses().map(function (c) { return c.name; }); } },
+      { hint: 'Fee', values: function () { return uniqueSorted(store.getFees().map(function (f) { return f.name; })); } }
+    ]);
 
     clear(content);
     content.appendChild(filterRow([
-      searchBox(s.search, 'Search student or receipt no.\u2026', function (v) { s.search = v; renderPayments(); }),
-      select(classOptions(), s.classId, 'All classes', function (v) { s.classId = v; renderPayments(); }),
-      dateInput(s.from, 'From date', function (v) { s.from = v; renderPayments(); }),
-      dateInput(s.to, 'To date', function (v) { s.to = v; renderPayments(); })
+      searchBox(s.search, 'Search student, receipt no., class or fee\u2026', function (v) { s.search = v; paint(); }, suggestions),
+      select(classOptions(), s.classId, 'All classes', function (v) { s.classId = v; paint(); }),
+      dateInput(s.from, 'From date', function (v) { s.from = v; paint(); }),
+      dateInput(s.to, 'To date', function (v) { s.to = v; paint(); })
     ]));
-    content.appendChild(el('div', { className: 'cn-stat-cards' }, [
-      statCard('Payments', String(visible.length)),
-      statCard('Total collected', filters.formatNaira(filters.sumAmounts(visible)), 'positive')
-    ]));
-    content.appendChild(reportTable(
-      ['Date', 'Student', 'Fee', 'Class', 'Amount', 'Method', 'Receipt no.'],
-      'cn-report-cols--payments',
-      visible.map(function (p) {
-        var fee = feeById(p.feeId);
-        return [
-          filters.formatDate(p.paymentDate), p.studentName, fee ? fee.name : p.feeId, className(p.classId),
-          filters.formatNaira(p.amount), p.paymentMethod, p.receiptNumber
-        ];
-      }),
-      'No payments recorded for these filters.'
-    ));
+    content.appendChild(results);
+    paint();
   }
 
-  // Tab 4: Expenses 
+  // Tab 4 - Expenses 
 
   function renderExpenseReport() {
     var s = state.expenses;
-    var visible = filters.filterExpenses(store.getExpenses(), s.search, s.categoryId, s.from, s.to, false)
-      .slice().sort(function (a, b) { return b.expenseDate < a.expenseDate ? -1 : 1; });
+    var results = el('div');
+
+    function paint() {
+      var visible = filters.sortExpenses(
+        filters.filterExpenses(store.getExpenses(), s.search, s.categoryId, s.from, s.to, false, categoryName)
+      );
+
+      clear(results);
+      results.appendChild(el('div', { className: 'cn-stat-cards' }, [
+        statCard('Expenses', String(visible.length)),
+        statCard('Total spent', filters.formatNaira(filters.sumAmounts(visible)), 'negative')
+      ]));
+      results.appendChild(reportTable(
+        ['Date', 'Description', 'Category', 'Payee', 'Amount'],
+        'cn-report-cols--expenses',
+        visible.map(function (e) {
+          return [filters.formatDate(e.expenseDate), e.description, categoryName(e.categoryId), e.payee, filters.formatNaira(e.amount)];
+        }),
+        'No expenses recorded for these filters.'
+      ));
+    }
 
     var categoryOptions = store.getExpenseCategories().map(function (c) { return { value: c.id, label: c.name }; });
+    var recent = function (field) {
+      return function () { return uniqueSorted(store.getExpenses().map(function (e) { return e[field]; })); };
+    };
+    var suggestions = window.CnSuggest.fromGroups([
+      { hint: 'Description', values: recent('description') },
+      { hint: 'Payee', values: recent('payee') },
+      { hint: 'Category', values: function () { return store.getExpenseCategories().map(function (c) { return c.name; }); } }
+    ]);
 
     clear(content);
     content.appendChild(filterRow([
-      searchBox(s.search, 'Search description or payee\u2026', function (v) { s.search = v; renderExpenseReport(); }),
-      select(categoryOptions, s.categoryId, 'All categories', function (v) { s.categoryId = v; renderExpenseReport(); }),
-      dateInput(s.from, 'From date', function (v) { s.from = v; renderExpenseReport(); }),
-      dateInput(s.to, 'To date', function (v) { s.to = v; renderExpenseReport(); })
+      searchBox(s.search, 'Search description, payee or category\u2026', function (v) { s.search = v; paint(); }, suggestions),
+      select(categoryOptions, s.categoryId, 'All categories', function (v) { s.categoryId = v; paint(); }),
+      dateInput(s.from, 'From date', function (v) { s.from = v; paint(); }),
+      dateInput(s.to, 'To date', function (v) { s.to = v; paint(); })
     ]));
-    content.appendChild(el('div', { className: 'cn-stat-cards' }, [
-      statCard('Expenses', String(visible.length)),
-      statCard('Total spent', filters.formatNaira(filters.sumAmounts(visible)), 'negative')
-    ]));
-    content.appendChild(reportTable(
-      ['Date', 'Description', 'Category', 'Payee', 'Amount'],
-      'cn-report-cols--expenses',
-      visible.map(function (e) {
-        return [filters.formatDate(e.expenseDate), e.description, categoryName(e.categoryId), e.payee, filters.formatNaira(e.amount)];
-      }),
-      'No expenses recorded for these filters. Voided expenses are always excluded.'
-    ));
+    content.appendChild(results);
+    paint();
   }
 
-  // Tab 5: Income vs expenditure 
+  // Tab 5 - Income vs expenditure 
 
   function renderIncomeExpenditure() {
     var s = state.incomeExpenditure;

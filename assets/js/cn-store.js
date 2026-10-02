@@ -8,10 +8,10 @@
   // Pure helpers 
   var CnFilters = {
     sectionOrder: SECTION_ORDER,
+    maxFiles: 3,
+    termOrder: TERM_ORDER,
 
     filterClasses: function (classes, search, section, includeArchived) {
-      // Every word typed must appear in the class name or its section, so
-      // "primary", "year 3" and "primary year 3" all find what you'd expect.
       var words = String(search || '').trim().toLowerCase().split(/\s+/).filter(Boolean);
       return classes.filter(function (cls) {
         if (!includeArchived && cls.status === 'archived') return false;
@@ -26,11 +26,9 @@
       });
     },
 
-    /** Like groupBySection, but newest-added classes lead their section and the
-     *  section holding the newest class leads the list. Seed classes keep their order. */
-    groupBySectionNewestFirst: function (classes) {
+    groupBySectionNewestFirst: function (classes, order) {
       var stamp = function (c) { return c.addedAt || 0; };
-      var groups = this.groupBySection(classes).map(function (entry, gi) {
+      var groups = this.groupBySection(classes, order).map(function (entry, gi) {
         var indexed = entry[1].map(function (c, i) { return { c: c, i: i }; });
         indexed.sort(function (a, b) { return (stamp(b.c) - stamp(a.c)) || (a.i - b.i); });
         var list = indexed.map(function (x) { return x.c; });
@@ -40,24 +38,25 @@
       return groups.map(function (g) { return g.entry; });
     },
 
-    /** Returns [[sectionName, classes], …] in curriculum order, unknown sections last. */
-    groupBySection: function (classes) {
+    groupBySection: function (classes, order) {
+      var base = order && order.length ? order : SECTION_ORDER;
       var buckets = {};
       classes.forEach(function (cls) {
         (buckets[cls.section] = buckets[cls.section] || []).push(cls);
       });
-      var known = SECTION_ORDER.filter(function (s) { return buckets[s]; });
+      var known = base.filter(function (s) { return buckets[s]; });
       var other = Object.keys(buckets).filter(function (s) {
-        return SECTION_ORDER.indexOf(s) === -1;
+        return base.indexOf(s) === -1;
       }).sort();
       return known.concat(other).map(function (s) { return [s, buckets[s]]; });
     },
 
-    distinctSections: function (classes) {
+    distinctSections: function (classes, order) {
+      var base = order && order.length ? order : SECTION_ORDER;
       var seen = classes.map(function (c) { return c.section; });
       var unique = seen.filter(function (s, i) { return seen.indexOf(s) === i; });
-      var known = SECTION_ORDER.filter(function (s) { return unique.indexOf(s) !== -1; });
-      var other = unique.filter(function (s) { return SECTION_ORDER.indexOf(s) === -1; }).sort();
+      var known = base.filter(function (s) { return unique.indexOf(s) !== -1; });
+      var other = unique.filter(function (s) { return base.indexOf(s) === -1; }).sort();
       return known.concat(other);
     },
 
@@ -72,7 +71,12 @@
       });
     },
 
-    /** A fee can run in several terms. Older records carry a single `term` string. */
+    expenseFiles: function (exp, kind) {
+      var list = exp[kind + 's'];
+      if (Array.isArray(list)) return list.filter(Boolean);
+      return exp[kind] ? [exp[kind]] : [];
+    },
+
     feeTerms: function (fee) {
       if (Array.isArray(fee.terms) && fee.terms.length) return fee.terms.slice();
       return fee.term ? [fee.term] : [];
@@ -129,31 +133,55 @@
       return true;
     },
 
-    filterExpenses: function (expenses, search, categoryId, from, to, includeVoided) {
-      var needle = String(search || '').trim().toLowerCase();
+    filterExpenses: function (expenses, search, categoryId, from, to, includeVoided, categoryName) {
+      var words = String(search || '').trim().toLowerCase().split(/\s+/).filter(Boolean);
       var self = this;
       return expenses.filter(function (exp) {
         if (!includeVoided && exp.status === 'voided') return false;
         if (categoryId && exp.categoryId !== categoryId) return false;
         if ((from || to) && !self.inDateRange(exp.expenseDate, from, to)) return false;
-        if (needle) {
-          var hay = (exp.description + ' ' + exp.payee).toLowerCase();
-          if (hay.indexOf(needle) === -1) return false;
+        if (words.length) {
+          var text = [
+            exp.description, exp.payee, categoryName ? categoryName(exp.categoryId) : '',
+            exp.notes, exp.paymentMethod,
+            self.expenseFiles(exp, 'receipt').join(' '), self.expenseFiles(exp, 'invoice').join(' ')
+          ].join(' ').toLowerCase();
+          var amounts = (String(exp.amount) + ' ' + self.formatNaira(exp.amount)).toLowerCase();
+          for (var i = 0; i < words.length; i++) {
+            var w = words[i];
+            if (text.indexOf(w) !== -1) continue;
+            if (w.length >= 3 && /\d/.test(w) && amounts.indexOf(w) !== -1) continue;
+            return false;
+          }
         }
         return true;
       });
     },
 
-    filterPayments: function (payments, search, classId, feeId, from, to) {
-      var needle = String(search || '').trim().toLowerCase();
+    /** Expenses recorded in this session lead (newest first); the rest by date, newest first. */
+    sortExpenses: function (expenses) {
+      return expenses.map(function (e, i) { return { e: e, i: i }; }).sort(function (a, b) {
+        var x = a.e.addedAt || 0, y = b.e.addedAt || 0;
+        if (x !== y) return y - x;
+        if (a.e.expenseDate !== b.e.expenseDate) return a.e.expenseDate < b.e.expenseDate ? 1 : -1;
+        return a.i - b.i;
+      }).map(function (x) { return x.e; });
+    },
+
+    /** extraText(payment) is optional — extra searchable text such as class or fee name. */
+    filterPayments: function (payments, search, classId, feeId, from, to, extraText) {
+      var words = String(search || '').trim().toLowerCase().split(/\s+/).filter(Boolean);
       var self = this;
       return payments.filter(function (pay) {
         if (classId && pay.classId !== classId) return false;
         if (feeId && pay.feeId !== feeId) return false;
         if ((from || to) && !self.inDateRange(pay.paymentDate, from, to)) return false;
-        if (needle) {
-          var hay = (pay.studentName + ' ' + pay.receiptNumber).toLowerCase();
-          if (hay.indexOf(needle) === -1) return false;
+        if (words.length) {
+          var hay = [pay.studentName, pay.receiptNumber, pay.paymentMethod, extraText ? extraText(pay) : '']
+            .join(' ').toLowerCase();
+          for (var i = 0; i < words.length; i++) {
+            if (hay.indexOf(words[i]) === -1) return false;
+          }
         }
         return true;
       });
@@ -163,8 +191,6 @@
       return records.reduce(function (sum, r) { return sum + Number(r.amount || 0); }, 0);
     },
 
-    /** [{key, total}], sorted highest first — the income-by-fee /
-     *  expenditure-by-category breakdowns on the Income vs Expenditure report. */
     sumByKey: function (records, keyFn) {
       var totals = {};
       records.forEach(function (r) {
@@ -213,19 +239,47 @@
     return Object.assign({}, fee, { terms: terms, term: terms.join(', ') });
   }
 
+  var MAX_FILES = 3;
+  function withFiles(exp) {
+    var receipts = CnFilters.expenseFiles(exp, 'receipt').slice(0, MAX_FILES);
+    var invoices = CnFilters.expenseFiles(exp, 'invoice').slice(0, MAX_FILES);
+    return Object.assign({}, exp, {
+      receipts: receipts, invoices: invoices,
+      receipt: receipts[0] || null, invoice: invoices[0] || null
+    });
+  }
+
   var classSequence = 0;
+  var classRank = {};   
+  var expenseSequence = 0;
 
   function createStore(seed) {
+    seed.classes.forEach(function (c, i) { classRank[c.id] = i; });
     var state = {
       classes: seed.classes.slice(),
       feeTypes: seed.feeTypes.slice(),
       fees: seed.fees.map(withTerms),
       deletedClassIds: [],
+      sectionOrder: null,
       expenseCategories: seed.expenseCategories.slice(),
-      expenses: seed.expenses.slice(),
+      expenses: seed.expenses.map(withFiles),
       payments: seed.payments.slice()
     };
     var listeners = [];
+
+    function normalizeOrder() {
+      var groups = CnFilters.groupBySectionNewestFirst(state.classes, state.sectionOrder);
+      state.sectionOrder = groups.map(function (g) { return g[0]; });
+      var flat = [];
+      groups.forEach(function (g) {
+        g[1].forEach(function (c) {
+          var n = Object.assign({}, c);
+          delete n.addedAt;
+          flat.push(n);
+        });
+      });
+      state.classes = flat;
+    }
 
     function notify() {
       listeners.forEach(function (fn) { fn(state); });
@@ -267,6 +321,7 @@
           status: 'active',
           addedAt: ++classSequence
         };
+        classRank[record.id] = 1000 + classSequence;
         state.classes = state.classes.concat([record]);
         notify();
         return record;
@@ -279,6 +334,97 @@
         state.classes[i] = Object.assign({}, state.classes[i], payload);
         notify();
         return state.classes[i];
+      },
+
+      // ---- Arranging classes and sections (the Classes page's Order mode) ----
+
+      /** Custom section order, or null while the default curriculum order applies. */
+      getSectionOrder: function () { return state.sectionOrder ? state.sectionOrder.slice() : null; },
+
+      moveSection: function (name, targetName, after) {
+        if (name === targetName) return false;
+        normalizeOrder();
+        var order = state.sectionOrder.filter(function (s) { return s !== name; });
+        var at = order.indexOf(targetName);
+        if (at === -1 || state.sectionOrder.indexOf(name) === -1) return false;
+        order.splice(after ? at + 1 : at, 0, name);
+        state.sectionOrder = order;
+        notify();
+        return true;
+      },
+
+      /** dir = -1 (up) or +1 (down). Returns false at either end. */
+      shiftSection: function (name, dir) {
+        normalizeOrder();
+        var order = state.sectionOrder.slice();
+        var i = order.indexOf(name);
+        var j = i + dir;
+        if (i === -1 || j < 0 || j >= order.length) return false;
+        order[i] = order[j];
+        order[j] = name;
+        state.sectionOrder = order;
+        notify();
+        return true;
+      },
+
+      /** Moves a class one place up/down within its own section. */
+      shiftClass: function (id, dir) {
+        normalizeOrder();
+        var cls = state.classes[findIndex(state.classes, id)];
+        if (!cls) return false;
+        var siblings = state.classes.filter(function (c) { return c.section === cls.section; });
+        var k = siblings.indexOf(cls) + dir;
+        if (k < 0 || k >= siblings.length) return false;
+        var list = state.classes.slice();
+        var a = list.indexOf(cls);
+        var b = list.indexOf(siblings[k]);
+        list[a] = siblings[k];
+        list[b] = cls;
+        state.classes = list;
+        notify();
+        return true;
+      },
+
+      /** Drops a class before/after another one — joining that class's section if it differs. */
+      moveClass: function (id, targetId, after) {
+        if (id === targetId) return null;
+        normalizeOrder();
+        var from = findIndex(state.classes, id);
+        var target = state.classes[findIndex(state.classes, targetId)];
+        if (from === -1 || !target) return null;
+        var moving = Object.assign({}, state.classes[from], { section: target.section });
+        var list = state.classes.filter(function (c) { return c.id !== id; });
+        var at = list.indexOf(target);
+        list.splice(after ? at + 1 : at, 0, moving);
+        state.classes = list;
+        notify();
+        return moving;
+      },
+
+      /** Drops a class onto a section heading: it becomes that section's first class. */
+      moveClassToSection: function (id, section) {
+        normalizeOrder();
+        var from = findIndex(state.classes, id);
+        if (from === -1) return null;
+        var moving = Object.assign({}, state.classes[from], { section: section });
+        var list = state.classes.filter(function (c) { return c.id !== id; });
+        var first = list.findIndex(function (c) { return c.section === section; });
+        list.splice(first === -1 ? list.length : first, 0, moving);
+        state.classes = list;
+        if (state.sectionOrder.indexOf(section) === -1) state.sectionOrder = state.sectionOrder.concat([section]);
+        notify();
+        return moving;
+      },
+
+      /** Back to the default arrangement: curriculum order for sections, original order for classes. */
+      resetOrder: function () {
+        state.sectionOrder = null;
+        state.classes = state.classes.map(function (c) {
+          var n = Object.assign({}, c);
+          delete n.addedAt;
+          return n;
+        }).sort(function (a, b) { return (classRank[a.id] || 0) - (classRank[b.id] || 0); });
+        notify();
       },
 
       /** Permanent. Also unassigns the class from any fee that used it. */
@@ -354,8 +500,10 @@
           id: nextId('EXP', state.expenses),
           account: 'MAIN-SCHOOL-ACCOUNT',
           status: 'active',
-          createdAt: new Date().toISOString().slice(0, 10)
+          createdAt: new Date().toISOString().slice(0, 10),
+          addedAt: ++expenseSequence
         }, payload);
+        record = withFiles(record);
         state.expenses = state.expenses.concat([record]);
         notify();
         return record;
@@ -365,9 +513,19 @@
         var i = findIndex(state.expenses, id);
         if (i === -1) return null;
         state.expenses = state.expenses.slice();
-        state.expenses[i] = Object.assign({}, state.expenses[i], payload);
+        state.expenses[i] = withFiles(Object.assign({}, state.expenses[i], payload));
         notify();
         return state.expenses[i];
+      },
+
+      /** Permanent — the expense drops out of the list, totals and reports. */
+      deleteExpense: function (id) {
+        var i = findIndex(state.expenses, id);
+        if (i === -1) return null;
+        var removed = state.expenses[i];
+        state.expenses = state.expenses.filter(function (e) { return e.id !== id; });
+        notify();
+        return removed;
       },
 
       voidExpense: function (id) {

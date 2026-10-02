@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="styles/cn.css">
+<link rel="stylesheet" href="styles/cn-ui.css">
 <?php
 $cn_default_session = '2026/2027';
 ?>
@@ -84,11 +85,6 @@ $cn_default_session = '2026/2027';
         <p class="cn-field-error" id="cn-fee-terms-error" role="alert" hidden>Select at least one term.</p>
       </fieldset>
 
-      <div class="cn-field">
-        <label for="cn-fee-description">Description</label>
-        <textarea id="cn-fee-description" name="description" class="cn-input cn-textarea" rows="3" placeholder="Optional"></textarea>
-      </div>
-
       <div class="cn-picker">
         <div class="cn-picker-head">
           <div>
@@ -100,6 +96,11 @@ $cn_default_session = '2026/2027';
         </div>
         <div class="cn-picker-list" id="cn-class-picker"></div>
       </div>
+
+      <div class="cn-field">
+          <label for="cn-fee-description">Description</label>
+          <textarea id="cn-fee-description" name="description" class="cn-input cn-textarea" rows="2" placeholder="Optional"></textarea>
+        </div>
 
       <div class="cn-modal-actions">
         <button type="button" class="ght-button ght-button--secondary text-sm font-medium" data-cn-dismiss><span class="ght-button-label">Cancel</span></button>
@@ -114,4 +115,5 @@ $cn_default_session = '2026/2027';
 <?php cn_render_seed(); ?>
 <script src="assets/js/cn-store.js"></script>
 <script src="assets/js/cn-modal.js"></script>
+<script src="assets/js/cn-search.js"></script>
 <script src="assets/js/cn-fees.js"></script>
